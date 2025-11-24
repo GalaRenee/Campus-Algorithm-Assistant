@@ -1,36 +1,78 @@
 """TitanCampus Algorithmic Assitant (TCAA). A Comprehensive GUI application demonstrating various algorithms."""
     
 import tkinter as tk 
-from tkinter import ttk, messagebox, filedialog, scrolledtext
+from tkinter import ttk, messagebox, filedialog, scrolledtext, font as tkfont
 import heapq
 from collections import deque, defaultdict
 import time
 import os 
 
 class TCAA(tk.Tk):
-    """Main application class"""
+    """Main application class with styling. Implementing a purple/blue/pink aesthetic."""
     
     def __init__(self):
+        """Initialize the styling with a custom theme."""
         super().__init__()
         
-        self.title("TitanCampus Algorithmic Assistant (TCAA)")
-        self.geometry("1000x700")
+        # Color Palette - Blueberry Milk 
+        self.colors = {
+            'bg_dark': '#0F1729',
+            'bg_medium': '#1A2332',
+            'bg_light': '#243447',
+            'accent_purple': '#B8A9FF',
+            'accent_light': '#D4C5FF',
+            'accent_blue': '#8B9FE8',
+            'accent_pink': '#FFB5D5',
+            'accent_peach': '#FFB5D5',
+            'accent_mint': '#B5EAD7',
+            'text_light': '#E8F0FF', 
+            'text_mdeium': '#C8D6E5',
+            'text_dark': '#1A1F2E',
+            'success': '#7FE7B7',
+            'highlight': '#A78BFA',
+            'border': '#3D4B5E',
+            'border_light': '#4A5A70',
+            'card_bg': '#1E2D3E',
+            'card_accent': '#2A3A4D',
+            'glow': '#E0C3FC',
+            'glow_pink': '#FFD6E8',
+            'glow_blue': '#C3D9FF',     
+        }
+        
+        
+        # Configure main window 
+        self.title("✨ Titan Campus Algorithmic Assistant (TCAA) ✨")
+        self.geometry("1150x800")
+        self.configure(bg=self.colors['bg_dark'])
+        
+        # Configure combox dropdown colors for better contrast
+        self.option_add('*TCombobox*Listbox.background', self.colors['bg_light'])
+        self.option_add('*TCombobox*Listbox.foreground', self.colors['text_light'])
+        self.option_add('*TCombobox*Listbox.selectBackground', self.colors['accent_purple'])
+        self.option_add('*TCombobox*Listbox.selectForeground', self.colors['text_dark'])
+        self.option_add('*TCombobox*Listbox.font', ('Segoe UI', 10))
+        
+        # Apply custom styling 
+        self.setup_styles()
         
         # Create notebook for tabs 
-        self.notebook = ttk.Notebook(self)
-        self.notebook.pack(fill='both', expand=True, padx=10, pady=10)
+        self.notebook = ttk.Notebook(self, style='Custom.TNotebook')
+        self.notebook.pack(fill='both', expand=True, padx=20, pady=(0, 20))
         
         # Initialize modules 
-        self.campus_nav = CampusNavigator(self.notebook)
-        self.study_planner = StudyPlanner(self.notebook)
-        self.notes_Search = NotesSearchEngine(self.notebook)
-        self.algo_info = AlgorithmInfo(self.notebook)
+        self.campus_nav = CampusNavigator(self.notebook, self.colors)
+        self.study_planner = StudyPlanner(self.notebook, self.colors)
+        self.notes_Search = NotesSearchEngine(self.notebook, self.colors)
+        self.algo_info = AlgorithmInfo(self.notebook, self.colors)
         
         # Add tabs 
         self.notebook.add(self.campus_nav, text="Campus Navigator")
         self.notebook.add(self.study_planner, text="Study Planner")
         self.notebook.add(self.notessearch, text="Notes Search")
         self.notebook.add(self.algo_info, text="Algorithm Info")
+        
+        # Add footer with personality
+        self.create_footer()
         
 class CampusNavigator(ttk.Frame):
     """Module 1: Graph Algorithms"""
