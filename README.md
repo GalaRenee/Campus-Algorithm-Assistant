@@ -27,3 +27,40 @@ This application implements four comprehensive modules showcasing algorithmic te
 4. Algorithm Info & P vs NP
 - Time Complexity Analysis - Big-O for all algorithms 
 - P vs NP Explanation - Computational complexity classes
+
+## Technology Requirements:
+
+Programming language: Python3
+
+GUI Framework:
+Tkinter(recommended and used)
+- Part pf Python standard library 
+- Cross-platform compatible 
+- No additional installation required 
+
+## Usage Guide 
+Module 1: Campus Navigator 
+Demonstrates: BFS, DFS, Dijkstra's Algroithm, PRim's MST
+
+How to Use:
+1. Select an algorithm (BFS/DFS/Dijkstra/Prim)
+2. Choose start and end locations from dropdowns
+3. Click "Run Algorithm"
+4. View the path/results and execution time 
+Sample Campus Locations:
+- Library
+- Student Union
+- Engineering 
+- Computer Science 
+- Gym
+- Admin
+- Parking A
+- Parking B
+What each Algorithm does:
+- BFS: Finds path with fewest hops(unweighted)
+- DFS: Shows traversal order + connectivity status
+- Dijkstra: Finds shortest weighted path 
+- Prim: Constructs minimum spanning tree
+
+
+
