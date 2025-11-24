@@ -730,9 +730,6 @@ class AlgorithmInfo(ttk.Frame):
         
 
 
-            
-            
-        
         
         
         
