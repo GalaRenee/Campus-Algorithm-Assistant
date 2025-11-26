@@ -280,18 +280,39 @@ def create_header(self):
     for color in gradient_colors:
         tk.Frame(bottom_frame, bg=color, height=3).pack(side='left', fill='both', expand=True)
         
+def create_footer(self):
+    """Create a cute footer with more info"""
+    footer_frame = tk.Frame(self, bg=self.colors['bg_dark'], height=30)
+    footer_frame.pack(fill='x', padx=20, pady=(0, 15))
+    footer_frame.pack_propagate(False)
     
+    # Decorative top line 
+    top_line = tk.Frame(footer_frame, bg=self.colors['border'], height=1)
+    top_line.pack(fill='x', pady=(0, 8))
     
+    # Decorative top line 
+    top_line = tk.Frame(footer_frame, bg=self.colors['border'], height=1)
+    top_line.pack(fill='x', pady=(0, 8))
     
+    # Footer content 
+    footer_text = tk.Label(footer_frame, 
+        text="💫 Made with algorithms & aesthetic vibes ✨ CPSC 335 Final Project 🎓 ",
+        font=('Segoe UI', 8),
+        bg=self.colors['bg_dark'],
+        fg=self.colors['text_medium'])
+    footer_text.pack()
     
     
 class CampusNavigator(ttk.Frame):
     """Module 1: Graph Algorithms"""
     
-    def __init__(self, parent):
+    def __init__(self, parent, colors):
+        """Initialize Campus Navigator"""
         super().__init__(parent)
+        self.colors = colors
+        self.configure(style='Card.TFrame')
         
-        # Sample CSUF campus graph 
+        # Campus graph 
         self.graph = {
             'Library': {'Student Union': 5, 'Engineering': 3, 'Parking A': 7},
             'Student Union': {'Library': 5, 'Gym': 4, 'Admin': 6},
@@ -304,28 +325,106 @@ class CampusNavigator(ttk.Frame):
         }
         
         self.locations = list(self.graph.keys())
+        self.setup_ui()
         
         self.setup_ui()
     
     def setup_ui(self):
+        """ Styled UI components with enhanced visuals"""
+        # Main container with padding 
+        main_container = tk.Frame(self, bg=self.colors['bg_dark'])
+        main_container.pack(fill='both', xpand=True, padx=25, pady=25)
+        
+        
         # Title
-        title = ttk.Label(self, text="Campus Navigator - Graph Algorithms", 
-                          font=('Arial', 14, 'bold'))
-        title.pack(pady=10)
+        title_frame = tk.Frame(main_container, bg=self.colors['bg_dark'])
+        title_frame.pack(fill='x', pady=(0, 20))
+        
+        
+        title = ttk.Label(title_frame, 
+            text=" Campus Navigation System",
+            font=('Segoe UI', 15, 'bold'),
+            bg=self.colors['bg_dark'],
+            fg=self.colors['accent_purple'])
+        title.pack(side='left')
+        
+        # Cute subtitle 
+        subtitle = tk.Label(title_frame, 
+            text=" Find your way around campus!", 
+            font=('Segoe UI', 9),
+            bg=self.colors['bg_dark'],
+            fg=self.colors['accent_pink'])
+        subtitle.pack(side='left', padx=(10, 0))
+        
+        # Controls frame with glow effect
+        glow_outer = tk.Frame(main_container, bg=self.colors['glow_pink'], padx=1, pady=1)
+        glow_outer.pack(fill='x', pady=(0, 15))
+        
+        controls_outer = tk.Frame(glow_outer, bg=self.colors['accent_purple'], padx=2, pady=2)
+        controls_outer.pack(fill='x')
+        
+        controls_frame = ttk.LabelFrame(controls_outer, 
+            text=" 🎯 Select Locations", 
+            style='Custom.TLabelframe',
+            padding=20)
+        controls_frame.pack(fill='x')
+        
+        # Use grid layout for perfect alignment 
+        controls_frame.grid_columnconfigure(1, weight=1)
+        
+        # Start location 
+        start_label = tk.Label(controls_frame, 
+            text="📍 Starting Point:",
+            font=('Segoe UI', 10, 'bold'),
+            bg=self.colors['card_bg'],
+            fg=self.colors['accent_pink'],
+            width=18,
+            anchor='w')
+        start_label.grid(row=0, column=0, sticky='w', padx=(0, 10), pady=8)
+        
+        # End location 
+        end_label = tk.Label(controls_frame, 
+            text=" 🎯 Destination:",
+            font=('Segoe UI', 10, 'bold'),
+            bg=self.colors['card_bg'], 
+            fg=self.colors['accent_mint'],
+            width=18,
+            anchor='w')
+        end_label.grid(row=1, column=0, sticky='w', padx=(0, 10), pady=8)
+        
+        self.end_var = tk.StringVar(value=self.locations[-1])
+        end_menu = ttk.Combobox(controls_frame, 
+            textvariable=self.end_var, 
+            values=self.locations, 
+            state='readonly',
+            width=30, 
+            font=('Segoe UI', 10),
+            style='Custom.TCombobox')
+        end_menu.grid(row=1, column=1, sticky='ew', pady=8)
+            
     
-    # Algorithm selection 
-    algo_frame = ttk.LabelFrame(self, text="Select Algorithm")
-    algo_frame.pack(fill='x', padx=20, pady=10)
+    # Algorithm selection with buttons 
+    algo_frame = ttk.LabelFrame(main_container, 
+        text=" Choose Your Algorithm",
+        style='Custom.TButtonframe',
+        padding=15)
+    algo_frame.pack(fill='x', pady=(0, 15))
     
     self.algo_var = tk.StringVar(value="BFS")
+    
+    # Create radio button frame with decorative elements 
+    radio_container = tk.Frame(algo_frame, bg=self.colors['card_bg'])
+    radio_container.pack(fill='x')
+    
     algorithms = [
-        ("BFS Path", "BFS"), 
-        ("DFS + Connectivity", "DFS"), 
-        ("Dijkstra Shortest Path", "DIJKSTRA"),
-        ("Prim's MST", "PRIM")
+        (' 🔵 BFS - Breadth-First Search', 'bfs', self.colors['accent_blue']),
+        (' 🌳 DFS - Depth-First Search', 'dfs', self.colors['accent_mint']),
+        (' ⚡ Dijkstra - Shortest Weighted Path', 'dijkstra', self.colors['accent_purple']),
+        (' 🌉 Prim\'s MST - Minimum Spanning Tree', 'prim', self.colors['accent_pink'])   
     ]
     
-    for i, (text, value) in enumerate(algorithms):
+    
+    for i, (text, value, color) in enumerate(algorithms):
         ttk.Radiobutton(algo_frame, text=text, variable=self.algo_var,
                         value=value).grid(row=0, column=i, padx=10, pady=5)
         
