@@ -74,6 +74,217 @@ class TCAA(tk.Tk):
         # Add footer with personality
         self.create_footer()
         
+        
+def setup_styles(self):
+    """Configure custom ttk styles for modern, cute appearance"""
+    style = ttk.Style()
+    
+    # Using 'clam' theme as the base - most customizable 
+    style.theme_use('clam')
+    
+    # Notebook tabs styling 
+    style.configure('Custom.TNotebook',
+                    background=self.colors['bg_dark'],
+                    borderwidth=0,
+                    tabmargins=[5, 5, 5, 0])
+    
+    style.configure('Custom.TNotebook.Tab',
+                    background=self.colors['bg_light'],
+                    foreground=self.colors['text_medium'],
+                    padding=[24, 12],
+                    borderwidth=0,
+                    font=('Segoe UI', 10, 'bold'))
+    
+    style.map('Custom.TNotebook.Tab',
+             background=[('selected', self.colors['accent_purple'])],
+             foreground=[('selected', self.colors['text_dark'])],
+             expand=[('selected', [1, 1, 1, 0])],
+             padding=[('selected, [24, 14]')])
+    
+    # Frame styling 
+    style.configure('Card.TFrame',
+             background=self.colors['card_bg'],
+             borderwidth=2,
+             relief='flat')
+    
+    # LabelFrame styling - enhanced borders
+    style.configure('Custom.TLabelframe',
+                    background=self.colors['card_bg'],
+                    foreground=self.colors['text_light'],
+                    borderwidth=2,
+                    relief='flat',
+                    bordercolor=self.colors['border_light'])
+    
+    style.configure('Custom.TLabelframe.Label',
+                    background=self.colors['card_bg'],
+                    foreground=self.colors['accent_purple'],
+                    font=('Segoe UI', 11, 'bold'))
+    
+    # Button styling 
+    style.configure('Accent.TButton', 
+                    background=self.colors['accent_purple'],
+                    borderwidth=0,
+                    focuscolor='none',
+                    padding=[24, 12],
+                    font=('Segoe UI', 10, 'bold'))
+    
+    style.map('Accent.TButton', 
+              background=[('active', self.colors['accent_pink']),
+                          ('presed', self.colors['accent_blue'])],
+              foreground=[('active', self.colors['text_dark'])])
+    
+    # Secondary button - with border accent
+    style.configure('Secondary.TButton',
+                    background=self.colors['bg_medium'],
+                    foreground=self.colors['text_light'],
+                    borderwidth=2, 
+                    bordercolor=self.colors['accent_purple'],
+                    focuscolor='none',
+                    padding=[18, 18],
+                    font=('Segoe UI', 9, 'bold'))
+    
+    style.map('Secondary.TButton',
+              background=[('active', self.colors['accent_light'])],
+              foreground=[('active', self.colors['text_dark'])],
+              bordercolor=[('active', self.colors['accent_pink'])])
+    
+    # Special action button 
+    style.configure('Special.TButton',
+                    background=self.colors['accent_pink'],
+                    foreground=self.colors['text_dark'],
+                    borderwidth=0,
+                    focuscolor='none',
+                    padding=[20, 20],
+                    font=('Segoe UI', 10, 'bold'))
+    
+    style.map('Special.TButton',
+              background=[('active', self.colors['accent_peach']),
+                          ('pressed', self.colors['accent_mint'])])
+    
+    # Label styling 
+    style.configure('Custom.TLabel', 
+                    background=self.colors['card_bg'], 
+                    foreground=self.colors['text_light'],
+                    font=('Segoe UI', 10))
+    
+    style.configure('Title.TLabel',
+                    background=self.colors['bg_dark'],
+                    foreground=self.colors['accent_purple'],
+                    font=('Segoe UI', 16, 'bold'))
+    
+    style.configure('Subtitle.TLabel',
+                    background=self.colors['bg_dark'],
+                    foreground=self.colors['accent_light'],
+                    font=('Segoe UI', 10))
+    
+    # Radio button styling 
+    style.configure('Custom.TRadiobutton',
+                    background=self.colors['card_bg'],
+                    foreground=self.colors['text_light'],
+                    font=('Segoe UI', 10), 
+                    borderwidth=0, 
+                    focuscolor=self.colors['accent_purple'])
+    
+    style.map('Custom.TRadiobutton', 
+              background=[('active', self.colors['card_bg'])],
+              indicatorcolor=[('selected', self.colors['accent_pink'])],
+              foreground=[('active', self.colors['accent_purple'])])
+    
+    # Combobox styling - improved contrast
+    style.configure('Custom.TCombobox', 
+                    fieldbackground=self.colors['bg_light'],
+                    background=self.colors['accent_purple'],
+                    foreground=self.colors['text_light'], 
+                    arrowcolor=self.colors['text_light'], 
+                    arrowcolor=self.colors['text_light'], 
+                    arrowcolor=self.colors['text_light'],
+                    arrowcolor=self.colors['text_light'], 
+                    borderwidth=2, 
+                    relief='flat')
+    
+    style.map('custom.TCombobox', 
+              fieldbackground=[('readonly', self.colors['bg_light'])], 
+              foreground=[('readonly', self.colors['text_light'])], 
+              selectbackground=[('readonly', self.colors['accent_purple'])],
+              selectforeground=[('readonly', self.colors['text_dark'])])
+    
+    # Addional combobox dropdown styling 
+    self.option_add('*TCombobox*Listbox.font', ('Segoe UI', 10))
+    self.option_add('*TCombobox*Listbox.background', self.colors['bg_light'])
+    self.option_add('*TCombobox*Listbox.foreground', self.colors['text_light'])
+    self.option_add('*TCombobox*Listbox.selectBackground', self.colors['accent_purple'])
+    self.option_add('*TCombobox*Listbox.selectForeground', self.colors['text_dark'])
+    
+def create_header(self):
+    """Create a styled header with decorative elements"""
+    # Header container with border accent 
+    header_container = tk.Frame(self, bg=self.colors['bg_dark'])
+    header_container.pack(fill='x', padx=20, pady=(20, 10))
+    
+    # Top decorative line 
+    top_border = tk.Frame(header_container, bg=self.colors['accent_purple'], height=3)
+    top_border.pack(fill='x')
+    
+    # Main header frame 
+    header_frame = tk.Frame(header_container, bg=self.colors['bg_medium'], height=100)
+    header_frame.pack(fill='x', pady=3)
+    header_frame.pack_propagrate(False)
+    
+    # Left decorative accent 
+    left_accent = tk.Frame(header_frame, bg=self.colors['accent_pink'], width=5)
+    left_accent.pack(side='left', fill='y')
+    
+    # Content frame 
+    content_frame = tk.Frame(header_frame, bg=self.colors['bg_medium'])
+    content_frame.pack(side='left', fill='both', expand=True, padx=20)
+    
+    # Title with gradient effect 
+    title_frame = tk.Frame(content_frame, bg=self.colors['bg_medium'])
+    title_frame.pack(pady=(15, 5))
+    
+    title_font = tk.font.Font(family='Segoe UI', size=22, weight='bold')
+    title = tk.Label(title_frame, 
+                     text="✨ Titan Campus Algorithmic Assistant ✨",
+                     font=title_font,
+                     bg=self.colors['bg_medium'],
+                     fg=self.colors['accent_purple'])
+    title.pack()
+    
+    # Decorative subtitle divider 
+    divider_frame = tk.Frame(content_frame, bg=self.colors['bg_medium'])
+    divider_frame.pack(pady=3)
+    
+    tk.Frame(divider_frame, bg=self.colors['accent_pink'], width=40, height=2).pack(side='left', padx=3)
+    tk.Frame(divider_frame, bg=self.colors['accent_purple'], width=40, height=2).pack(side='left', padx=3)
+    tk.Frame(divider_frame, bg=self.colors['accent_blue'], width=40, height=2).pack(side='left', padx=3)
+    tk.Frame(divider_frame, bg=self.colors['accent_mint'], width=40, height=2).pack(side='left', padx=3)
+    
+    # Subtitle with icons 
+    subtitle = tk.Label(content_frame, 
+                        text=" Graph Algorithms • Dynamic Programming • String Matching • Complexity Analysis", 
+                        font=('Segoe UI', 9), 
+                        bg=self.colors['bg_medium'],
+                        fg=self.colors['text_medium'])
+    subtitle.pack()
+    
+    # Right decorative accent 
+    right_accent = tk.Frame(header_frame, bg=self.colors['accent_mint'], width=5)
+    right_accent.pack(side='right', fill='y')
+    
+    # Bottom decorative line (gradient effect)
+    bottom_frame = tk.Frame(header_container, bg=self.colors['bg_dark'], height=3)
+    bottom_frame.pack(fill='x')
+    
+    graident_colors = [self.colors['accent_mint'], self.colors['accent_blue'],
+                       self.colors['accent_purple'], self.colors['accent_pink']]
+    for color in gradient_colors:
+        tk.Frame(bottom_frame, bg=color, height=3).pack(side='left', fill='both', expand=True)
+        
+    
+    
+    
+    
+    
 class CampusNavigator(ttk.Frame):
     """Module 1: Graph Algorithms"""
     
