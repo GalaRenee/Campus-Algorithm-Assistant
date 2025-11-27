@@ -1,4 +1,5 @@
-""" Test script for TCAA algroithms (no GUI required). 
+""" 
+Test script for TCAA algroithms (no GUI required). 
 Run this verify all algorithm work correctly.
 """
 
@@ -86,6 +87,8 @@ def test_graph_algorithms():
             print(f"    Path: {' -> '}.join(path)")
             print(f"    Distance: {distances['E']} units")
             break
+        
+        
         for neighbor, weight in graph[current].items()
             distance = current_dist + weight
             if distance < distances[neighbor]:
@@ -198,7 +201,108 @@ def test_knapsack():
     
 def test_String_matching():
     """Test string matching algorithm"""
+    print("\n" + "=" * 60)
+    print("TESTING STRING MATCHING ALGORITHMS")
+    print("=" * 60)
     
+    text = "ABABDABACDABABCABAB"
+    pattern = "ABABCABAB"
+    
+    # Test Naive Search 
+    print("\n1. Naive Search:")
+    start_time = time.time()
+    matches = []
+    n, m = len(text), len(pattern)
+    for i in range(n - m + 1):
+        if text[i:i+m] == pattern:
+            matches.append(i)
+    print(f"   Matches found: {len(matches)} at positions {matches}")
+    print(f"   Time: {(time.time() - start_time)*1000:.4f} ms")
+    print(f"    Status: {'✓ PASS' if len(matches) == 1 else 'x FAIL'}")
+    
+    # Test Rabin-Karp
+    print("\n2. Rabin-Karp:")
+    start_time = time.time()
+    matches = []
+    d, q = 256, 101
+    h = pow(d, m-1, q)
+    p, t = 0, 0
+    
+    for i in range(m):
+        p = (d * p + ord(pattern[i])) % q
+        t = (d * t + ord(text[i])) % q
+    
+    for i in range(n - m + 1):
+        if p == t and text[i:i+m] == pattern:
+            matches.append(i)
+        if i < n - m:
+            t = (d * (t - ord(text[i]) * h) + ord(text[i + m])) % q
+            if t < 0:
+                t+= q 
+                
+    print(f"   Matches found: {len(matches)} at positions {matches}")
+    print(f"   Time: {(time.time() - start_time)*1000:.4f} ms")
+    print(f"   Status: {'✓ PASS' if len(matches) == 1 else 'x FAIL'}")
+    
+    # Test KMP 
+    print("\n3.KMP:")
+    start_time = time.time()
+    
+    # Compute LPS
+    lps = [0] * m 
+    length = 0
+    i = 1
+    while i < m:
+        if pattern[i] == pattern[length]:
+            length += 1
+            lps[i] = length
+            i += 1
+        else:
+            if length != 0:
+                length = lps[length - 1]
+            else:
+                lps[i] = 0
+                i += 1
+                
+    # Search 
+    matches = []
+    while i < n:
+        if pattern[j] == text[i]:
+            i += 1
+            j += 1
+        if j == m:
+            matches.append(i - j)
+            j = lps[j - 1]
+        elif i < n and pattern[j] != text[i]:
+            if j != 0:
+                j = lps[j - 1]
+            else:
+                i += 1
+                
+    print(f"   Matches found: {len(matches)} at positions {matches}")
+    print(f"   Time: {(time.time() - start_time)*1000:.4f} ms")
+    print(f"   Status: {'✓ PASS' if len(matches) == 1 else 'x FAIL'}")
+    
+def main():
+    """Run all tests"""
+    print("\n")
+    print("╔" + "=" * 58 + "╗")
+    print("║" + " " * 8 + "TCAA ALGORITHM TEST SUITE" + " " * 25 + "║")
+    print("╚" + "=" * 58 + "╝")
+    
+    test_graph_algorithms()
+    test_greedy_scheduling()
+    test_knapsack()
+    test_string_matching()
+    
+    print("\n" + "=" * 60)
+    print("ALL TESTS COMPLETED")
+    print("=" * 60)
+    print("\nif all tests show '✓ PASS', algorithms are working correctly!")
+    print("You can now run the GUI application: python tcaa.main.p\n")
+    
+if __name__ == "__main__":
+    main()
     
             
             
