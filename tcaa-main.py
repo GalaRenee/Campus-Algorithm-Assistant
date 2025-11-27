@@ -1260,21 +1260,274 @@ Ready to ptimize your study time? Add tasks to begin! 💫
             
             return result 
         
-  
-    
 class NotesSearchEngine(ttk.Frame):
-    """Module 3: String Pattern Matching"""
+    """Module 3: Notes Search Engine with String Pattern Matching"""
     
-    def __init__(self, parent):
+    def __init__(self, parent, colors):
+        """Initialize Notes Search Engine"""
         super().__init__(parent)
-        self.document_text = ""
+        self.colors = colors
+        self.configure(style='Card.TFrame')
+        self.notes_content = ""
         self.setup_ui()
         
     def setup_ui(self):
+        """Stylized UI components"""
+        main_container = tk.Frame(self, bg=self.colors['bg_dark'])
+        main_container.pack(fill='both', expand=True, padx=25, pady=25)
+        
         # Title
-        title = ttk.Label(self, text="Notes Search Engine - String Pattern Matching",
-                          font=('Arial', 14, 'bold'))
-        title.pack(pady=10)
+        title_frame = tk.Frame(main_container, bg=self.colors['bg_dark'])
+        title_frame.pack(fill='x', pady=(0, 20))
+        
+        
+        title = tk.Label(title_frame, 
+            text="🔍  Notes Search Engine",
+            font=('Segoe UI', 15, 'bold'), 
+            bg=self.colors['bg_dark'],
+            fg=self.colors['accent_purple'])
+        title.pack(side='left')
+        
+        subtitle = tk.Label(title_frame, 
+            text="💡  Find patterns in your notes!", 
+            font=('Segoe UI', 9),
+            bg=self.colors['bg_dark'],
+            fg=self.colors['accent_blue'])
+        subtitle.pack(side='left', padx=(10, 0))
+        
+        # Notes input with decorative border
+        notes_outer = tk.Frame(main_container, bg=self.colors['accent_purple'], padx=2, pady=2)
+        notes_outer.pack(fill='both', expand=True, pady=(0, 15))
+        
+        notes_frame = ttk.LabelFrame(notes_outer, 
+             text="📝  Your Notes",
+             style='Custom.TLabelframe',
+             padding=15)
+        notes_frame.pack(fill='both', expand=True)
+        
+        # File operations
+        file_btn_frame = tk.Frame(notes_frame, bg=self.colors['card_bg'])
+        file_btn_frame.pack(fill='x', pady=(0, 10))
+        
+        ttk.Button(file_btn_frame,
+            text="📂 Load File",
+            command=self.load_file,
+            style='Secondary.TButton').pack(side='Left', padx=5)
+        
+        ttk.Button(file_btn_frame, 
+            text="🧹 Clear",
+            command=self.clear_notes,
+            style='Secondary.TButton').pack(side='left', padx=5)
+        
+        # Text area
+        self.notes_text = scrolledtext.ScrolledText(notes_frame,
+            wrap=tk.WORD,
+            font=('Segoe UI', 10),
+            bg=self.colors['bg_light'],
+            fg=self.colors['text_light'],
+            relief='flat',
+            padx=15,
+            pady=15,
+            height=8)
+        self.notes_text.pack(fill='both', expand=True)
+        
+        # Search controls
+        search_frame = ttk.LabelFrame(main_container, 
+            text="🔍 Search Pattern", 
+            style='Custom.TLabelframe',
+            padding=15)
+        search_frame.pack(fill='x', pady=(0, 15))
+        
+        pattern_frame = tk.Frame(search_frame, bg=self.colors['card_bg'])
+        pattern_frame.pack(fill='x', pady=5)
+        
+        tk.Label(pattern_frame, 
+            text=" Pattern:",
+            font=('Segoe UI', 10, 'bold'),
+            bg=self.colors['card_bg'],
+            fg=self.colors['accent_pink']).pack(side='left', padx=(0, 10))
+        
+        self.pattern_entry = tk.Entry(pattern_frame, 
+            font=('Segoe UI', 10),
+            bg=self.colors['bg_light'],
+            fg=self.colors['text_light'],
+            relief='flat',
+            insertbackground=self.colors['accent_purple'])
+        self.pattern_entry.pack(side='left', fill='x', expand=True, ipady=6)
+        
+        # Algorithm selection
+        algo_frame = tk.Frame(search_frame, bg=self.colors['card_bg'])
+        algo_frame.pack(fill='x', pady=(10, 0))
+        
+        self.search_algo = tk.StringVar(value='native')
+        
+        algorithms = [
+            ('🔄 Naive Search', 'naive', self.colors['accent_blue']),
+            ('🎲 Rabin-Karp', 'rabin-karp', self.colors['accent_mint']),
+            ('⚡ KMP Algorithm', 'kmp', self.colors['accent_pink'])
+        ]
+        
+        for text, value, color in algorithms:
+            radio_frame = tk.Frame(algo_frame, bg=self.colors['card_bg'])
+            radio_frame.pack(side='left', fill='x', expand=True, padx=5)
+            
+            tk.Frame(radio_frame, bg=color, width=3, height=20).pack(side='left', padx=(0, 5))
+            
+            ttk.Radiobutton(radio_frame, 
+                text=text,
+                variable=self.search_algo,
+                value=value,
+                style='Custom.TRadiobutton').pack(side='left')
+            
+            # Search button 
+            ttk.Button(main_container,
+                text="🔍 Search Now!",
+                command=self.search_pattern,
+                style='Accent.TButton').pack(pady=(0, 15))
+            
+            # Results 
+            results_outer = tk.Frame(main_container, bg=self.colors['accent_light'], padx=2, pady=2)
+            results_outer.pack(fill='both', expand=True)
+            
+            results_inner = tk.Frame(results_outer, bg=self.colors['card_bg'], padx=2, pady=2)
+            results_inner.pack(fill='both', expand=True)
+            
+            results_label = tk.Label(results_inner, 
+                text="📊 Search Results",
+                font=('Segoe UI', 11, 'bold'),
+                bg=self.colors['card_bg'],
+                fg=self.colors['accent_purple'])
+            results_label.pack(anchor='w', padx=15, pady=(15, 10))
+            
+            self.results_text = scrolledtext.ScrolledText(results_inner,
+                wrap=tk.WORD, 
+                font=('Consolas', 10),
+                bg=self.colors['bg_light'],
+                fg=self.colors['text_light'],
+                relief='flat',
+                padx=20,
+                pady=20)
+            self.results_text.pack(fill='both', expand=True, padx=15, pady=(0, 15))
+            
+            welcome_msg = """
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+Ready to search? Load your notes to begin!💫            
+            """
+            self.results_text.insert(1.0, welcome_msg)
+            
+        def load_file(self):
+            """Load notes from a file"""
+            filename = filedialog.askopenfilename(
+                filetypes=[("Text files", "*, txt"), ("All files", "*.*")],
+                title="Load Notes File"
+            )
+            if filename:
+                try: 
+                    with open(filename, 'r', encoding='utf-8')
+                    content = f.read()
+                    self.notes_text.delete(1.0, tk.END)
+                    self.notes_text.insert(1.0, content)
+                    messagebox.showinfo("✅ Success", 
+                                        f"File loaded successfully! ✨\n\n{filename}")
+                except Exception as e:
+                    messagebox.showerror("❌ Error",
+                        f"Could not load file:\n{str(e)}")
+                    
+        def clear_notes(self):
+            """Clear the notes text area"""
+            if self.notes_text.get(1.0, tk.END).strip():
+                if messagebox.askyesno("🗑️ Confirm", 
+                    "Clear all notes? This cannot be undone!"):
+                    self.notes_text.delete(1.0, tk.END)
+                    messagebox.showinfo("✅ Cleared", "Notes cleared! 🧹")
+                    
+        def search_pattern(self):
+            """Search for pattern using selected algorithm"""
+            text = self.notes_text.get(1.0, tk.END).strip()
+            pattern = self.pattern_entry.get().strip()
+            
+            if not text:
+                messagebox.showwarning("⚠️  No Notes",
+                    "Please load or enter some notes first! 📝")
+                return 
+            
+            if not pattern:
+                messagebox.showwarning("⚠️ No Pattern",
+                    "Please enter a pattern to search for! 🔍")
+                return 
+            
+            algo = self.search_algo.get()
+            self.results_text.delete(1.0, tk.END)
+            
+            header = f"""
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+"""
+            self.results_text.insert(tk.END, header)
+            
+            start_time = time.time()
+            
+            if algo == 'naive':
+                result = self.naive_search(text, pattern)
+            elif algo == 'rabin-karp':
+                result = self.rabin_karp(text, pattern)
+            else: # kmp 
+                result = self.kmp_search(text, pattern)
+                
+            elapsed = (time.time() - start_time) * 1000
+            
+            self.results_text.insert(tk.END, result)
+            self.results_text.insert(tk.END, f"\n{'━'*59}\n")
+            self.results_text.insert(tk.END, f"     Execution Time: {elapsed:.3f}ms\n")
+            self.results_text.insert(tk.END, f"{'━'*59}\n")
+            
+        def naive_search(self, text, pattern):
+            """Naive string matching algorithm"""
+            result = "🔄 NAIVE STRING SEARCH\n"
+            result += "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+            results += "Stratgey: Check every position in text\n\n"
+            
+            matches = []
+            n = len(text)
+            m = len(pattern)
+            comparisons = 0
+            
+            result += "  Search Progress:\n"
+            
+            
+            
+        
+        
+        
+        
+        
+        
+        
         
         # File upload
         upload_frame = ttk.LabelFrame(self, text="Document Upload")
