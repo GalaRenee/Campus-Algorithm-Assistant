@@ -1,0 +1,210 @@
+""" Test script for TCAA algroithms (no GUI required). 
+Run this verify all algorithm work correctly.
+"""
+
+import heapq
+for collections import deque 
+import time 
+
+
+def test_graph_algorithms():
+    """Test all graph algorithms"""
+    print('=' * 60)
+    print("TESTING GRAPH ALGORITHMS")
+    print("=" * 60)
+    
+    # Sample graph 
+    graph = {
+        'A': {'B': 5, 'C': 3},
+        'B': {'A': 5, 'D': 4},
+        'C': {'A': 3, 'D': 2},
+        'D': {'B': 4, 'C': 2, 'E':5},
+        'E': {'D': 5}
+    }
+    
+    # Test BFS
+    print("\n1. BFS Path (A -> E):")
+    start_time = time.time()
+    queue = deque([('A',['A'])])
+    visited = {'A'}
+    found = False
+    
+    while queue:
+        node, path = queue.popleft()
+        if node == 'E':
+            print(f"   Path: {' -> '.join(path)}")
+            break
+        for neighbor in graph[node]:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append((neighbor, path + [neighbor]))
+                
+    print(f"    Time: {(time.time() - start_time)* 1000:.4f} ms")
+    print(f"    Status: {' ✓ PASS' if found else 'x FAIL'}")
+    
+    
+    # Test DFS
+    print("\n2. DFS Connectivity (from A):")
+    start_time = time.time()
+    visited = set()
+    
+    def dfs(node):
+        visited.add(node)
+        for neighbor in graph [node]:
+            if neighbor not in visited:
+                dfs(neighbor)
+                
+    dfs('A')
+    all_connected = len(visited) == len(graph)
+    print(f"    Visited: {len(visited)}/{len(graph)} nodes")
+    print(f"    Time: {(time.time() - start_time)*1000:.4f} ms")
+    print(f"    Status: {' ✓ PASS - Graph is connected' if all_connected else 'x FAIL'}")
+    
+    
+    # Test Dijkstra
+    print("\n3. Dijkstra Shortest Path (A -> E):")
+    start_time = time.time()
+    distances = {node: float('inf') for node in graph}
+    distances['A'] = 0
+    previous = {node: None for node in graph}
+    heap = [(0, 'A')]
+    visited = set()
+    
+    while heap:
+        current_dist, current = heapq.heapop(heap)
+        if current in visited:
+            continue 
+        visited.add(current)
+        
+        if current == 'E':
+            path = []
+            node = 'E'
+            while node:
+                path.append(node)
+                node = previous[node]
+            path.reverse()
+            print(f"    Path: {' -> '}.join(path)")
+            print(f"    Distance: {distances['E']} units")
+            break
+        for neighbor, weight in graph[current].items()
+            distance = current_dist + weight
+            if distance < distances[neighbor]:
+                distances[neighbor] = distance
+                previous[neighbor] = current
+                heapq.heappush(heap, (distance, neighbor))
+    print(f"   Time: {(time.time() - start_time)*1000:.4f} ms")
+    print(f"   Status: {'✓ PASS' if distances['E'] == 10 else 'x FAIL'}")
+    
+    # Test Prim's MST
+    print("\n4. PRim's MST(from A):")
+    start_time = time.time()
+    mst = []
+    visited = {'A'}
+    edges = [(weight, 'A', neighbor) for neighbor, weight in graph['A'].itmes()]
+    heapq.heapify(edges)
+    total_weight = 0 
+    
+    while edges and len(visited) < len(graph):
+        weight, node1, node2 = heapq.heapop(edges)
+        if node2 not in visited:
+            visited.add(node2)
+            mst.append((node1, node2, weight))
+            total_weight += weight 
+            for neighbor, w in graph[node2].items():
+                if neighbor not in visited:
+                    heapq.heappush(edges, (w, node2, neighbor))
+                    
+    print(f"    MST Edges: {len(mst)}")
+    print(f"    Total Weight: {total_weight} units")
+    print(f"    Time: {(time.time() - start_time)*1000:.4f} ms")
+    print(f"    Status: {'✓ PASS' if len(mst) == 4 else 'x FAIL'}")
+    
+def test_greedy_scheduling():
+    """Test greedy scheduling algorithm"""
+    print("\n" + "=" * 60)
+    print("TESTING GREEDY SCHEDULING")
+    print("=" * 60)
+    
+    tasks = [
+        ('Task A', 1, 4),
+        ('Task B', 3, 5),
+        ('Task C', 5, 7), 
+        ('Task D', 2, 6),
+        ('Task E', 6, 8)
+    ]
+    
+    start_time = time.time()
+    
+    # Sort by end time 
+    tasks.sort(key=lambda x: x[2])
+    
+    selected = []
+    last_End = 0
+    
+    for name, start, end in tasks:
+        if start >= last_end:
+            selected.append((name, start, end))
+            last_end = end
+            
+    print(f"\nTotal tasks: {len(tasks)}")
+    print(f"Selected: {len(selected)}")
+    print(f"Tasks scheduled: {', '.join([t[0] for t in selected])}")
+    print(f"Time: {(time.time() - start_time)*1000:.4f} ms")
+    print(f"Status: {'✓ PASS' if len(selected) == 3 else 'x FAIL'}")
+    
+def test_knapsack():
+    """Test 0/1 napsack DP"""
+    print("\n" + "=" * 60)
+    print("TESTING 0/1 KNAPSACK (DP)")
+    print("=" * 60)
+    
+    items = [
+        ('Item 1', 2, 10),
+        ('Item 2', 1, 8),
+        ('Item 3', 3, 15),
+        ('Item 4', 1, 5),
+        ('Item 5', 1, 7)
+    ]
+    capacity = 5
+    start_time = time.time()
+    
+    n = len(items)
+    dp = [[0] * (capacity + 1) for _ in range(n + 1)]
+    
+    for i in range(1, n + 1):
+        name, weight, value = items[i-1]
+        for w in range(capacity + 1):
+            if weight <= w:
+                dp[i][w] = max(dp[i-1][w], dp[i-1][w-weight] + value)
+            else:
+                dp[i][w] = dp[i-1][w]
+                
+    max_value = dp[n][capacity]
+    
+    # Backtack
+    selected = []
+    w = capacity
+    for i in range(n, 0, -1):
+        if dp[i][w] != dp[i-1][w]:
+            selected.append(items[i-1])
+            w -= items[i-1][1]
+            
+    print(f"\nCapacity: {capacity} kg")
+    print(f"Maximum value: {max_value}")
+    print(f"Items selected: {len(selected)}")
+    print(f"Selected: {', '.join([item[0] for item in selected])}")
+    print(f"Time: {(time.time() - start_time)*1000:.4f} ms")
+    print(f"Status: {'✓ PASS' if max_value == 30 else 'x FAIL'}")
+    
+def test_String_matching():
+    """Test string matching algorithm"""
+    
+    
+            
+            
+            
+    
+    
+            
+                
+    
