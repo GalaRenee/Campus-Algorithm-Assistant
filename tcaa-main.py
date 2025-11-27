@@ -1125,209 +1125,142 @@ Ready to ptimize your study time? Add tasks to begin! 💫
         elapsed = (time.time() - start_time) * 1000
         
         self.schedule_text.insert(tk.END, result)
-        self.schedule_text.insert
-        self.schedule_text.insert
-        self.schedule_text.insert
+        self.schedule_text.insert(tk.END, f"\n{'━'*59}\n")
+        self.schedule_text.insert(tk.END, f"⏱️   Execution Time: {elapsed:.2f}ms\n")
+        self.schedule_text.insert(tk.END, f"{'━'*59}\n")
         
-               
-        
-        
-        
-        
-        
-        
-        
-    
-
-    
+        def greedy_schedule(self, start):
+            """Greedy interval scheduling algorithm"""
+            result = "⚡ GREEDY INTERVAL SCHEDULING\n"
+            result += "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+            result += "Strategy: Sort by end time, pick non-overlapping tasks!\n\n"
             
-          
-        
-    
- 
-class StudyPlanner(ttk.Frame):
-    """Module 2: Greedy Scheduling and Dynamic Programming"""
-    
-    def __init__(self, parent):
-        super().__init__(parent)
-        self.setup_ui()
-        
-        
-    def setup_ui(self):
-        # Title
-        title = ttk.Label(self, text="Study Planner - Scheduling & optimization",
-                          font=('Arial', 14, 'bold'))
-        title.pack(pady=10)
-        
-        # Algorithm selection 
-        algo_frame = ttk.LabelFrame(self, text="Select Algorithm")
-        algo_frame.pack(fill='x', padx=20, pady=10)
-        
-        self.algo_var = tk.StringVar(value="GREEDY")
-        ttk.Radiobutton(algo_frame, text="Greedy Scheduling",
-                        variable=self.algo_var, value="GREEDY").pack(side='left', padx=20, pady=5)
-        ttk.Radiobutton(algo_frame, text="0/1 Knapsack (DP)",
-                        variable=self.algo_var,value="KNAPSACK").pack(side='left', padx=20, pady=5)
-        
-        # Input frame
-        input_frame = ttk.LabelFrame(self, text="Input Data")
-        input_frame.pack(fill='x', padx=20, pady=10)
-        
-        # Greedy scheduling inputs 
-        self.greedy_frame = ttk.Frame(input_frame)
-        self.greedy_frame.pack(fill='x', padx=5, pady=5)
-        
-        ttk.Label(self.greedy_frame,
-                  text="Tasks(format: name, start, end per line):").pack(anchor='w')
-        self.tasks_text = scrolledtext.ScrolledText(self.greedy_frame, height=5, width=60)
-        self.tasks_text.pack(fill='x', pady=5)
-        self.tasks_text.insert(1.0, 
-            "Study CPSC335,1,4\nGym,3,5\nProject Meeting,5,7\nRead Chapter5,2,6\nLunch,6,8")
-        
-        # Knapsack inputs 
-        self.knapsak_frame = ttk.Frame(input_frame)
-        
-        ttk.Label(self.knapsack_frame, 
-                  text="Items (format: name, weight, value per line):").pack(anchor='w')
-        self.items_text = scrolledtext.ScrolledText(self.knapsack_frame, height=5, width=60)
-        self.items_text.pack(fill='x', pady=5)
-        self.items_text.insert(1.0, 
-            "Algorithms Textbook,2,10\nCalculus Notes,1\nLaptop, 3,15\nNotebook,1,5\nCalculator,1,7")
-        
-        ttk.Label(self.knapsack_frame, text="Backpack Capacity:").pack(anchor='w', pady=(5,0))
-        self.capacity_var = tk.StringVar(value="5")
-        ttk.Entry(self.knapsack_frame,textvariable=self.capacity_var, width=10).pack(anchor='w')
-        
-        # Run button
-        ttk.Button(self, text="Run Algorithm", command=self.run_algorithm).pack(pady=10)
-        
-        # Results
-        result_frame = ttk.LabelFrame(self, text="Results")
-        result_frame.pack(fill='both', expand=True, padx=20, pady=10)
-        
-        self.result_text = scrolledtext.ScrolledText(result_frame, height=15, width=80)
-        self.result_text.pack(fill='both', expand=True, padx=20, pady=10)
-        
-        # Show/hide appropriate input frames
-        self.algo_var.trace('w', self.toggle_inputs)
-        self.toggle_inputs()
-        
-        
-def toggle_inputs(self, *args):
-    if self.algo_var.get() == "GREEDY":
-        self.greedy_frame.pack(fill='x', padx=5, pady=5)
-        self.knapsack_frame.pack_forget()
-    else:
-        self.greedy_frame.pack_forget()
-        self.knapsack_frame.pack(fill='x', padx=5, pady=5)
-        
-def run_algorithm(self):
-    self.result_text.delete(1.0, tk.END)
-    
-    start_time = time.time()
-    
-    if self.algo_var.get() == "GREEDY":
-        result = self.greedy_scjeduling()
-    else:
-        result = self.knapsack_dp()
-        
-    elapsed = time.time() - start_time 
-    
-    self.result_text.insert(tk.END, result)
-    self.result_text.insert(tk.END, f"\n\nExecution Time: {elapsed*1000:.4f} ms")
-
-def greedy_scheduling(self):
-    """Greedy interval scheduling algorithm"""
-    try: 
-        task = []
-        for like in self.tasks_text.get(1.0, tk.END).strip().split('\n'):
-            if line.strip():
-                parts = line.split(',')
-                name = parts[0].strip()
-                start = int(parts[1].strip())
-                end = int(parts[2].strip())
-                tasks.append((name, start, end))
-                
-                
-        # Sort by end time (greedy choice)
-        tasks.sort(key=lambda x: x[2])
-        
-        selected = []
-        last_end = 0
-        
-        for name, start, end in tasks:
-            if start >= last_end:
-                selected.append((name, start, end))
-                last_end = end 
-                
-        result = "Greedy Scheduling (Maximum Non-Overlapping Tasks:\n\n"
-        result += f"Total tasks submitted: {len(tasks)}\n"
-        result += f"Maximum tasks scheduled: {len(selected)}\n\n"
-        result += "Scheduled Tasks:\n"
-        for i, (name, start, end) in enumerate(selected, 1):
-            result += f"{i}. {name}: {start}:00 - {end}:00\n"
+            # Sort by end time 
+            sorted_tasks = sorted(self.tasks, key=lambda x: x['end'])
             
-        if len(selected) < len(tasks):
-            unscheduled = [t[0] for t in tasks if t not in selected]
-            result += f"\nUnscheduled (conflicts): {','.join(unscheduled)}"
-            
-        return result 
-    except Exception as e:
-        return f"Error parsing input: {str(e)}"
+            result += " 📋  Tasks Sorted by End Time:\n"
+            for i, task in enumerate(sorted_tasks, 1):
+                result += f"   {i}. {task['name']} ({tasks['start']} → {task['end']})  ⭐{task['priority']}\n"
     
-def knapsack_dp(self):
-    """0/1 Knapsack using Dynamic Programming"""
-    try: 
-        items = []
-        for line in self.items_text.get(1.0, tk.END).strip().split('\n'):
-            if line.strip():
-                parts = line.split(',')
-                name = parts[0].strip()
-                weight = int(parts[1].strip())
-                value = int(parts[2].strip())
-                items.append((name, weight, value))
-                
-        capacity = int(self.capacity_var.get())
-        n = len(items)
-        
-        # DP table 
-        dp = [[0] * (capacity + 1) for _ in range(n + 1)]
-        
-        # Fill DP table 
-        for i in range(1, n + 1):
-            name, weight, value = items[i-1]
-            for w in range(capacity + 1):
-                if weight <= w:
-                    dp[i][w] = max(dp[i-1][w], dp[i-1][w-weight] + value)
+            result += "\n🔍 Selection Process:\n"
+            
+            scheduled = []
+            last_end = -1
+            step = 1
+            
+            for task in sorted_tasks:
+                if task['start'] >= last_end:
+                    scheduled.append(task)
+                    result += f"    Step {step}: ✅ Selected '{task['name']}' "
+                    result += f"({task['start']} → {task['end']})\n"
+                    last_end = task['end']
                 else:
-                    dp[i][w] = dp[i-1][w]
-                    
-        # Backtrack to find items 
-        selected = []
-        w = capacity
-        for i in range(n, 0, -1):
-            if dp[i][w] != dp[i-1][w]:
-                selected.append(items[i-1])
-                w -= items[i-1][1]
+                    result += f"    Step{step}:  ⏭️  Skipped '{task['name']}' "
+                    result += f"(conflits with previous task)\n"
+                step += 1
                 
-        selected.reverse()
+            result += f"\n✨ OPTIMAL SCHEDULE\n\n"
+            result += "📅 Selected Tasks:\n"
+            total_priority = 0
+            total_time = 0 
+            
+            for i, task in enumerate(scheduled, 1):
+                duration = task['end'] - task['start']
+                total_time += duration
+                total_priority += task['priority']
+                result += f"   {i}. {task['name']}\n"
+                result += f"       ⏰ Time: {task['start']}:80 - {task['end']}: 80 ({duration}h)\n"
+                result += f"       ⭐ Priority: {task['priority']}\n\n"
+                
+            result += f"📊  Statistics:\n"
+            result += f"   ✅ Tasks Scheduled: {len(scheduled)}/{len(self.tasks)}\n"
+            result += f"   ⏰ Total Study Time: {total_time} hours\n"
+            result += f"   ⭐ Total Priority: {total_priority}\n"
+            
+            return result 
         
-        result = "0/1 Knapsack Dynamic Programming:\n\n"
-        result += f"Backpack Capacity: {capacity} kg\n"
-        result += f"Total items available: {n}\n"
-        result += f"Items selected: {len(selected)}\n"
-        result += f"Maximum value: {dp[n][capacity]}\n\n"
-        total_weight = 0
-        for name, weight, value in selected:
-            result += f"   • {name}: {weight} kg, value {value}\n"
-            total_weight += weight
-        result += f"\nTotal Weight: {total_weight}/{capacity} kg"
+        def dp_schedule(self):
+            """Dynamic programming weighted scheduling"""
+            result = "🎯 DYNAMIC PROGRAMMING SCHEDULER\n"
+            result += "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+            result += "Strategy: Maximize total priority using 0/1 Knapsack approach!\n\n"
+            
+            # Sort by end time for DP
+            sorted_tasks = sorted(self.tasks, key=lambda x: x['end'])
+            n = len(sorted_tasks)
+            
+            # Find latest non-conflicting task 
+            def find_latest_non_conflict(i):
+                for j in range(i - 1, -1, -1):
+                    if sorted_tasks[j]['end'] <= sorted_tasks[i]['start']:
+                        return j 
+                return -1 
+            
+            # DP table
+            dp = [0] * n
+            dp[0] = sorted_tasks[0]['priority']
+            
+            result += "📊 DP Table Construction:\n"
+            
+            for i in range(1, n):
+                # Include current task 
+                include_priority = sorted_tasks[i]['priority']
+                latest = find_latest_non_conflict(i)
+                if latest != -1:
+                    include_priority += dp[latest]
+                    
+                # Exclude current task 
+                exclude_priority = dp[i -1]
+                
+                dp[i] = max(include_priority, exclude_priority)
+                
+                result += f"    Task {i+1} ({sorted_tasks[i]['name']}): "
+                result += f"Include={include_priority}, Exclude={exclude_priority} → "
+                result += f"Max={dp[i]}\n"
+                
+            # Backtrack to find solution 
+            scheduled = []
+            i = n - 1
+            while i >= 0:
+                if i == 0:
+                    scheduled.append(sorted_tasks[0])
+                    break
+                
+                latest = find_latest_non_conflict(i)
+                include_priority = sorted_tasks[i]['priority']
+                if latest != -1:
+                    include_priority += dp[latest]
+                    
+                if include_priority > dp[i - 1]:
+                    scheduled.append(sorted_tasks[i])
+                    i = latest
+                else:
+                    i -= 1
+                    
+            scheduled.reverse()
+            
+            result += f"\n✨ OPTIMAL WEIGHTED SCHEDULE\n\n"
+            result += "📅 Selected Tasks (Priority-Optimized):\n"
+            total_priority = 0
+            total_time = 0
+            
+            for i, task in enumerate(scheduled, 1):
+                duration = task['end'] - task['start']
+                total_time += duration
+                total_priority += task['priority']
+                result += f"   {i}. {task['name']}\n"
+                result += f"       ⏰ Time: {task['start']}:00 - {task['end']}: 00 ({duration}h)\n"
+                result += f"       ⭐ Priority: {task['priority']}\n\n"
+                
+            result += f"📊 Statistics:\n"
+            result += f"   ✅ Tasks Scheduled: {len(scheduled)}/{len(self.tasks)}\n"
+            result += f"   ⏰ Total Study Time: {total_time} hours\n"
+            result += f"   ⭐ Maximum Priority Achieved: {total_priority}\n"
+            result += f"   🎯 DP Table Final Value: {dp[n-1]}\n"
+            
+            return result 
         
-        return result 
-    
-    except Exception as e:
-        return f"Error: {str(e)}"
-    
+  
     
 class NotesSearchEngine(ttk.Frame):
     """Module 3: String Pattern Matching"""
