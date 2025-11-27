@@ -425,187 +425,726 @@ class CampusNavigator(ttk.Frame):
     
     
     for i, (text, value, color) in enumerate(algorithms):
-        ttk.Radiobutton(algo_frame, text=text, variable=self.algo_var,
-                        value=value).grid(row=0, column=i, padx=10, pady=5)
+        radio_frame = tk.Frame(radio_container, bg=self.colors['card_bg'])
+        radio_frame.pack(side='left', fill='x', expand=True, padx=5)
         
+        # Decorative accent bar with glow 
+        accent_container = tk.Frame(radio_frame, bg=color, width=4, height=22)
+        accent_container.pack(side='left', padx=(0, 8))
+        
+        
+        ttk.Radiobutton(radio_frame,
+            text=text,
+            variable=self.algo_var,
+            value=value,
+            style='Custom.TRadiobutton').pack(side='left')
+        
+    button_frame = tk.Frame(main_container, bg=self.colors['bg_dark'])
+    button_frame.pack(fill='x', pady=(0, 15))
     # Location selection 
-    loc_frame = ttk.LabelFrame(self, text="Select Locations")
-    loc_frame.pack(fill='x', padx=20, pady=10)
     
-    ttk.Label(loc_frame, text="Start:").grid(row=0, column=0, padx=5, pady=5)
-    self.start_var = tk.StringVar(value=self.locations[0])
-    start_combo = ttk.Combobox(loc_frame, textvariable=self.start_var, 
-                               values=self.locations, state='readonly', width=20)
-    start_combo.grid(row=0, column=1, padx=5, pady=5)
+    # Main action button with glow 
+    main_btn_glow = tk.Frame(button_frame, bg=self.colors['glow_pink'], padx=2, pady=2)
+    main_btn_glow.pack(side='left', padx=5)
     
-    ttk.Label(loc_frame, text="End:").grid(row=0, column=2, padx=5, pady=5)
-    self.end_var = tk.StringVar(value=self.locations[-1])
-    end_combo = ttk.Combox(loc_frame, textvariable=self.end_var,
-                           values=self.locations, state='readonly', width=20)
-    end_combo.grid(row=0, column=3, padx=5, pady=5)
+    ttk.Button(main_btn_shadow,
+        text="🚀 Find Path!",
+        command=self.reset_display,
+        style='Secondary.TButton').pack()
     
-    # Run button 
-    ttk.Button(self, text="Run Algorithm", command=self.run_algorithm,
-               style='Accent.TButton').pack(pady=10)
+    # Secondary buttons 
+    ttk.Button(main_btn_shadow,
+        text= " Reset",
+        command=self.reset_display,
+        style='Accent.TButton').pack()
     
-    # Results
-    result_frame = ttk.LabelFrame(self, text="Results")
-    result_frame.pack(fill='both', expand=True, padx=20, pady=10)
+    # Decorative sparkles 
+    sparkle_frame = tk.Frame(button_frame, bg=self.colors['bg_dark'])
+    sparkle_frame.pack(side='left', padx=(20, 0))
     
-    self.result_text = scrolledtext.ScrolledText(result_frame, height=15, width=80)
-    self.result_text.pack(fill='both', expand=True, padx=5, pady=5)
-    
-
-def run_algorithm(self):
-    algo = self.algo_var.get()
-    start = self.start_var.get()
-    end = self.end_var.get()
-    
-    self.result_text.delete(1.0, tk.END)
-    
-    start_time = time.time()
-    
-    if algo == "BFS":
-        result = self.bfs_path(start, end)
-    elif algo == "DFS":
-        result = self.dfs_connectivity(start)
-    elif algo == "DIJKSTRA":
-        result = self.djikstra_shortest_path(start, end)
-    elif algo == "PRIM":
-        result = self.prims_mst(start)
+    sparkles = ['✨', '💫', '⭐']
+    for sparkle in sparkles:
+        tk.Label(sparkle_frame:
+            text=sparkle,
+            font=('Segoe UI', 10), 
+            bg=self.colors['bg_dark'],
+            fg=self.colors['accent_light']).pack(side='left', padx=2)
         
-    elapsed = time.time() - start_time 
+    # Results display with gradient border 
+    results_gradient = tk.Frame(main_container, bg=self.colors['bg_dark'], height=3)
+    results_graident.pack(fill='x')
     
-    self.result_text.insert(tk.END, result)
-    self.result_text.insert(tk.END, f"\n\nExecution Time: {elapsed*1000:.4f} ms")
+    gradient_colors = [self.colors['accent_mint'], self.colors['accent_blue'], 
+                       self.colors['accent_purple'], self.colors['accent_pink']]
+    for color in gradient_colors:
+        tk.Frame(results_gradient, bg=color, height=3).pack(side='left', fill='both', expand=True)
     
-def bfs_path(self, start, end):
-    """BFS pathfinding algorithm"""
-    if start not in self.graph or end not in self.graph:
-        return "Invalid locations selected"
+    results_outer = tk.Frame(main_container, bg=self.colors['accent_light'], padx=2, pady=2)
+    results_inner.pack(fill='both', expand=True)
     
+    results_label = tk.Label(results_header, 
+        text= " Results & Path Visualization", 
+        font=('Segoe UI', 11, 'bold'), 
+        bg=self.colors['card_bg'], 
+        fg=self.colors['accent_purple'])
+    results_label.pack(side='left')
+    
+    # Decorative dots 
+    dots_frame = tk.Frame(results_header, bg=self.colors['card_bg'])
+    dots_frame.pack(side='right')
+    
+    dots_colors = [self.colors['accent_pink'], self.colors['accent_purple'], self.colors['accent_mint']]
+    for color in dot_colors:
+        tk.Label(dots_frame, 
+                 text="●", 
+                 font=('Segoe UI', 12),
+                 bg=self.colors['card_bg'],
+                 fg=color).pack(side='left', padx=3)
+        
+        self.results_text = scrolledtext.ScrolledText(results_inner,
+            wrap=tk.WORD, 
+            font=('Consolas', 10),
+            bg=self.colors['bg_light'],
+            fg=self.colors['text_light'],
+            relief='flat', 
+            padx=20, 
+            pady=20,
+            insertbackground=self.colors['accent_purple'])
+        self.results_text.pack(fill='both', expand=True, padx=15, pady=(0, 15))
+        
+        # Add welcome message 
+        welcome_msg = """
+╔═════════════════════════════════════════════════════╗
+║          ✨ Welcome to Campus Navigator! ✨          ║
+╚═════════════════════════════════════════════════════╝
+        
+     Choose your starting point and destination above 
+   Select an algorithm to use for pathfinding
+      Click "Find Path!" to discover the best route 
+            
+Available Algorithms:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🔵 BFS     - Finds shortest path (unweighted)
+🌳 DFS     - Explores depth-first through graph
+⚡ Dijkstra - Optimal weighted shortest path 
+🌉 Prim      - Creates minimum spanning tree 
+               
+Ready to navigate? Let's go! 💫
+        """
+        self.results_text.insert(1.0, welcome_msg)
+    
+    def find_path(self):
+        """Execute selected pathfinding algorithm with styling output"""
+        start = self.start_var.get()
+        end = self.end_var.get()
+        algo = self.algo_var.get()
+        
+        if start == end:
+            messagebox.showwarning("⚠️ Same Location",
+                                   "You're already at your destination!🎯")
+            return 
+        
+        self.results_text.delete(1.0, tk.END)
+        
+        # Header with cute formatting 
+        header = f"""
+╔═════════════════════════════════════════════════════╗
+║          🗺️ PATHFINDING RESULTS 🗺️                   ║
+╚═════════════════════════════════════════════════════╝
+
+📍  Start: {start}
+🎯  Goal: {end}
+⚡   Algorithm: {algo.upper()}
+               
+"""
+    self.results_text.insert(tk.END, header)
+          
+    start_time = time.time()
+          
+    if algo == 'bfs':
+        result = self.bfs(start, end)
+    elif algo == 'dfs':
+        result = self.dfs(start, end)
+    elif algo == 'dijkstra':
+        result = self.dijkstra(start, end)
+    else: # prim
+        result = self.prim_mst(start)
+        
+    elapsed = (time.time() - start_time) * 1000
+    
+    self.results_text.insert(tk.END, result)
+    self.results_text.insert(tk.END, f"\n{'━'*59}\n")
+    self.results_text.insert(tk.END, f"⏱️  Execution Time:{elapsed:.2f}ms\n")
+    self.results_text.insert(tk.END, f"{'━'*59}\n")
+    
+def bts(self, start, goal):
+    """BFS algorithm with styled output"""
     queue = deque([(start, [start])])
     visited = {start}
     
+    result = "🔵 BREADTH-FIRST SEARCH (BFS)\n"
+    result += "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+    result += "🔍  Exploration Order:\n"
+    
+    step = 1
     while queue:
-        node, path = queue.popleft()
+        current, path = queue.popleft()
+        result += f"    Step {step}: {current}\n"
+        step += 1
         
-        if node == end:
-            return f"BFS Path Found!\n\nPath: {' -> '.join(path)}\n\nSteps: {len(path)}"
+        if current == goal:
+            result += f"\n✅ PATH FOUND!\n\n"
+            result += "🛤️  Route:\n"
+            for i, location in enumerate(path, 1):
+                if i < len(path):
+                    result += f"    {i}. {location}📍\n"
+                    result += f"        ↓\n"
+                else:
+                    result += f"    {i}. {location} 🎯\n"
+                    
+            total_dist = sum(self.graph[path[i]][path[i+1]] for i in range(len(path-1)))
+            result += f"\n  Total Distance: {total_dist} units\n"
+            result += f"  Nodes Visited: {len(visited)}\n"
+            return result 
         
-        for neighbor in self.graph[node]:
+        for neighbor in sorted(self.graph[current].keys()):
             if neighbor not in visited:
                 visited.add(neighbor)
                 queue.append((neighbor, path + [neighbor]))
                 
-    return "No path found"
+    return " ❌ No path found between locations.\n"
+
+def dfs(self, start, goal):
+    """DFS algorithm with styled output"""
+    result = "🌳 DEPTH_FIRST SEARCH (DFS)\n"
+    result+= "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+    result += "🔍 Exploration Order (Deep Dive):\n"
     
-def dfs_connectivity(self, start):
-    """DFS with connectivity check"""
     visited = set()
-    
-    def dfs(node, path):
-        visited.add(node)
-        path.append(node)
-        
-        for neighbor in self.graph[node]:
-            if neighbor not in visited:
-                dfs(neighbor, path)
-                
     path = []
-    dfs(start, path)
+    found = [False]
+    step = [1]
+    output = [""]
     
-    all_nodes = set(self.graph.keys())
-    connected = len(visited) == len(all_nodes)
+    def dfs_recursive(node, target, current_path):
+        visited.add(node)
+        current_path.append(node)
+        output[0] += f"   Step {step[0]}: {node}, (depth: {len(current_path)})\n"
+        step[0] += 1
     
-    result = f"DFS Traversal from {start}:\n\n"
-    result += f"Visited Order: {'->'.join(path)}\n\n"
-    result += f"Nodes Reached: {len(visited)}/{len(all_nodes)}\n"
-    result += f"Graph is {'CONNECTED' if connected else 'NOT CONNECTED'}"
+        if node == target:
+            found[0] = True
+            path.extend(current_path)
+            return True 
     
-    if not connected:
-        unreached = all_nodes - visited 
-        result += f"\n\nUnreachable nodes: {', '.join(unreached)}"
+        for neighbor in sorted(self.graph[node].keys()):
+             if neighbor not in visited:
+                 if dfs_recursive(neighbor, target, current_path)
+                     return True 
+            
+        current_path.pop()
+        return False
+    
+    defs_recursive(start, goal, [])
+    result += output[0]
+    
+    if found[0]:
+        result += f"\n✅ PATH FOUND!\n\n"
+        result += "🛤️ Route:\n"
+        for i, location in enumerate(path, 1):
+            if i < len(path):
+                result += f"   {i}. {location} 📍 \n"
+                result += f"       ↓\n"
+            else:
+                result += f"   {i}. {location} 🎯\n"
+                
+        total_dist = sum(self.graoh[path[i]][path[i+1]] for i in range(len(path)-1))
+        result += f"\n  Total Distance: {total_dist} units\n"
+        result += f" Nodes Visited: {len(visited)}\n"
+    else:
+        result += " No path between locations.\n"
         
     return result 
 
-def dijkstra_shortest_path(self, start, end):
-    """Dijkstra's shortest path using heap"""
-    if start not in self.graph or end not in self.graph:
-        return "Invalid locations selected"
+def dijkstra(self, start, goal):
+    """Dijkstra's algorithm with styled output"""
+    result = " DIJKSTRA'S SHORTEST PATH ALGORITHM\n"
+    result += "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
     
     distances = {node: float('inf') for node in self.graph}
-    distances[start] = 0 
+    distances[start] = 0
     previous = {node: None for node in self.graph}
-    
-    heap = [(0, start)]
+    pq = [(0, start)]
     visited = set()
     
-    while heap:
-        current_dist, current = heapq.heappop(heap)
+    result += "🔍 Processing Nodes (by distance):\n"
+    step = 1
+    
+    while pq:
+        current_dist, current = heapq.heappop(pq)
         
         if current in visited:
             continue 
         
         visited.add(current)
+        result += f"   Step{step}: {current} (distance: {current_dist})\n"
+        step += 1
         
-        if current == end:
-            # Reconstruct path 
-            path = []
-            node = end
-            while node:
-                path.append(node)
-                node = previous[node]
-            path.reverse()
-            
-            return(f"Dijkstra's Shortest Path:\n\n"
-                   f"Path: {' -> '.join(path)}\n"
-                   f"Total Distance: {distances[end]} units\n"
-                   f"Nodes Explored: {len(visited)}")
-            
-        for neighbor, weight in self.graph[current].items():
-            distance = current_dist + weight 
+        if current == goal:
+            break 
+        
+        for neighbor, weight in self.graph[current].itmes():
+            distance = current_dist + weight
             
             if distance < distances[neighbor]:
-                distances[neighbor] = distance
+                distances[neighbor] = distance 
                 previous[neighbor] = current 
-                heapq.heappush(heap, (distance, neighbor))
-                
-    return "No path found"
-
-def prims_mst(self, start):
-    """Prim's Minimum Spanning Tree algorithm"""
-    mst = []
-    visited = {start}
-    total_weight = 0 
-    
-    # Edges from start node 
-    edges = [(weight, start, neighbor)
-             for neighbor, weight in self.graph[start].items()]
-    heapq.heapify(edges)
-    
-    while edges and len(visited) < len(self.graph):
-        weight, node1, node2 = heapq.heappop(edges)
-        
-        if node2 not in visited:
-            visited.add(node2)
-            mst.append((node1, node2, weight))
-            total_weight += weight
+                heapq.heappush(pq, (distance, neighbor))
             
-            # Add new edges 
-            for neighbor, w in self.graph[node2].items():
-                if neighbor not in visited:
-                    heapq.heappush(edges, (w, node2, neighbor))
-                    
-    result = f"Prim's Minimum Spanning Tree (starting from {start})\n\n"
-    result += "Edges in MST:\n"
-    for node1, node2, weight in mst:
-        result += f" {node1} ↔ {node2}: {weight} units\n"
-    result += f"\nTotal Weight: {total_weight} units\n"
-    result += f"Nodes in MST: {len(visited)}/{len(self.graph)}"
+    # Reconstruct path 
+    if distances[goal] != float('inf'):
+        path = []
+        current = goal
+        while current is not None:
+            path.append(current)
+            current = previous[current]
+        path.reverse()
+        
+        result += f"\n✅ OPTIMAL PATH FOUND!\n\n"
+        result += "    Shortest Route:\n"
+        for i, location in enumerate(path, 1):
+            if i < len(path):
+                dist = self.graph[path[i-1]][path[i]]
+                result += f"    {i}. {location}  📍\n"
+                result += f"        ↓ ({dist} units)\n"
+            else: 
+                result += f"    {i}. {location}  🎯\n"
+                
+        result += f"\n📏  Optimal Distance: {distances[goal]} units\n"
+        result += f"🔢  Nodes Processed: {len(visited)}\n"
+    else:
+        result += "❌  No path exists between locations.\n"
+        
+    return result
+
+def prim_mst(self, start):
+    """Prim's MST algorithm with styled output"""
+    result = "🌉 PRIM'S MINIMUM SPANNING TREE\n"
+    result += "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+    result += "Building MST to connect all campus locations efficiently!\n\n"
+    result += "🔍 Edge Selection Process:\n"
+    
+    visited = {start}
+    edges = []
+    pq = []
+    
+    for neighbor, weight in self.graph[start].items():
+        heapq.heappush(pq, (weight, start, neighbor))
+        
+    total_weight = 0
+    step = 1
+    
+    while pq and len(visited) < len(self.graph):
+        weight, u, v = heapq.heapop(pq)
+        
+        if v in visited:
+            continue
+        
+        visited.add(v)
+        edges.append((u, v, weight))
+        total_weight += weight
+        
+        result += f"    Step {step}: Add edges {u} ↔ {v} (weight: {weight}) ✨\n"
+        step += 1
+        
+        for neighbor, w in self.graph[v].items():
+            if neighbor not in visited:
+                heapq.heappush(pq, (w, v, neighbor))
+                
+    result += f"\n✅  MINIMUM SPANNING TREE COMPLETE!\n\n"
+    result += "🌉  All Edges in MST:\n"
+    for u, v, weight in edges:
+        result += f"   • {u} ↔ {v} ({weight} units)\n"
+        
+    result += f"\n📏  Total MST Weight: {total_weight} units\n"
+    result += f"🔢  Edges in Tree: {len(edges)}\n"
+    result += f"🌳  Nodes Connected: {len(visited)}\n"
     
     return result 
 
+def reset_display(self):
+    """Reset the display to intial state"""
+    self.results_text.delete(1.0, tk.END)
+    welcome_msg = """
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+Ready to navigate? Let's go! 
+        """
+        
+    def save_results(self):
+        """Save current results to a file"""
+        content = self.results_text.get(1.0, tk.END)
+        
+        if content.strip()
+            filename = filedialog.asksaveasfilename(
+                defaultextension=".txt",
+                filetypes=[("Text files", "*.txt"), ("All files", "*.*")],
+                title="Save Navigation Results"
+            )
+            
+            if filename:
+                try:
+                    with open(filename, 'w', encoding='utf-8') as f:
+                        f.write(content)
+                    messagebox.showinfo("💾 Success",
+                                        f"Results saved successfully! ✨\n\n{filename}")
+                except Exception as e:
+                    messagebox.showerror("❌ Error",
+                                         f"Could not save file:\n{str(e)}")
+                    
+class StudyPlanner(ttk.Frame):
+    """Study Planner module with greedy and DP scheduling"""
+    
+    def __init__(self, parent, colors):
+        """Initalize Study Planner with custom colors"""
+        super().__init__(parent)
+        self.colors = colors
+        self.configure(style='Card.TFrame')
+        self.tasks = []
+        self.setup_ui()
+        
+    def setup_ui(self):
+        """Create styled UI components"""
+        main_container = tk.Frame(self, bg=self.colors['bg_dark'])
+        main_container.pack(fill='both', expand=True, padx=25, pady=25)
+        
+        # Decorative title
+        title_frame = tk.Frame(main_container, bg=self.colors['bg_dark'])
+        title_frame.pack(fill='x', pady=(0, 20))
+        
+        title = tk.Label(title_frame, 
+            text="✨ Study Session Planner",
+            font=('Segoe UI', 15, 'bold'),
+            bg=self.colors['bg_dark'],
+            fg=self.colors['acent_purple'])
+        title.pack(side='left')
+        
+        subtitle = tk.Label(title_frame,
+            text="📚 Optimize your study scheduke!",
+            font=('Segoe UI', 9),
+            bg=self.colors['bg_dark'],
+            fg=self.colors['accent_peach'])
+        subtitle.pack(side='left', padx=(10, 0))
+        
+        
+        # Task input frame with decorative border 
+        input_outer = tk.Frame(main_container, bg=self.colors['accent_purple'], padx=2, pady=2)
+        input_outer.pack(fill='x', pady=(0, 15))
+        
+        input_frame = ttk.LabelFrame(input_outer,
+            text="➕ Add Study Task",
+            style='Custom.TLabelframe',
+            padding=20)
+        input_frame.pack(fill='x')
+        
+        # Task name
+        name_frame = tk.Frame(input_frame, bg=self.colors['card_bg'])
+        name_frame.pack(fill='x', pady=5)
+        
+        tk.Label(name_frame,
+                 text="📝  Task Name:",
+                 font=('Segoe Ui', 10, 'bold'),
+                 bg=self.colors['card_bg'],
+                 fg=self.colors['accent_pink']).pack(side='left', padx=(0, 10))
+        
+        self.task_name = tk.Entry(name_frame,
+            font=('Segoe UI', 10),
+            bg=self.colors['bg_light'],
+            fg=self.colors['text_light'],
+            relief='flat',
+            insertbackground=self.colors['accent_purple'])
+        self.tasks_name.pack(side='left', fill='x', expand=True, ipady=5)
+        
+        # Time inputs 
+        time_frame = tk.Frame(input_frame, bg=self.colors['card_bg'])
+        time_frame.pack(fill='x', pady=5)
+        
+        tk.Label(time_frame,
+            text="⏰  Start:",
+            font=('Segoe UI', 10, 'bold'),
+            bg=self.colors['card_bg'],
+            fg=self.colors['accent_mint']).pack(side='left', padx=(0, 10))
+        
+        self.start_time = tk.Entry(time_frame, 
+            font=('Segoe UI', 10),
+            width=10,
+            bg=self.colors['bg_light'],
+            fg=self.colors['text_light'],
+            relief='flat')
+        self.start_time.pack(side='left', ipady=5)
+        
+        tk.Label(time_frame,
+            text="⏰  End:",
+            font=('Segoe UI', 10, 'bold'),
+            bg=self.colors['card_bg'],
+            fg=self.colors['accent_blue']).pack(side='left', padx=(20, 10))
+        
+        self.end_time = tk.Entry(time_frame, 
+            font=('Segoe UI', 10), 
+            width=10, 
+            bg=self.colors['bg_light'],
+            relief='flat')
+        self.end_time.pack(side='left', ipady=5)
+        
+        tk.Label(time_frame, 
+            text="⭐ Priority:",
+            font=('Segoe UI', 10, 'bold'),
+            bg=self.colors['card_bg'],
+            fg=self.colors['accent_peach']).pack(side='left', padx=(20, 10))
+        
+        self.priority = tk.Entry(time_frame, 
+            font=('Segoe UI', 10),
+            width=10,
+            bg=self.colors['bg_light'],
+            fg=self.colors['text_light'],
+            relief='flat')
+        self.priority.pack(side='left', ipady=5)
+        
+        # Buttons 
+        btn_frame = tk.Frame(input_frame, bg=self.colors['card_bg'])
+        btn_frame.pack(fill='x', pady=(10, 0))
+        
+        ttk.Button(btn_frame, 
+            text="➕ Add Task",
+            command=self.add_task,
+            style='Accent.TButton').pack(side='left', padx=5)
+        
+        ttk.Button(btn_frame, 
+            text="🗑️  Clear All",
+            command=self.clear_tasks,
+            style='Secondary.TButton').pack(side='left', padx=5)
+        
+        # Algorithm selection
+        algo_frame = ttk.LabelFrame(main_container,
+            text="⚡ Select Scheduling Algorithm",
+            style='Custom.TLabelframe', 
+            padding=15)
+        algo_frame.pack(fill='x', pady=(0, 15))
+        
+        self.schedule_algo = tk.StringVar(value='greedy')
+        
+        radio_container = tk.Frame(algo_frame, bg=self.colors['card_bg'])
+        radio_container.pack(fill='x')
+        
+        algorithms = [
+            (' Greedy - Maximize Tasks', 'greedy', self.colors['accent_mint']),
+            ('  Dynamic Programming - Maximize Priority', 'dp', self.colors['accent_pink'])
+        ]
+        
+        for text, value, color in algorithms:
+            radio_frame = tk.Frame(radio_container, bg=self.colors['card_bg'])
+            radio_frame.pack(side='left', fill='x', expand=True, padx=10)
+            
+            tk.Frame(radio_frame, bg=color, width=3, height=20).pack(side='left', padx=(0, 5))
+            
+            ttk.Radiobutton(radio_frame, 
+                text=text,
+                variable=self.schedule_algo,
+                value=value,
+                style='Custom.TRadiobutton').pack(side='left')
+            
+        # Schedule button 
+        ttk.Button(main_container, 
+            text="   Generate Schedule!",
+            command=self.generate_schedule,
+            style='Special.TButton').pack(pady=(0, 15))
+        
+        # Results display 
+        results_outer = tk.Frame(main_container, bg=self.colors['accent_light'], padx=2, pady=2)
+        results_outer.pack(fill='both', expand=True)
+        
+        results_inner = tk.Frame(main_container, bg=self.colors['accent_light'], padx=2, pady=2)
+        results_inner.pack(fill='both', expand=True)
+        
+        
+        results_label = tk.Label(results_inner,
+            text="  Schedule Results",
+            font=('Segoe UI', 11, 'bold'),
+            bg=self.colors['card_bg'],
+            fg=self.colors['accent_purple'])
+        results_label.pack(anchor='w', padx=15, pady=(15, 10))
+        
+        self.schedule_text = scrolledtext.ScrolledText(results_inner, 
+            wrap=tk.WORD,
+            font=('Consolas', 10),
+            bg=self.colors['bg_light'],
+            fg=self.colors['text_light'],
+            relief='flat',
+            padx=20, 
+            pady=20)
+        self.schedule_text.pack(fill='both', expand=True, padx=15, pady=(0, 15))
+        
+        welcome_msg = """
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+Ready to ptimize your study time? Add tasks to begin! 💫
+        """
+        
+        self.schedule_text.insert(1.0, welcome_msg)
+    def add_task(self):
+        """Add a study task with validation"""
+        name = self.task_name.get().strip()
+        
+        try:
+            start = int(self.start_time.get())
+            end = int(self.end_time.get())
+            priority = int(slef.priority.get())
+            
+            if not name:
+                messagebox.shwowarning("⚠️  Invalid Input", "Please enter a task name! 📝")
+                return
+            
+            if start >= end:
+                messagebox.showwarning("⚠️  Invalid Time",
+                    "Start time must be before end time! ⏰")
+                return
+            
+            self.tasks.append({
+                'name': name, 
+                'start': start, 
+                'end': end, 
+                'priority': priority
+            })
+            
+            # Clear inputs 
+            self.task_name.delete(0, tk.END)
+            self.start_time.delete(0, tk.END)
+            self.end_time.delete(0, tk.END)
+            self.priority.delete(0, tk.END)
+            
+            messagebox.showinfo("✅ Success",
+                f"Task  '{name}' added successfully!  ✨\nTotal tasks: {len(self.tasks)}")
+            
+        except ValueError:
+            messagebox.showerror("❌ Error",
+                "Please enter valid numbers for time and priority! 🔢")
+            
+    def clear_tasks(self):
+        """Clear all tasks"""
+        if self.tasks:
+            if messagebox.askyesno("🗑️ Confirm", 
+                "Clear all tasks? This cannot be undone"):
+                self.tasks.clear()
+                messagebox.showinfo("✅ Cleared", "All tasks removed! 🧹")
+        else:
+            messagebox.showinfo("ℹ️ Info", "No tasks to clear! 📝")
+            
+    def generate_schedule(self):
+        """Generate schedule using selected algorithm"""
+        if not self.tasks:
+            messagebox.showwarning("  No Tasks",
+                "Please add some tasks first! 📝")
+            return 
+        
+        algo = self.schedule_algo.get()
+        self.schedule_text.delete(1.0, tk.END)
+        
+        header = f"""
+        
+        
+        
+        
+        
+        
+        
+        
+"""
+        self.schedule_text.insert(tk.END, header)
+               
+        start_time = time.time()
+               
+        if algo == 'greedy':
+            result = self.greedy_schedule()
+        else:
+            result = self.dp_schedule()
+            
+        elapsed = (time.time() - start_time) * 1000
+        
+        self.schedule_text.insert(tk.END, result)
+        self.schedule_text.insert
+        self.schedule_text.insert
+        self.schedule_text.insert
+        
+               
+        
+        
+        
+        
+        
+        
+        
+    
+
+    
+            
+          
+        
+    
+ 
 class StudyPlanner(ttk.Frame):
     """Module 2: Greedy Scheduling and Dynamic Programming"""
     
