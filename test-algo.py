@@ -89,7 +89,7 @@ def test_graph_algorithms():
             break
         
         
-        for neighbor, weight in graph[current].items()
+        for neighbor, weight in graph[current].items():
             distance = current_dist + weight
             if distance < distances[neighbor]:
                 distances[neighbor] = distance

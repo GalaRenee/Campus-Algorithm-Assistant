@@ -639,7 +639,7 @@ def dfs(self, start, goal):
     
         for neighbor in sorted(self.graph[node].keys()):
              if neighbor not in visited:
-                 if dfs_recursive(neighbor, target, current_path)
+                 if dfs_recursive(neighbor, target, current_path):
                      return True 
             
         current_path.pop()
@@ -798,7 +798,7 @@ Ready to navigate? Let's go!
         """Save current results to a file"""
         content = self.results_text.get(1.0, tk.END)
         
-        if content.strip()
+        if content.strip():
             filename = filedialog.asksaveasfilename(
                 defaultextension=".txt",
                 filetypes=[("Text files", "*.txt"), ("All files", "*.*")],
@@ -1410,7 +1410,7 @@ Ready to search? Load your notes to begin!💫
             )
             if filename:
                 try: 
-                    with open(filename, 'r', encoding='utf-8')
+                    with open(filename, 'r', encoding='utf-8'):
                     content = f.read()
                     self.notes_text.delete(1.0, tk.END)
                     self.notes_text.insert(1.0, content)
