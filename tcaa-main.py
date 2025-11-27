@@ -1698,6 +1698,300 @@ class AlgorithmInfo(ttk.Frame):
         self.configure(style='Card.TFrame')
         self.setup_ui()
         
+    def setup_ui(self):
+        """Create styled UI omponents"""
+        main_container = tk.Frame(self, bg=self.colors['bg_dark'])
+        main_container.pack(fill='both', expand=True, padx=25, pady=25)
         
+        # Title 
+        title_frame = tk.Frame(main_container, bg=self.colors['bg_dark'])
+        title_frame.pack(fill='x', pady=(0, 20))
+        
+        title = tk.Label(title_frame, 
+            text="💡  Algorithm Knowledge Base",
+            font=('Segoe UI', 15, 'bold'),
+            bg=self.colors['bg_dark'],
+            fg=self.colors['accent_purple'])
+        title.pack(side='left')
+        
+        subtitle = tk.Label(title_frame,
+            text="📊  Complexity & Theory",
+            font=('Segoe UI', 9),
+            bg=self.colors['bg_dark'],
+            fg=self.colors['accent_mint'])
+        subtitle.pack(side='left', padx=(10, 0))
+        
+        # Sub-notebook for tabs 
+        notebook = ttk.Notebook(main_container, style='Custom.TNotebook')
+        notebook.pack(fil='both', expand=True)
+        
+        # Time Complexities tab 
+        complexity_frame = tk.Frame(notebook, bg=self.colors['card_bg'])
+        notebook.add(complexity_frame, text=" ⏱️  Time Complexities  ")
+        
+        complexity_text = scrolledtext.ScrolledText(complexity_frame,
+            wrap=tk.WORD,
+            font=('Consolas', 10),
+            bg=self.colors['bg_light'],
+            fg=self.colors['text_light'],
+            relief='flat',
+            padx=15, 
+            pady=15)
+        complexity_text.pack(fill='both', expand=True, padx=10, pady=10)
+        
+        complexity_info = """⏱️  TIME COMPLEXITY ANALYSIS ✨
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+💡  Pro Tip: Always aim for O(n log n) or better for large inputs!
+"""
+
+        complexity_text.insert(1.0, complexity_info)
+        complexity_text.config(state='disabled')
+        
+        # P vs NP tab 
+        pnp_frame = tk.Frame(notebook, bg=self.colors['card_bg'])
+        notebook.add(pnp_frame, text="  🧠  P vs NP")
+        
+        pnp_text = scrolledtext.ScrolledText(pnp_frame, 
+            wrap=tk.WORD,
+            font=('Consolas', 10),
+            bg=self.colors['bg_light'],
+            fg=self.colors['text_light'],
+            relief='flat',
+            padx=15, 
+            pady=15)
+        pnp_text.pack(fill='both', expand=True, padx=10, pady=10)
+        
+        pnp_info = """🧠  P vs NP: THE MILLION DOLLAR QUESTION  ✨
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+"""
+        pnp_text.insert(1.0, pnp_info)
+        pnp_text.config(state='disabled')
+              
+def main():
+    """Main entry point for the enhanced style application"""
+    app = StyledTCAA()
+    app.mainloop()
+    
+if __name__ == "__main__":
+    main()
+    
         
     
