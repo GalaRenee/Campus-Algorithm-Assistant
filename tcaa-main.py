@@ -1503,7 +1503,7 @@ Ready to search? Load your notes to begin!💫
             
             self.results_text.insert(tk.END, result)
             self.results_text.insert(tk.END, f"\n{'━'*59}\n")
-            self.results_text.insert(tk.END, f"     Execution Time: {elapsed:.3f}ms\n")
+            self.results_text.insert(tk.END, f"⏱️   Execution Time: {elapsed:.3f}ms\n")
             self.results_text.insert(tk.END, f"{'━'*59}\n")
             
         def naive_search(self, text, pattern):
@@ -1517,303 +1517,187 @@ Ready to search? Load your notes to begin!💫
             m = len(pattern)
             comparisons = 0
             
-            result += "  Search Progress:\n"
+            result += "🔍 Search Progress:\n"
             
+            for i in range(n - m + 1):
+                j = 0 
+                while j < m and text[i + j] == pattern[j]:
+                    j += 1
+                    comparisons += 1
+                    
+                if j == m:
+                    matches.append(i)
+                    result += f"    ✅ Match found at position {i}\n"
+                else:
+                    comparisons += 1 # Count the failed comparisons
+                    
+            result += f"\n📊 SEARCH COMPLETE\n\n"
+            result += f"✨ Matches Found: {len(matches)}\n"
+            result += f"🔢 Total Comparisons: {comparisons}\n\n"
             
-            
-        
-        
-        
-        
-        
-        
-        
-        
-        # File upload
-        upload_frame = ttk.LabelFrame(self, text="Document Upload")
-        upload_frame.pack(fill='x', padx=20, pady=10)
-        
-        ttk.Button(upload_frame, text="Upload TXT/PDF/DOCX",
-                   command=self.upload_file).pack(side='left', padx=10, pady=5)
-        self.file_label = ttk.Label(upload_frame, text="No file loaded")
-        self.file_label.pack(side='left', padx=10)
-        
-        # Search input 
-        search_frame = ttk.LabelFrame(self, text="Search Pattern")
-        search_frame.pack(side='left', padx=10)
-        
-        ttk.Button(upload_frame, text="Upload TXT/PDF/DOCX",
-                   command=self.upload_file).pack(side='left', padx=10, pady=5)
-        self.file_label = ttk.Label(upload_frame, text="No file loaded")
-        self.file_label.pack(side='left', padx=10)
-        
-        
-        # Search input 
-        search_frame = ttk.LabelFrame(self, text="Search Pattern")
-        search_frame.pack(fill='x', padx=20, pady=10)
-        
-        ttk.Label(search_frame, text="Pattern to search:").pack(side='left', padx=5)
-        self.pattern_var = tk.StringVar()
-        ttk.Entry(search_frame, textvariable=self.pattern_var, width=30).pack(side='left', padx=5)
-        
-        
-        # Algorithm selection
-        algo_frame = ttk.LabelFrame(self, text="Search Algorithm")
-        algo_frame.pack(fill='x', padx=20, pady=10)
-        
-        self.algo_var = tk.StringVar(value="NATIVE")
-        ttk.Radiobutton(algo_frame, text="Native Search",
-                        variable=self.algo_var, value="NAIVE").pack(side='left', padx=15, pady=5)
-        ttk.Radiobutton(algo_frame, text="Rabin-Karp",
-                        variable=self.algo_var, value="RABIN").pack(side='left', padx=15, pady=5)
-        ttk.Radiobutton(algo_frame, text="KMP",
-                        variable=self.algo_var, value="KMP").pack(side='left', padx=15, pady=5)
-        ttk.Radiobutton(algo_frame, text="Compare All", 
-                        variable=self.algo_var, value="COMPARE").pack(side='left', padx=15, pady=5)
-        
-        # Search button 
-        ttk.Button(self, text="Search", command=self.search).pack(pady=10)
-        
-        # Results 
-        result_frame = ttk.LabelFrame(self, text="Search Results")
-        result_frame.pack(fill='both', expand=True, padx=20, pady=10)
-        
-        self.result_text = scrolledtext.ScrolledText(result_frame, height=15, width=80)
-        self.result_text.pack(fill='both', expand=True, padx=5, pady=5)
-        
-def upload_file(self):
-    """Upload and read document"""
-    filename = filedialog.askopenfilename(
-        title="Select a file",
-        filetypes=[("Text files", "*.txt"), ("PDF files", "*.pdf"),
-                   ("Word files", "*.docx"), ("All files", "*.*")]
-    )
-    
-    if filename:
-        try: 
-            if filename.endswith('.txt'):
-                with open(filename, 'r', encoding='utf-8') as f:
-                    self.document_text = f.read()
-            elif filename.endswith('.pdf'):
-                self.document_text = "PDF support: Use sample text for demo."
-                self.document_text = """Sample course notes for Algorithm Engineering. 
-                Topics include: sorting algorithms, graph algorithms, dynamic programming,
-                greedy algorithms, string matching, and complexity analysis."""
+            if matches:
+                result += "📍 Match Positions:\n"
+                for pos in matches:
+                    context_start = max(0, pos - 20)
+                    context_end = min(len(text), pos + len(pattern) + 20)
+                    context = text[context_start:context_end]
+                    result += f"   Position {pos}: ...{context}...\n"
             else:
-                self.document_text = "DOCX support: use sample text for demo."
-                self.document_text = """Algorithm Engineering Course Notes
-                Chapter 1: Introduction to Algorithms
-                Chapter 2: Sorting and Searching
-                Chapter 3: Graph Algorithms"""
+                result += "❌ No matches found in the text.\n"
                 
-            self.file_label.config(text=f"Loaded: {os.path.basename(filename)}")
-            messagebox.showinfo("Success", "File loaded successfully!")
-        except Exception as e:
-            messagebox.showerror("Error", f"Failed to load file: {str(e)}")
-            
-def search(self):
-    """Run selected search algorithm"""
-    if not self.document_text:
-        messagebox.showwarning("No Document", "Please upload a document first!")
-        return 
-    
-    pattern = self.pattern_var.get()
-    if not pattern:
-        messagebox.showwarning("No Pattern", "Please enter a search pattern!")
-        return 
-    
-    self.result_text.delete(1.0, tk.END)
-    
-    if self.algo_var.get() == "COMPARE":
-        self.compare_algorithms(pattern)
-    else:
-        start_time = time.time()
+            return result 
         
-        if self.algo_var.get() == "NATIVE":
-            matches = self.naive_search(self.document_text, pattern)
-            algo_name = "Naive Search"
-        elif self.algo_var.get() == "RABIN":
-            matches = self.rabin_karp_search(self.document_text, pattern)
-            algo_name = "Rabin-Karp"
-        else: # KMP
-            matches = self.kmp_search(self.document_text, pattern)
-            algo_name = "KMP (Knuth-Morris-Pratt)"
+        def rabin_karp(self, text, pattern):
+            """Rabin-Karp string matching algorithm"""
+            result = "  RABIN_KARP ALGORITHM\n"
+            result += "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+            result += "Strategy: Use rolling hash for efficient comparisons\n\n"
             
-        elapsed = time.time() - start_time
+            matches = []
+            n = len(text)
+            m = len(pattern)
+            d = 256 # Number of characters 
+            q = 101 # Prime number 
+            
+            # Calculate hash values
+            h = pow(d, m - 1, q)
+            p = 0 # Pattern hash
+            t = 0 # Text hash
+            
+            # Calculate intial hash values 
+            for i in range(m):
+                p = (d * p + ord(pattern[i])) % q
+                t = (d * t + ord(text[i])) % q
+                
+            result += f"🔢  Pattern Hash: {p}\n\n"
+            result += "🔍  Searching with Rolling Hash:\n"
+            
+            comparisons = 0
+            hash_matches = 0
+            
+            # Slide pattern over text
+            for i in range(n - m + 1):
+                if p == t:
+                    hash_matches += 1
+                    # Verify match character by character 
+                    match = True 
+                    for j in range(m):
+                        comparisons += 1
+                        if text[i + j] != pattern[j]:
+                            match = False
+                            break
+                        
+                    if match: 
+                        matches.append(i)
+                        result += f"   ✅ Hash match & verified at position {i}\n"
+                    else:
+                        result += f"   ⚠️  Hash collision at position {i}\n"
+                        
+                # Calculate rolling hash for next window
+                if i < n - m:
+                    t = (d * (t - ord(text[i]) * h) + ord(text[i + m])) % q
+                    if t < 0:
+                        t += q
+                        
+                        
+            result += f"\n📊  SEARCH COMPLETE\n\n"
+            result += f"✨   Matches Found: {len(matches)}\n"
+            result += f"🔢  Hash Matches: {hash_matches}\n"
+            result += f"🔢  Character Comparisons: {comparisons}\n\n"
+            
+            if matches:
+                result += "📍 Match Positions:\n"
+                for pos in matches:
+                    context_start = max(0, pos - 20)
+                    context_end = min(len(text), pos + len(pattern) + 20)
+            else:
+                result += "❌  No matches found in the text.\n"
+                
+            return result 
         
-        result = f"{algo_name} Results:\n\n"
-        result += f"Pattern: '{pattern}'\n"
-        result += f"Matches found: {len(matches)}\n"
-        result += f"Execution time: {elapsed*1000:.4f} ms\n\n"
+    def kmp_search(self, text, pattern):
+        """KMP string matching algorithm."""
+        result = "⚡ KNUTH-MORRIS-PRATT (KMP) ALGORITHM\n"
+        result += "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+        
+        # Compute LPS (Longest Proper Prefix which is also Suffix) array
+        m = len(pattern)
+        lps = [0] * m
+        
+        length = 0
+        i = 1
+        
+        while i < m:
+            if pattern[i] == pattern[length]:
+                length += 1
+                lps[i] = length
+                i += 1
+            else:
+                if length != 0:
+                    length = lps[length - 1]
+                else:
+                    lps[i] = 0
+                    i += 1
+                    
+        result += "📊   LPS Array (preprocessing): \n"
+        result += f"     Pattern: {pattern}\n"
+        result += f"     LPS:      {lps}\n\n"
+        
+        # Search for pattern 
+        matches = []
+        n = len(text)
+        i = 0 # Index for text 
+        j = 0 # Index for pattern 
+        comparisons = 0 
+        
+        result += "🔍 Searching with KMP:\n"
+        
+        while i < n:
+            comparisons += 1
+            
+            if pattern[j] == text[i]:
+                i += 1
+                j += 1
+                
+            if j == m:
+                matches.append(i - j)
+                result += f"   ✅ Match found at position {i - j}\n"
+                j = lps[j - 1]
+            elif i < n and pattern[j] != text[i]:
+                if j != 0:
+                    j = lps[j - 1]
+                    result += f"    ⏭️   Skip using LPS[{j}] at position {i}\n"
+                else:
+                    i += 1
+                    
+        result += f"\n📊   SEARCH COMPLETE\n\n"
+        result += f"✨  Matches Found: {len(matches)}\n"
+        result += f"🔢  Total Comparisons: {comparisons}\n"
+        result += f"⚡  Efficiency Gain: {((n * m - comparisons) / (n * m) * 100):.f}%\n\n"
+        
         
         if matches:
-            result += "Match positions:\n"
-            for i, pos in enumerate(matches[:10], 1): # Shows first 10
+            result += "📍  Match Positions: \n"
+            for pos in matches:
                 context_start = max(0, pos - 20)
-                context_end = min(len(self.document_text), pos + len(pattern) + 20)
-                context = self.document_text[context_start:context_end]
-                result += f"{i}. Position {pos}: ...{context}...\n"
-                
-            if len(matches) > 10:
-                result += f"\n... and {len(matches) - 10} more matches"
-                
-        self.result_text.insert(tk.END, result)
-        
-
-def naive_search(self, text, pattern):
-    """Naive string search"""
-    matches = []
-    n, m = len(text), len(pattern)
-    
-    for i in range(n - m + 1):
-        if text[i:i+m] == pattern:
-            matches.append(i)
-            
-    return matches 
-
-def rabin_karp_search(self, text, pattern):
-    """Rabin-Karp string search"""
-    matches = []
-    n, m = len(text), len(pattern)
-    d = 256 # number of characters
-    q = 101 # prime number 
-    
-    h = pow(d, m-1, q)
-    p = 0 # hash of pattern
-    t = 0 # hash of text
-    
-    # Calculate initial hash
-    for i in range(m):
-        p = (d * p + ord(pattern[i])) % q
-        t = (d * t + ord(text[i])) % q
-        
-    # Slide pattern over text
-    for i in range(n - m + 1):
-        if p == t:
-            # Hash match, verify actual string 
-            if text[i:i+m] == pattern:
-                matches.append(i)
-                
-        if i < n - m:
-            t = (d * (t - ord(text[i]) * h) + ord(text[i + m])) % q
-            if t < 0:
-                t += q
-                
-    return matches 
-
-def kmp_search(self, text, pattern):
-    """KMP string search"""
-    matches = []
-    n, m = len(text), len(pattern)
-    
-    # Compute LPS array
-    lps = self.compute_lps(pattern)
-    
-    i = 0 # index for text
-    j = 0 # index for pattern 
-    
-    while i < n:
-        if pattern[j] == text[i]:
-            i += 1
-            j += 1
-            
-        if j == m:
-            matches.append(i - j)
-            j = lps[j - 1]
-        elif i < n and pattern[j] != text[i]:
-            if j != 0:
-                j = lps[j - 1]
-            else:
-                i += 1
-                
-    return matches 
-
-def compute_lps(self, pattern):
-    """Compute Longest Proper Prefix which is also Suffix"""
-    m = len(pattern)
-    lps = [0] * m 
-    length = 0 
-    i = 1
-    
-    while i < m:
-        if pattern[i] == pattern[length]:
-            length += 1
-            lps[i] = length
-            i += 1
+                context_end = min(len(text), pos + len(pattern) + 20)
+                context = text[context_start:context_end]
+                result += f"    Position {pos}: ...{context}...\n"
         else:
-            if length != 0:
-                length = lps[length - 1]
-            else:
-                lps[i] = 0 
-                i += 1
-                
-    return lps
-
-def compare_algorithms(self, pattern):
-    """Compare all three algorithms"""
-    results = []
+            result += "❌  No matches found in the text.\n"
+        return result 
     
-    for algo_name, search_func in [
-        ("Naive Search", self.naive_search),
-        ("Rabin-Karp", self.rabin_karp_search),
-        ("KMP", self.kmp_search)
-    ]:
-        start_time = time.time()
-        matches = search_func(self.document_text, pattern)
-        elapsed = time.time() - start_time
-        results.append((algo_name, len(matches), elapsed))
-        
-    output = "Algorithm Comparison:\n\n"
-    output += f"Pattern: '{pattern}'\n"
-    output += f"Document length: {len(self.document_text)} characters\n\n"
-    output += f"{'Algorithm':<20} {'Matches':<10} {'Time (ms)':<15}\n"
-    output += "-" * 50 + "\n"
-    
-    for name, matches, time_taken in results:
-        output += f"{name:<20} {matches:<10} {time_taken*1000:>10.4f} ms\n"
-        
-        # Find fastest
-        fastest = min(results, key=lambda x: x[2])
-        output += f"{name:<20} {matches:<10} {time_taken*1000:>10.4f} ms\n"
-        
-        self.result_text.insert(tk.END, output)
-        
 class AlgorithmInfo(ttk.Frame):
-    """Module 4: Algorithm Information and Complexity Analysis"""
-    
-    def __init__(self, parent):
+    """Algorithm Information module with complexity analysis."""
+                
+        
+    def __init__(self, parent, colors):
+        """Initialize Algorithm Info module"""
         super().__init__(parent)
+        self.colors = colors
+        self.configure(style='Card.TFrame')
         self.setup_ui()
         
-    def setup_ui(self):
         
-        # Title
-        title = ttk.Label(self, text="Algorithm Information & Complexity Analysis",
-                          font=('Arial', 14, 'bold'))
-        title.pack(pady=10)
-        
-        # Create notebook for sub-sections
-        notebook = ttk.Notebook(self)
-        notebook.pack(fill='both', expand=True, padx=20, pady=10)
-        
-        # Time Complexities tab 
-        complexity_frame = ttk.Frame(notebook)
-        notebook.add(complexity_frame, text="Time Complexities")
-        
-        complexities_text = scrolledtext.ScrolledText(complexity_frame, wrap=tk.WORD)
-        complexity_text.pack(fill='both', expand=True, padx=10, pady=10)
-        
-        complexity_info = """TIME COMPLEXITY ANALYSIS"""
-        
-
-
-        
-        
-        
-        
-        
-        
-                
-    
         
     
