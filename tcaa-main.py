@@ -776,42 +776,20 @@ def reset_display(self):
     """Reset the display to intial state"""
     self.results_text.delete(1.0, tk.END)
     welcome_msg = """
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+╔═════════════════════════════════════════════════════╗
+║       ✨   Welcome to Campus Navigator! ✨           ║
+╚═════════════════════════════════════════════════════╝   
+
+🗺️ Choose your starting point and destination above
+⚡ Select an algorithm to use for pathfinding
+🚀 Click "Find Path!" to discover the best route 
+
+Available: Algorithms:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 🔵 BFS    - Finds shortest path (unweighted)
+ 🌳 DFS    - Explores depth-first through path
+ ⚡ Dijkstra - Optimal weighted shortest path
+ 🌉 Prim     - Creates minimum spanning tree
     
 Ready to navigate? Let's go! 
         """
@@ -1020,27 +998,22 @@ class StudyPlanner(ttk.Frame):
         self.schedule_text.pack(fill='both', expand=True, padx=15, pady=(0, 15))
         
         welcome_msg = """
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+╔═════════════════════════════════════════════════════╗
+║       ✨   Welcome to Study Planner! ✨              ║
+╚═════════════════════════════════════════════════════╝   
+
+ 📝 Add your study tasks with:
+   - Task name 
+   - Start time (e.g., 9)     
+   - End time (e.g., 11)
+   - Priority score (e.g., 10)
+   
+⚡ Choose an algorithm:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚡ Greedy - Schedules maximum number of non-overlapping tasks 
+🎯 DP     - Maximizes total priority value (weighted scheduling)
+   
+       
 Ready to ptimize your study time? Add tasks to begin! 💫
         """
         
@@ -1104,14 +1077,13 @@ Ready to ptimize your study time? Add tasks to begin! 💫
         self.schedule_text.delete(1.0, tk.END)
         
         header = f"""
-        
-        
-        
-        
-        
-        
-        
-        
+╔═════════════════════════════════════════════════════╗
+║         📅  STUDY SCHEDULE GENERATED  📅             ║
+╚═════════════════════════════════════════════════════╝     
+
+⚡ Algorithm: {algo.upper()} 
+📝 Total Tasks Available: {len(self.tasks)}
+       
 """
         self.schedule_text.insert(tk.END, header)
                
@@ -1410,24 +1382,22 @@ class NotesSearchEngine(ttk.Frame):
             self.results_text.pack(fill='both', expand=True, padx=15, pady=(0, 15))
             
             welcome_msg = """
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
+╔═════════════════════════════════════════════════════╗
+║           🔍 Welcome to Notes Search! 🔍             ║
+╚═════════════════════════════════════════════════════╝               
+ 
+ 📝 How to use:
+   1. Load a file or type your notes above 
+   2. Enter a pattern to search for 
+   3. Choose a search algorithm 
+   4. Click "Search Now!" to find matches 
+   
+ ⚡ Available Algorithms:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 🔄 Naive        - Simple brute-force search 
+ 🎲 Rabin-Karp   - Hash-based pattern matching 
+ ⚡ KMP           - Efficient with preprocessing 
+       
 Ready to search? Load your notes to begin!💫            
             """
             self.results_text.insert(1.0, welcome_msg)
@@ -1477,15 +1447,13 @@ Ready to search? Load your notes to begin!💫
             self.results_text.delete(1.0, tk.END)
             
             header = f"""
-            
-            
-            
-            
-            
-            
-            
-            
-            
+╔═════════════════════════════════════════════════════╗
+║            🔍  PATTERN SEARCH RESULTS 🔍             ║
+╚═════════════════════════════════════════════════════╝   
+
+ 🎯 Pattern: "{pattern} "
+ ⚡ Algorithm: {algo.upper().replace('_', '-')}
+ 📝 Text Length: {len(text)} characters 
             
 """
             self.results_text.insert(tk.END, header)
@@ -1741,94 +1709,81 @@ class AlgorithmInfo(ttk.Frame):
         
         complexity_info = """⏱️  TIME COMPLEXITY ANALYSIS ✨
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+╔═════════════════════════════════════════════════════╗
+║                   GRAPH ALGORITHMS  🗺️               ║
+╚═════════════════════════════════════════════════════╝     
+
+🔵 BFS (Breadth-First Search)  
+   Time: O(V + E)
+   SPACE: O(V)
+   Use:   Shortest path in unweighted graphs
+   ✨      Level-by-level exploration
+   
+🌳 DFS (Depth-First Search)
+   Time:  O(V + E)
+   Space: O(V) recursion stack 
+   Use: Connectivity, cycle detection
+   ✨    Deep exploration first
+   
+⚡ Dijkstra's Algorithm (heap-based)
+   Time: O((V + E) log V)
+   Space: O(V)
+   Use:   Shortest weighted path (non-negative weights)
+   ✨      Greedy shortest path selection
+   
+🌉 Prim's MST (heap-based)
+Time: O((V + E) log V)
+Space: O(V)
+Use:   Minimum spanning tree
+✨     Greedy edges selection
+
+╔═════════════════════════════════════════════════════╗
+║         GREEDY & DYNAMIC PROGRAMMING  📚             ║
+╚═════════════════════════════════════════════════════╝   
+
+⚡ Greedy Interval Scheduling 
+   Time:  O(n log n) - sorting dominates 
+   Space: O(1)
+   Use:   Maximize number of non-overlapping activities 
+   ✨     Sorting by end time, pick greedily
+   
+╔═════════════════════════════════════════════════════╗
+║            STRING MATCHING ALGORITHM 🔍              ║
+╚═════════════════════════════════════════════════════╝  
+
+🔄 Naive Search 
+  Time: O(n x m)
+  Space: O(1)
+  Use:   Simple cases, small patterns 
+  ✨     Check every position 
+  
+🎲 Rabin-Karp
+  Time: O(n + m) average, O(n x m) worst
+  Space: O(1)
+  Use: Multiple pattern search 
+  ✨   Rolling hash for efficiency 
+  
+⚡ KMP (Knuth-Morris-Pratt)
+   Time: O(n + m) guaranteed 
+   Space: O(m) for LPS array
+   Use: Single pattermn, linear time guarentee
+   ✨   LPS array prevents backtraacking 
+   
+╔═════════════════════════════════════════════════════╗
+║            COMPLEXITY CLASSES 📊                     ║
+╚═════════════════════════════════════════════════════╝ 
+
+O(1)        Constant     ⚡ Instant - array access 
+O(log n)    Logarithmic  ⚡ Very fast - binary search 
+O(n)        Linear       ✅ Acceptable - single pass
+O( n log n) Linearithmic ✅ Efficient - merge sort 
+O(n^2)      Quadratic    ⚠️ Slow for large n - nested loops 
+O(n^3)      Cubic        ⚠️ Very slow - triple nested 
+O(2^n)      Exponential  ❌ Impractical - subsets
+O(n!)       Factorial    ❌ Impossible - permutations   
         
 💡  Pro Tip: Always aim for O(n log n) or better for large inputs!
 """
-
         complexity_text.insert(1.0, complexity_info)
         complexity_text.config(state='disabled')
         
@@ -1848,139 +1803,136 @@ class AlgorithmInfo(ttk.Frame):
         
         pnp_info = """🧠  P vs NP: THE MILLION DOLLAR QUESTION  ✨
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+╔═════════════════════════════════════════════════════╗
+║                    NAVIGATION  💡                    ║
+╚═════════════════════════════════════════════════════╝
+
+The P vs NP question asks:
+
+    "If we can quickly VERIFY a solution,
+     can we also quickly FIND it?"
+     
+ 💰 Millennium Prize Problem: $1,000,000 reward
+ 🤔 Unsolved for 50+ years
+ 📊 Most computer scientists believe P ≠ NP
+ ✨ One of the most important questions in CS
+    
+
+╔═════════════════════════════════════════════════════╗
+║                   WHAT IS P? ⚡                      ║
+╚═════════════════════════════════════════════════════╝  
+
+P = Problems solvable in POLYNOMIAL time 
+
+✅  Examples from TCAA:
+- BFS Pathfining             O( V + E)
+- Dijkstra Shortest Path     O((V+E) log V)
+- All sorting algorithms     O(n log n)
+- String matching (KMP)      O(n + m)
+
+✨ These problems are "tractable" - we can solve them efficiently!
+
+╔═════════════════════════════════════════════════════╗
+║                   WHAT IS NP? 🔍                     ║
+╚═════════════════════════════════════════════════════╝  
+
+NP = Problems where solutions can be VERIFIED in polynomial time 
+
+❓  Examples NOT in TCAA:
+    - Boolean SAT (satisfiability)
+    - Traveling Salesman (decision version)
+    - Graph Coloring
+    - Hamiltonian Cycle 
+    - Subset Sum 
+    
+✨  Key insight: Verification is easier than finding!
+    
+Example: Sudoku
+- Finding solution: Could take very long ❌
+- Checking solution: Quick and easy ✅
+
+╔═════════════════════════════════════════════════════╗
+║                   NP-COMPLETE 🔴                    ║
+╚═════════════════════════════════════════════════════╝  
+
+The HARDEST problems in NP
+
+if ANY NP-Complete problem can be solved in P time, 
+then P = NP (all NP problems become easy!)
+
+Famous NP-Complete problems:
+    🔴 SAT (first proven NP-Complete)
+    🔴 3-SAT
+    🔴 Vertex Cover
+    🔴 Clique
+    🔴 Independent Set
+    🔴 Hamiltonian Path
+      
+ ✨ All NP-Complete problems can be reduced to each other!
+ 
+╔═════════════════════════════════════════════════════╗
+║                   NP-HARD ⚠️                         ║
+╚═════════════════════════════════════════════════════╝ 
+
+At least as hard as Np-Complete, maybe harder
+
+⚠️  0/1 Knapsack (optimization) - NP-Hard
+  Our DP solution: O(nW) pseudo-polynomial
+  Works well when W is reasonable!
+  
+⚠️  Traveling Salesman (optimization) - NP-Hard
+  Finding shortest tour is harder than yes/no question 
+  
+✨ NP-Hard problems aren't necessarily in NP!
+
+╔═════════════════════════════════════════════════════╗
+║               WHY IT MATTERS 🌟                      ║
+╚═════════════════════════════════════════════════════╝ 
+
+🔐 Cryptography
+   RSA encryption relies on P ≠ NP
+   if P = NP, most encryption breaks!
+   
+🎯  Real-World Optimzation
+   Scheduling, routing, packing all NP-Hard
+   Need approximations, not perfect solutions
+   
+🧠  Undertsanding Computation 
+   Fundamental limits of what's computable 
+   Shapes how we approach problem-solving
+   
+💰  Career Impact 
+   Understanding complexity helps choose right approach 
+   Don't waste time looking for polyminal solutions!
+    
+╔═════════════════════════════════════════════════════╗
+║        STRATEGIES FOR NP-HARD PROBLEMS  💡           ║
+╚═════════════════════════════════════════════════════╝ 
+
+1. 📈 Approxiation Algorithms 
+Get "good enough" solutions quickly
+Example: 2-approximation for Vertex Cover 
+
+2. 🎲 Heuristics 
+Greedy algorithms, local search, genetic algorithms
+No guarantees, but often work well in practice
+
+3. 📊 Dynamic Programming 
+Like our knapsack! Works for reaonable inputs 
+Pseudo-polyminal for some problems 
+
+4. 🎯 Special Cases
+Restrict problem to make tractable 
+Example: 2-SAT is in P (but 3-SAT is NP-Complete)
+
+5. 🔧 Parameterized Complexity 
+Efficient when some parameter is small 
+Example: Tree width, vertex cover size
+
+✨ Remember: If a problem is NP-Hard, don't waste time 
+looking for a perfect polynomial algorithm! Be smart,
+use approximations and heuristics instead!
+              
 """
         pnp_text.insert(1.0, pnp_info)
         pnp_text.config(state='disabled')
@@ -1992,6 +1944,4 @@ def main():
     
 if __name__ == "__main__":
     main()
-    
-        
     
