@@ -1945,3 +1945,125 @@ def main():
 if __name__ == "__main__":
     main()
     
+    
+    def toggle_graph(self):
+        """Toggle betwen custom and default graph"""
+        if not self.custom_graph:
+            messagebox.showwarning("⚠️  No Custom Graph"),
+            "Please build a custom graph first! 🏗️ \n\nAdd nodes and edges using the builder above."
+            return
+        
+        self.using_custom = not self.using_custom
+        
+        if self.using_custom:
+            self.graph = self.custom_graph.copy()
+            self.use_custom_btn.config(text="🏛️ Use Default Graph")
+            self.graph_status.config(text="📊 Using: Custom ")
+            status_msg = "Custom Graph"
+        else:
+            self.graph = self.default_graph.copy()
+            self.use_custom_btn.config(text="🎨 Use Custom Graph")
+            self.graph_status.config(text="📊 Using: Default")
+            status_msg = "Default Graph"
+            
+        # Update locations list
+        self.locations = list(self.graph.keys())
+        
+        # Update combox values
+        self.start_menu['values'] = self.locations
+        self.end_menu['values'] = self.locations
+        
+        # Set default selections
+        self.start_var.set(self.locations[0] if self.locations else "")
+        self.end_var.set(self.locations[-1] if len(self.locations) > 1 else (self.locations[0] if self.locations else ""))
+        
+        messagebox.showinfo("🔄 Graph Switched", 
+            f"Now using: {status_msg}!🎉 \n\nNodes: {len(self.graph)}") 
+        
+    def clear_custom_graph(self):
+        """Clear the custom graph"""
+        if not self.custom_graph:
+            messagebox.showinfo("  Info", 
+                "Custom graph is already empty!  ")
+            return 
+        
+        if messagebox.askyesno("  Confirm", 
+            "Clear all custom nodes and edges? This cannot be undone!"):
+            self.custom_graph.clear()
+            self.node_positions.clear()
+            
+            # Clear listbox
+            if hasattr(self, 'node_listbox'):
+                self.node_listbox.delete(0, tk.END)
+                
+            # Clear canvas
+            if hasattr(self, 'builder_canvas'):
+                self.draw_graph()
+                
+            # Update combos
+            self.update_builder_combos()
+            
+            # Reset selection
+            self.selected_node = None
+            if hasattr(self, 'selected_node_label'):
+                self.slected_node_label.config(text="None")
+                
+            # If currently using custom graph, switch back to default
+            if self.using_custom:
+                self.using_custom = False
+                self.graph = self.default_graph.copy()
+                self.locations = list(self.graph.keys())
+                self.use_custom_btn.config(text="🎨 Use Custom Graph")
+                self.graph_status.config(text="📊 Using: Default")
+                
+                # Update combobox values list
+                self.start_menu['values'] = self.locations
+                self.end_menu['values'] = self.locations
+                
+                # Update combox selections
+                self.start_var.set(self.locations[0])
+                self.end_var.set(self.locations[-1])
+                
+            messagebox.showinfo("✅ Cleared",
+                "Custom graph cleared! 🧹 ")
+            
+    def view_graph_structure(self):
+        """Display the current graph structure"""
+        graph_to_view = self.custom_graph if self.custom else self.graph
+        graph_name = "Custom Graph" if (self.custom_graph and self.using_custom) else ("Custom Graph (Not Active)" if self.custom_graph else "Default Campus Graph")
+        
+        if not graph_to_view:
+            messagebox.showinfo(" ℹ️ Info",
+                "No graph to display! 📊\n\nBuild a custom graph first.")
+            return 
+        
+        # Build display text
+        display_text = f"""
+╔═══════════════════════════════════════════════════════════╗
+║          🏗️  GRAPH STRUCTURE: {graph_name.upper()}          
+╚═══════════════════════════════════════════════════════════╝
+
+  📊 Total Nodes: {len(graph_to_view)}      
+  🔗 Graph Edges:
+  
+"""
+
+
+        total_edges = 0
+        for node in sorted(graph_to_view.keys()):
+            display_text += f"\n📍  {node}:\n"
+            if graph_to_view[node]:
+                for neighbor, weight in sorted(graph_to_view[node].items()):
+                    display_text += f"   <-> {neighbor} (weight: {weight})\n"
+                    total_edges += 1
+            else:
+                display_text += f"    (No connections)\n"
+                
+        display_text += f"\n{'━'*59}\n"
+        display_text += f"Total Edges: {total_edges // 2} (undirected)\n"
+        display_text += f"{'━'*59}\n"
+        
+        # Show in main view area only 
+        self.results_text.delete(1.0, tk.END)
+        self.results_text.insert(1.0, display_text)
+        
