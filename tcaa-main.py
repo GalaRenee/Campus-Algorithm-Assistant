@@ -406,7 +406,7 @@ class CampusNavigator(ttk.Frame):
         # Algorithm selection with buttons 
         algo_frame = ttk.LabelFrame(main_container, 
            text=" Choose Your Algorithm",
-           style='Custom.TButtonframe',
+           style='Custom.TLabelframe',
         padding=15)
         algo_frame.pack(fill='x', pady=(0, 15))
     
@@ -485,7 +485,7 @@ class CampusNavigator(ttk.Frame):
         results_inner = tk.Frame(main_container, bg=self.colors['accent_light'], padx=2, pady=2)
         results_inner.pack(fill='both', expand=True)
     
-        results_label = tk.Label(results_label, 
+        results_label = tk.Label(results_inner, 
             text= " Results & Path Visualization", 
             font=('Segoe UI', 11, 'bold'), 
             bg=self.colors['card_bg'], 
@@ -842,7 +842,7 @@ class StudyPlanner(ttk.Frame):
             text="✨ Study Session Planner",
             font=('Segoe UI', 15, 'bold'),
             bg=self.colors['bg_dark'],
-            fg=self.colors['acent_purple'])
+            fg=self.colors['accent_purple'])
         title.pack(side='left')
         
         subtitle = tk.Label(title_frame,
@@ -879,7 +879,7 @@ class StudyPlanner(ttk.Frame):
             fg=self.colors['text_light'],
             relief='flat',
             insertbackground=self.colors['accent_purple'])
-        self.tasks_name.pack(side='left', fill='x', expand=True, ipady=5)
+        self.task_name.pack(side='left', fill='x', expand=True, ipady=5)
         
         # Time inputs 
         time_frame = tk.Frame(input_frame, bg=self.colors['card_bg'])
@@ -1409,7 +1409,7 @@ class NotesSearchEngine(ttk.Frame):
         ttk.Button(file_btn_frame,
             text="📂 Load File",
             command=self.load_file,
-            style='Secondary.TButton').pack(side='Left', padx=5)
+            style='Secondary.TButton').pack(side='left', padx=5)
         
         ttk.Button(file_btn_frame, 
             text="🧹 Clear",
