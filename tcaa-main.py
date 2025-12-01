@@ -1,3 +1,6 @@
+# Name: Gala Ferdoaus 
+# Date: 11/23/25
+
 """TitanCampus Algorithmic Assitant (TCAA). A Comprehensive GUI application demonstrating various algorithms."""
     
 import tkinter as tk 
@@ -68,7 +71,7 @@ class TCAA(tk.Tk):
         # Add tabs 
         self.notebook.add(self.campus_nav, text="Campus Navigator")
         self.notebook.add(self.study_planner, text="Study Planner")
-        self.notebook.add(self.notessearch, text="Notes Search")
+        self.notebook.add(self.notes_Search, text="Notes Search")
         self.notebook.add(self.algo_info, text="Algorithm Info")
         
         # Add footer with personality
@@ -275,7 +278,7 @@ def create_header(self):
     bottom_frame = tk.Frame(header_container, bg=self.colors['bg_dark'], height=3)
     bottom_frame.pack(fill='x')
     
-    graident_colors = [self.colors['accent_mint'], self.colors['accent_blue'],
+    gradient_colors = [self.colors['accent_mint'], self.colors['accent_blue'],
                        self.colors['accent_purple'], self.colors['accent_pink']]
     for color in gradient_colors:
         tk.Frame(bottom_frame, bg=color, height=3).pack(side='left', fill='both', expand=True)
@@ -403,117 +406,120 @@ class CampusNavigator(ttk.Frame):
         end_menu.grid(row=1, column=1, sticky='ew', pady=8)
             
     
-    # Algorithm selection with buttons 
-    algo_frame = ttk.LabelFrame(main_container, 
-        text=" Choose Your Algorithm",
-        style='Custom.TButtonframe',
+        # Algorithm selection with buttons 
+        algo_frame = ttk.LabelFrame(main_container, 
+           text=" Choose Your Algorithm",
+           style='Custom.TButtonframe',
         padding=15)
-    algo_frame.pack(fill='x', pady=(0, 15))
+        algo_frame.pack(fill='x', pady=(0, 15))
     
-    self.algo_var = tk.StringVar(value="BFS")
+        self.algo_var = tk.StringVar(value="BFS")
     
-    # Create radio button frame with decorative elements 
-    radio_container = tk.Frame(algo_frame, bg=self.colors['card_bg'])
-    radio_container.pack(fill='x')
+        # Create radio button frame with decorative elements 
+        radio_container = tk.Frame(algo_frame, bg=self.colors['card_bg'])
+        radio_container.pack(fill='x')
     
-    algorithms = [
-        (' 🔵 BFS - Breadth-First Search', 'bfs', self.colors['accent_blue']),
-        (' 🌳 DFS - Depth-First Search', 'dfs', self.colors['accent_mint']),
-        (' ⚡ Dijkstra - Shortest Weighted Path', 'dijkstra', self.colors['accent_purple']),
-        (' 🌉 Prim\'s MST - Minimum Spanning Tree', 'prim', self.colors['accent_pink'])   
-    ]
+        algorithms = [
+           (' 🔵 BFS - Breadth-First Search', 'bfs', self.colors['accent_blue']),
+           (' 🌳 DFS - Depth-First Search', 'dfs', self.colors['accent_mint']),
+           (' ⚡ Dijkstra - Shortest Weighted Path', 'dijkstra', self.colors['accent_purple']),
+           (' 🌉 Prim\'s MST - Minimum Spanning Tree', 'prim', self.colors['accent_pink'])   
+        ]
     
     
-    for i, (text, value, color) in enumerate(algorithms):
-        radio_frame = tk.Frame(radio_container, bg=self.colors['card_bg'])
-        radio_frame.pack(side='left', fill='x', expand=True, padx=5)
+        for i, (text, value, color) in enumerate(algorithms):
+           radio_frame = tk.Frame(radio_container, bg=self.colors['card_bg'])
+           radio_frame.pack(side='left', fill='x', expand=True, padx=5)
         
-        # Decorative accent bar with glow 
-        accent_container = tk.Frame(radio_frame, bg=color, width=4, height=22)
-        accent_container.pack(side='left', padx=(0, 8))
+           # Decorative accent bar with glow 
+           accent_container = tk.Frame(radio_frame, bg=color, width=4, height=22)
+           accent_container.pack(side='left', padx=(0, 8))
         
         
-        ttk.Radiobutton(radio_frame,
-            text=text,
-            variable=self.algo_var,
-            value=value,
-            style='Custom.TRadiobutton').pack(side='left')
+           ttk.Radiobutton(radio_frame,
+               text=text,
+               variable=self.algo_var,
+               value=value,
+               style='Custom.TRadiobutton').pack(side='left')
         
-    button_frame = tk.Frame(main_container, bg=self.colors['bg_dark'])
-    button_frame.pack(fill='x', pady=(0, 15))
-    # Location selection 
+        button_frame = tk.Frame(main_container, bg=self.colors['bg_dark'])
+        button_frame.pack(fill='x', pady=(0, 15))
+        # Location selection 
     
-    # Main action button with glow 
-    main_btn_glow = tk.Frame(button_frame, bg=self.colors['glow_pink'], padx=2, pady=2)
-    main_btn_glow.pack(side='left', padx=5)
+        # Main action button with glow 
+        main_btn_glow = tk.Frame(button_frame, bg=self.colors['glow_pink'], padx=2, pady=2)
+        main_btn_glow.pack(side='left', padx=5)
     
-    ttk.Button(main_btn_shadow,
-        text="🚀 Find Path!",
-        command=self.reset_display,
-        style='Secondary.TButton').pack()
+        ttk.Button(main_btn_glow,
+           text="🚀 Find Path!",
+           command=self.reset_display,
+           style='Secondary.TButton').pack()
     
-    # Secondary buttons 
-    ttk.Button(main_btn_shadow,
-        text= " Reset",
-        command=self.reset_display,
-        style='Accent.TButton').pack()
+        # Secondary buttons 
+        ttk.Button(main_btn_glow,
+           text= " Reset",
+           command=self.reset_display,
+           style='Accent.TButton').pack()
     
-    # Decorative sparkles 
-    sparkle_frame = tk.Frame(button_frame, bg=self.colors['bg_dark'])
-    sparkle_frame.pack(side='left', padx=(20, 0))
+        # Decorative sparkles 
+        sparkle_frame = tk.Frame(button_frame, bg=self.colors['bg_dark'])
+        sparkle_frame.pack(side='left', padx=(20, 0))
     
-    sparkles = ['✨', '💫', '⭐']
-    for sparkle in sparkles:
-        tk.Label(sparkle_frame:
-            text=sparkle,
-            font=('Segoe UI', 10), 
-            bg=self.colors['bg_dark'],
-            fg=self.colors['accent_light']).pack(side='left', padx=2)
+        sparkles = ['✨', '💫', '⭐']
+        for sparkle in sparkles:
+            tk.Label(sparkle_frame:
+                text=sparkle,
+                font=('Segoe UI', 10), 
+                bg=self.colors['bg_dark'],
+                fg=self.colors['accent_light']).pack(side='left', padx=2)
         
-    # Results display with gradient border 
-    results_gradient = tk.Frame(main_container, bg=self.colors['bg_dark'], height=3)
-    results_graident.pack(fill='x')
+        # Results display with gradient border 
+        results_gradient = tk.Frame(main_container, bg=self.colors['bg_dark'], height=3)
+        results_gradient.pack(fill='x')
     
-    gradient_colors = [self.colors['accent_mint'], self.colors['accent_blue'], 
-                       self.colors['accent_purple'], self.colors['accent_pink']]
-    for color in gradient_colors:
-        tk.Frame(results_gradient, bg=color, height=3).pack(side='left', fill='both', expand=True)
+        gradient_colors = [self.colors['accent_mint'], self.colors['accent_blue'], 
+                           self.colors['accent_purple'], self.colors['accent_pink']]
+        for color in gradient_colors:
+             tk.Frame(results_gradient, bg=color, height=3).pack(side='left', fill='both', expand=True)
     
-    results_outer = tk.Frame(main_container, bg=self.colors['accent_light'], padx=2, pady=2)
-    results_inner.pack(fill='both', expand=True)
-    
-    results_label = tk.Label(results_header, 
-        text= " Results & Path Visualization", 
-        font=('Segoe UI', 11, 'bold'), 
-        bg=self.colors['card_bg'], 
-        fg=self.colors['accent_purple'])
-    results_label.pack(side='left')
-    
-    # Decorative dots 
-    dots_frame = tk.Frame(results_header, bg=self.colors['card_bg'])
-    dots_frame.pack(side='right')
-    
-    dots_colors = [self.colors['accent_pink'], self.colors['accent_purple'], self.colors['accent_mint']]
-    for color in dot_colors:
-        tk.Label(dots_frame, 
-                 text="●", 
-                 font=('Segoe UI', 12),
-                 bg=self.colors['card_bg'],
-                 fg=color).pack(side='left', padx=3)
+        results_outer = tk.Frame(main_container, bg=self.colors['accent_light'], padx=2, pady=2)
+        results_outer.pack(fill='both', expand=True)
         
-        self.results_text = scrolledtext.ScrolledText(results_inner,
-            wrap=tk.WORD, 
-            font=('Consolas', 10),
-            bg=self.colors['bg_light'],
-            fg=self.colors['text_light'],
-            relief='flat', 
-            padx=20, 
-            pady=20,
-            insertbackground=self.colors['accent_purple'])
-        self.results_text.pack(fill='both', expand=True, padx=15, pady=(0, 15))
+        results_inner = tk.Frame(main_container, bg=self.colors['accent_light'], padx=2, pady=2)
+        results_inner.pack(fill='both', expand=True)
+    
+        results_label = tk.Label(results_label, 
+            text= " Results & Path Visualization", 
+            font=('Segoe UI', 11, 'bold'), 
+            bg=self.colors['card_bg'], 
+            fg=self.colors['accent_purple'])
+        results_label.pack(side='left')
+    
+        # Decorative dots 
+        dots_frame = tk.Frame(results_label, bg=self.colors['card_bg'])
+        dots_frame.pack(side='right')
+    
+        dots_colors = [self.colors['accent_pink'], self.colors['accent_purple'], self.colors['accent_mint']]
+        for color in dots_colors:
+            tk.Label(dots_frame, 
+                    text="●", 
+                    font=('Segoe UI', 12),
+                    bg=self.colors['card_bg'],
+                    fg=color).pack(side='left', padx=3)
         
-        # Add welcome message 
-        welcome_msg = """
+            self.results_text = scrolledtext.ScrolledText(results_inner,
+                wrap=tk.WORD, 
+                font=('Consolas', 10),
+                bg=self.colors['bg_light'],
+                fg=self.colors['text_light'],
+                relief='flat', 
+                padx=20, 
+                pady=20,
+                insertbackground=self.colors['accent_purple'])
+            self.results_text.pack(fill='both', expand=True, padx=15, pady=(0, 15))
+        
+            # Add welcome message 
+            welcome_msg = """
 ╔═════════════════════════════════════════════════════╗
 ║          ✨ Welcome to Campus Navigator! ✨          ║
 ╚═════════════════════════════════════════════════════╝
@@ -533,21 +539,21 @@ Ready to navigate? Let's go! 💫
         """
         self.results_text.insert(1.0, welcome_msg)
     
-    def find_path(self):
-        """Execute selected pathfinding algorithm with styling output"""
-        start = self.start_var.get()
-        end = self.end_var.get()
-        algo = self.algo_var.get()
+        def find_path(self):
+            """Execute selected pathfinding algorithm with styling output"""
+            start = self.start_var.get()
+            end = self.end_var.get()
+            algo = self.algo_var.get()
         
-        if start == end:
-            messagebox.showwarning("⚠️ Same Location",
-                                   "You're already at your destination!🎯")
-            return 
+            if start == end:
+                messagebox.showwarning("⚠️ Same Location",
+                        "You're already at your destination!🎯")
+                return 
         
-        self.results_text.delete(1.0, tk.END)
+                self.results_text.delete(1.0, tk.END)
         
-        # Header with cute formatting 
-        header = f"""
+            # Header with cute formatting 
+            header = f"""
 ╔═════════════════════════════════════════════════════╗
 ║          🗺️ PATHFINDING RESULTS 🗺️                   ║
 ╚═════════════════════════════════════════════════════╝
@@ -557,74 +563,74 @@ Ready to navigate? Let's go! 💫
 ⚡   Algorithm: {algo.upper()}
                
 """
-    self.results_text.insert(tk.END, header)
+        self.results_text.insert(tk.END, header)
           
-    start_time = time.time()
+        start_time = time.time()
           
-    if algo == 'bfs':
-        result = self.bfs(start, end)
-    elif algo == 'dfs':
-        result = self.dfs(start, end)
-    elif algo == 'dijkstra':
-        result = self.dijkstra(start, end)
-    else: # prim
-        result = self.prim_mst(start)
+        if algo == 'bfs':
+            result = self.bfs(start, end)
+        elif algo == 'dfs':
+            result = self.dfs(start, end)
+        elif algo == 'dijkstra':
+            result = self.dijkstra(start, end)
+        else: # prim
+            result = self.prim_mst(start)
         
-    elapsed = (time.time() - start_time) * 1000
+        elapsed = (time.time() - start_time) * 1000
     
-    self.results_text.insert(tk.END, result)
-    self.results_text.insert(tk.END, f"\n{'━'*59}\n")
-    self.results_text.insert(tk.END, f"⏱️  Execution Time:{elapsed:.2f}ms\n")
-    self.results_text.insert(tk.END, f"{'━'*59}\n")
+        self.results_text.insert(tk.END, result)
+        self.results_text.insert(tk.END, f"\n{'━'*59}\n")
+        self.results_text.insert(tk.END, f"⏱️  Execution Time:{elapsed:.2f}ms\n")
+        self.results_text.insert(tk.END, f"{'━'*59}\n")
     
-def bts(self, start, goal):
-    """BFS algorithm with styled output"""
-    queue = deque([(start, [start])])
-    visited = {start}
+    def bts(self, start, goal):
+       """BFS algorithm with styled output"""
+       queue = deque([(start, [start])])
+       visited = {start}
     
-    result = "🔵 BREADTH-FIRST SEARCH (BFS)\n"
-    result += "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
-    result += "🔍  Exploration Order:\n"
+       result = "🔵 BREADTH-FIRST SEARCH (BFS)\n"
+       result += "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+       result += "🔍  Exploration Order:\n"
     
-    step = 1
-    while queue:
-        current, path = queue.popleft()
-        result += f"    Step {step}: {current}\n"
-        step += 1
+       step = 1
+       while queue:
+           current, path = queue.popleft()
+           result += f"    Step {step}: {current}\n"
+           step += 1
         
-        if current == goal:
-            result += f"\n✅ PATH FOUND!\n\n"
-            result += "🛤️  Route:\n"
-            for i, location in enumerate(path, 1):
-                if i < len(path):
-                    result += f"    {i}. {location}📍\n"
-                    result += f"        ↓\n"
-                else:
-                    result += f"    {i}. {location} 🎯\n"
+           if current == goal:
+               result += f"\n✅ PATH FOUND!\n\n"
+               result += "🛤️  Route:\n"
+               for i, location in enumerate(path, 1):
+                   if i < len(path):
+                       result += f"    {i}. {location}📍\n"
+                       result += f"        ↓\n"
+                   else:
+                       result += f"    {i}. {location} 🎯\n"
                     
-            total_dist = sum(self.graph[path[i]][path[i+1]] for i in range(len(path-1)))
-            result += f"\n  Total Distance: {total_dist} units\n"
-            result += f"  Nodes Visited: {len(visited)}\n"
-            return result 
+               total_dist = sum(self.graph[path[i]][path[i+1]] for i in range(len(path-1)))
+               result += f"\n  Total Distance: {total_dist} units\n"
+               result += f"  Nodes Visited: {len(visited)}\n"
+               return result 
         
-        for neighbor in sorted(self.graph[current].keys()):
-            if neighbor not in visited:
-                visited.add(neighbor)
-                queue.append((neighbor, path + [neighbor]))
+           for neighbor in sorted(self.graph[current].keys()):
+               if neighbor not in visited:
+                   visited.add(neighbor)
+                   queue.append((neighbor, path + [neighbor]))
                 
-    return " ❌ No path found between locations.\n"
+       return " ❌ No path found between locations.\n"
 
-def dfs(self, start, goal):
-    """DFS algorithm with styled output"""
-    result = "🌳 DEPTH_FIRST SEARCH (DFS)\n"
-    result+= "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
-    result += "🔍 Exploration Order (Deep Dive):\n"
+    def dfs(self, start, goal):
+       """DFS algorithm with styled output"""
+       result = "🌳 DEPTH_FIRST SEARCH (DFS)\n"
+       result+= "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+       result += "🔍 Exploration Order (Deep Dive):\n"
     
-    visited = set()
-    path = []
-    found = [False]
-    step = [1]
-    output = [""]
+       visited = set()
+       path = []
+       found = [False]
+       step = [1]
+       output = [""]
     
     def dfs_recursive(node, target, current_path):
         visited.add(node)
@@ -664,7 +670,7 @@ def dfs(self, start, goal):
     else:
         result += " No path between locations.\n"
         
-    return result 
+        return result 
 
 def dijkstra(self, start, goal):
     """Dijkstra's algorithm with styled output"""
@@ -2061,7 +2067,7 @@ use approximations and heuristics instead!
               
 def main():
     """Main entry point for the enhanced style application"""
-    app = StyledTCAA()
+    app = TCAA()
     app.mainloop()
     
 if __name__ == "__main__":
