@@ -102,7 +102,7 @@ class TCAA(tk.Tk):
                 background=[('selected', self.colors['accent_purple'])],
                 foreground=[('selected', self.colors['text_dark'])],
                 expand=[('selected', [1, 1, 1, 0])],
-                padding=[('selected, [24, 14]')])
+                padding=[('selected', [24, 14])])
     
         # Frame styling 
         style.configure('Card.TFrame',
@@ -133,7 +133,7 @@ class TCAA(tk.Tk):
     
         style.map('Accent.TButton', 
                 background=[('active', self.colors['accent_pink']),
-                        ('presed', self.colors['accent_blue'])],
+                        ('pressed', self.colors['accent_blue'])],
                 foreground=[('active', self.colors['text_dark'])])
     
        # Secondary button - with border accent
@@ -199,9 +199,6 @@ class TCAA(tk.Tk):
                 background=self.colors['accent_purple'],
                 foreground=self.colors['text_light'], 
                 arrowcolor=self.colors['text_light'], 
-                arrowcolor=self.colors['text_light'], 
-                arrowcolor=self.colors['text_light'],
-                arrowcolor=self.colors['text_light'], 
                 borderwidth=2, 
                 relief='flat')
     
@@ -231,7 +228,7 @@ class TCAA(tk.Tk):
         # Main header frame 
         header_frame = tk.Frame(header_container, bg=self.colors['bg_medium'], height=100)
         header_frame.pack(fill='x', pady=3)
-        header_frame.pack_propagrate(False)
+        header_frame.pack_propagate(False)
     
         # Left decorative accent 
         left_accent = tk.Frame(header_frame, bg=self.colors['accent_pink'], width=5)
@@ -336,7 +333,7 @@ class CampusNavigator(ttk.Frame):
         """ Styled UI components with enhanced visuals"""
         # Main container with padding 
         main_container = tk.Frame(self, bg=self.colors['bg_dark'])
-        main_container.pack(fill='both', xpand=True, padx=25, pady=25)
+        main_container.pack(fill='both', expand=True, padx=25, pady=25)
         
         
         # Title
@@ -344,7 +341,7 @@ class CampusNavigator(ttk.Frame):
         title_frame.pack(fill='x', pady=(0, 20))
         
         
-        title = ttk.Label(title_frame, 
+        title = tk.Label(title_frame, 
             text=" Campus Navigation System",
             font=('Segoe UI', 15, 'bold'),
             bg=self.colors['bg_dark'],
@@ -539,21 +536,21 @@ Ready to navigate? Let's go! 💫
         """
         self.results_text.insert(1.0, welcome_msg)
     
-        def find_path(self):
-            """Execute selected pathfinding algorithm with styling output"""
-            start = self.start_var.get()
-            end = self.end_var.get()
-            algo = self.algo_var.get()
+    def find_path(self):
+        """Execute selected pathfinding algorithm with styling output"""
+        start = self.start_var.get()
+        end = self.end_var.get()
+        algo = self.algo_var.get()
         
-            if start == end:
-                messagebox.showwarning("⚠️ Same Location",
+        if start == end:
+            messagebox.showwarning("⚠️ Same Location",
                         "You're already at your destination!🎯")
-                return 
+            return 
         
-                self.results_text.delete(1.0, tk.END)
+            self.results_text.delete(1.0, tk.END)
         
-            # Header with cute formatting 
-            header = f"""
+        # Header with cute formatting 
+        header = f"""
 ╔═════════════════════════════════════════════════════╗
 ║          🗺️ PATHFINDING RESULTS 🗺️                   ║
 ╚═════════════════════════════════════════════════════╝
@@ -632,45 +629,45 @@ Ready to navigate? Let's go! 💫
        step = [1]
        output = [""]
     
-    def dfs_recursive(node, target, current_path):
-        visited.add(node)
-        current_path.append(node)
-        output[0] += f"   Step {step[0]}: {node}, (depth: {len(current_path)})\n"
-        step[0] += 1
+       def dfs_recursive(node, target, current_path):
+           visited.add(node)
+           current_path.append(node)
+           output[0] += f"   Step {step[0]}: {node}, (depth: {len(current_path)})\n"
+           step[0] += 1
     
-        if node == target:
-            found[0] = True
-            path.extend(current_path)
-            return True 
+           if node == target:
+               found[0] = True
+               path.extend(current_path)
+               return True 
     
-        for neighbor in sorted(self.graph[node].keys()):
-             if neighbor not in visited:
-                 if dfs_recursive(neighbor, target, current_path):
-                     return True 
+           for neighbor in sorted(self.graph[node].keys()):
+                if neighbor not in visited:
+                    if dfs_recursive(neighbor, target, current_path):
+                        return True 
             
-        current_path.pop()
-        return False
+                current_path.pop()
+                return False
     
-        dfs_recursive(start, goal, [])
-        result += output[0]
+           dfs_recursive(start, goal, [])
+           result += output[0]
     
-        if found[0]:
-            result += f"\n✅ PATH FOUND!\n\n"
-            result += "🛤️ Route:\n"
-            for i, location in enumerate(path, 1):
-               if i < len(path):
-                   result += f"   {i}. {location} 📍 \n"
-                   result += f"       ↓\n"
-               else:
-                   result += f"   {i}. {location} 🎯\n"
+           if found[0]:
+               result += f"\n✅ PATH FOUND!\n\n"
+               result += "🛤️ Route:\n"
+               for i, location in enumerate(path, 1):
+                  if i < len(path):
+                      result += f"   {i}. {location} 📍 \n"
+                      result += f"       ↓\n"
+                  else:
+                      result += f"   {i}. {location} 🎯\n"
                 
-            total_dist = sum(self.graph[path[i]][path[i+1]] for i in range(len(path)-1))
-            result += f"\n  Total Distance: {total_dist} units\n"
-            result += f" Nodes Visited: {len(visited)}\n"
-        else:
-            result += " No path between locations.\n"
+               total_dist = sum(self.graph[path[i]][path[i+1]] for i in range(len(path)-1))
+               result += f"\n  Total Distance: {total_dist} units\n"
+               result += f" Nodes Visited: {len(visited)}\n"
+           else:
+               result += " No path between locations.\n"
         
-            return result 
+               return result 
 
     def dijkstra(self, start, goal):
         """Dijkstra's algorithm with styled output"""
@@ -1538,11 +1535,11 @@ Ready to search? Load your notes to begin!💫
         )
         if filename:
             try: 
-                as f with open(filename, 'r', encoding='utf-8'):
-                content = f.read()
-                self.notes_text.delete(1.0, tk.END)
-                self.notes_text.insert(1.0, content)
-                messagebox.showinfo("✅ Success", 
+                with open(filename, 'r', encoding='utf-8') as f:
+                   content = f.read()
+                   self.notes_text.delete(1.0, tk.END)
+                   self.notes_text.insert(1.0, content)
+                   messagebox.showinfo("✅ Success", 
                                         f"File loaded successfully! ✨\n\n{filename}")
             except Exception as e:
                 messagebox.showerror("❌ Error",
@@ -1819,7 +1816,7 @@ class AlgorithmInfo(ttk.Frame):
         
         # Sub-notebook for tabs 
         notebook = ttk.Notebook(main_container, style='Custom.TNotebook')
-        notebook.pack(fil='both', expand=True)
+        notebook.pack(fill='both', expand=True)
         
         # Time Complexities tab 
         complexity_frame = tk.Frame(notebook, bg=self.colors['card_bg'])
