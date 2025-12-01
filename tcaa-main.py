@@ -29,7 +29,7 @@ class TCAA(tk.Tk):
             'accent_peach': '#FFB5D5',
             'accent_mint': '#B5EAD7',
             'text_light': '#E8F0FF', 
-            'text_mdeium': '#C8D6E5',
+            'text_medium': '#C8D6E5',
             'text_dark': '#1A1F2E',
             'success': '#7FE7B7',
             'highlight': '#A78BFA',
@@ -78,232 +78,232 @@ class TCAA(tk.Tk):
         self.create_footer()
         
         
-def setup_styles(self):
-    """Configure custom ttk styles for modern, cute appearance"""
-    style = ttk.Style()
+    def setup_styles(self):
+        """Configure custom ttk styles for modern, cute appearance"""
+        style = ttk.Style()
     
-    # Using 'clam' theme as the base - most customizable 
-    style.theme_use('clam')
+        # Using 'clam' theme as the base - most customizable 
+        style.theme_use('clam')
     
-    # Notebook tabs styling 
-    style.configure('Custom.TNotebook',
-                    background=self.colors['bg_dark'],
-                    borderwidth=0,
-                    tabmargins=[5, 5, 5, 0])
+        # Notebook tabs styling 
+        style.configure('Custom.TNotebook',
+                background=self.colors['bg_dark'],
+                borderwidth=0,
+                tabmargins=[5, 5, 5, 0])
     
-    style.configure('Custom.TNotebook.Tab',
-                    background=self.colors['bg_light'],
-                    foreground=self.colors['text_medium'],
-                    padding=[24, 12],
-                    borderwidth=0,
-                    font=('Segoe UI', 10, 'bold'))
+        style.configure('Custom.TNotebook.Tab',
+                background=self.colors['bg_light'],
+                foreground=self.colors['text_medium'],
+                padding=[24, 12],
+                borderwidth=0,
+                font=('Segoe UI', 10, 'bold'))
     
-    style.map('Custom.TNotebook.Tab',
-             background=[('selected', self.colors['accent_purple'])],
-             foreground=[('selected', self.colors['text_dark'])],
-             expand=[('selected', [1, 1, 1, 0])],
-             padding=[('selected, [24, 14]')])
+        style.map('Custom.TNotebook.Tab',
+                background=[('selected', self.colors['accent_purple'])],
+                foreground=[('selected', self.colors['text_dark'])],
+                expand=[('selected', [1, 1, 1, 0])],
+                padding=[('selected, [24, 14]')])
     
-    # Frame styling 
-    style.configure('Card.TFrame',
-             background=self.colors['card_bg'],
-             borderwidth=2,
-             relief='flat')
+        # Frame styling 
+        style.configure('Card.TFrame',
+                background=self.colors['card_bg'],
+                borderwidth=2,
+                relief='flat')
     
-    # LabelFrame styling - enhanced borders
-    style.configure('Custom.TLabelframe',
-                    background=self.colors['card_bg'],
-                    foreground=self.colors['text_light'],
-                    borderwidth=2,
-                    relief='flat',
-                    bordercolor=self.colors['border_light'])
+        # LabelFrame styling - enhanced borders
+        style.configure('Custom.TLabelframe',
+                background=self.colors['card_bg'],
+                foreground=self.colors['text_light'],
+                borderwidth=2,
+                relief='flat',
+                bordercolor=self.colors['border_light'])
     
-    style.configure('Custom.TLabelframe.Label',
-                    background=self.colors['card_bg'],
-                    foreground=self.colors['accent_purple'],
-                    font=('Segoe UI', 11, 'bold'))
+        style.configure('Custom.TLabelframe.Label',
+                background=self.colors['card_bg'],
+                foreground=self.colors['accent_purple'],
+                font=('Segoe UI', 11, 'bold'))
     
-    # Button styling 
-    style.configure('Accent.TButton', 
-                    background=self.colors['accent_purple'],
-                    borderwidth=0,
-                    focuscolor='none',
-                    padding=[24, 12],
-                    font=('Segoe UI', 10, 'bold'))
+        # Button styling 
+        style.configure('Accent.TButton', 
+                background=self.colors['accent_purple'],
+                borderwidth=0,
+                focuscolor='none',
+                padding=[24, 12],
+                font=('Segoe UI', 10, 'bold'))
     
-    style.map('Accent.TButton', 
-              background=[('active', self.colors['accent_pink']),
-                          ('presed', self.colors['accent_blue'])],
-              foreground=[('active', self.colors['text_dark'])])
+        style.map('Accent.TButton', 
+                background=[('active', self.colors['accent_pink']),
+                        ('presed', self.colors['accent_blue'])],
+                foreground=[('active', self.colors['text_dark'])])
     
-    # Secondary button - with border accent
-    style.configure('Secondary.TButton',
-                    background=self.colors['bg_medium'],
-                    foreground=self.colors['text_light'],
-                    borderwidth=2, 
-                    bordercolor=self.colors['accent_purple'],
-                    focuscolor='none',
-                    padding=[18, 18],
-                    font=('Segoe UI', 9, 'bold'))
+       # Secondary button - with border accent
+        style.configure('Secondary.TButton',
+                background=self.colors['bg_medium'],
+                foreground=self.colors['text_light'],
+                borderwidth=2, 
+                bordercolor=self.colors['accent_purple'],
+                focuscolor='none',
+                padding=[18, 18],
+                font=('Segoe UI', 9, 'bold'))
     
-    style.map('Secondary.TButton',
-              background=[('active', self.colors['accent_light'])],
-              foreground=[('active', self.colors['text_dark'])],
-              bordercolor=[('active', self.colors['accent_pink'])])
+        style.map('Secondary.TButton',
+                background=[('active', self.colors['accent_light'])],
+                foreground=[('active', self.colors['text_dark'])],
+                bordercolor=[('active', self.colors['accent_pink'])])
     
-    # Special action button 
-    style.configure('Special.TButton',
-                    background=self.colors['accent_pink'],
-                    foreground=self.colors['text_dark'],
-                    borderwidth=0,
-                    focuscolor='none',
-                    padding=[20, 20],
-                    font=('Segoe UI', 10, 'bold'))
+        # Special action button 
+        style.configure('Special.TButton',
+                background=self.colors['accent_pink'],
+                foreground=self.colors['text_dark'],
+                borderwidth=0,
+                focuscolor='none',
+                padding=[20, 20],
+                font=('Segoe UI', 10, 'bold'))
     
-    style.map('Special.TButton',
-              background=[('active', self.colors['accent_peach']),
-                          ('pressed', self.colors['accent_mint'])])
+        style.map('Special.TButton',
+                background=[('active', self.colors['accent_peach']),
+                        ('pressed', self.colors['accent_mint'])])
     
-    # Label styling 
-    style.configure('Custom.TLabel', 
-                    background=self.colors['card_bg'], 
-                    foreground=self.colors['text_light'],
-                    font=('Segoe UI', 10))
+        # Label styling 
+        style.configure('Custom.TLabel', 
+                background=self.colors['card_bg'], 
+                foreground=self.colors['text_light'],
+                font=('Segoe UI', 10))
     
-    style.configure('Title.TLabel',
-                    background=self.colors['bg_dark'],
-                    foreground=self.colors['accent_purple'],
-                    font=('Segoe UI', 16, 'bold'))
+        style.configure('Title.TLabel',
+                background=self.colors['bg_dark'],
+                foreground=self.colors['accent_purple'],
+                font=('Segoe UI', 16, 'bold'))
     
-    style.configure('Subtitle.TLabel',
-                    background=self.colors['bg_dark'],
-                    foreground=self.colors['accent_light'],
-                    font=('Segoe UI', 10))
+        style.configure('Subtitle.TLabel',
+                background=self.colors['bg_dark'],
+                foreground=self.colors['accent_light'],
+                font=('Segoe UI', 10))
     
-    # Radio button styling 
-    style.configure('Custom.TRadiobutton',
-                    background=self.colors['card_bg'],
-                    foreground=self.colors['text_light'],
-                    font=('Segoe UI', 10), 
-                    borderwidth=0, 
-                    focuscolor=self.colors['accent_purple'])
+        # Radio button styling 
+        style.configure('Custom.TRadiobutton',
+                background=self.colors['card_bg'],
+                foreground=self.colors['text_light'],
+                font=('Segoe UI', 10), 
+                borderwidth=0, 
+                focuscolor=self.colors['accent_purple'])
     
-    style.map('Custom.TRadiobutton', 
-              background=[('active', self.colors['card_bg'])],
-              indicatorcolor=[('selected', self.colors['accent_pink'])],
-              foreground=[('active', self.colors['accent_purple'])])
+        style.map('Custom.TRadiobutton', 
+                background=[('active', self.colors['card_bg'])],
+                indicatorcolor=[('selected', self.colors['accent_pink'])],
+                foreground=[('active', self.colors['accent_purple'])])
     
-    # Combobox styling - improved contrast
-    style.configure('Custom.TCombobox', 
-                    fieldbackground=self.colors['bg_light'],
-                    background=self.colors['accent_purple'],
-                    foreground=self.colors['text_light'], 
-                    arrowcolor=self.colors['text_light'], 
-                    arrowcolor=self.colors['text_light'], 
-                    arrowcolor=self.colors['text_light'],
-                    arrowcolor=self.colors['text_light'], 
-                    borderwidth=2, 
-                    relief='flat')
+        # Combobox styling - improved contrast
+        style.configure('Custom.TCombobox', 
+                fieldbackground=self.colors['bg_light'],
+                background=self.colors['accent_purple'],
+                foreground=self.colors['text_light'], 
+                arrowcolor=self.colors['text_light'], 
+                arrowcolor=self.colors['text_light'], 
+                arrowcolor=self.colors['text_light'],
+                arrowcolor=self.colors['text_light'], 
+                borderwidth=2, 
+                relief='flat')
     
-    style.map('custom.TCombobox', 
-              fieldbackground=[('readonly', self.colors['bg_light'])], 
-              foreground=[('readonly', self.colors['text_light'])], 
-              selectbackground=[('readonly', self.colors['accent_purple'])],
-              selectforeground=[('readonly', self.colors['text_dark'])])
+        style.map('custom.TCombobox', 
+                fieldbackground=[('readonly', self.colors['bg_light'])], 
+                foreground=[('readonly', self.colors['text_light'])], 
+                selectbackground=[('readonly', self.colors['accent_purple'])],
+                selectforeground=[('readonly', self.colors['text_dark'])])
     
-    # Addional combobox dropdown styling 
-    self.option_add('*TCombobox*Listbox.font', ('Segoe UI', 10))
-    self.option_add('*TCombobox*Listbox.background', self.colors['bg_light'])
-    self.option_add('*TCombobox*Listbox.foreground', self.colors['text_light'])
-    self.option_add('*TCombobox*Listbox.selectBackground', self.colors['accent_purple'])
-    self.option_add('*TCombobox*Listbox.selectForeground', self.colors['text_dark'])
+        # Addional combobox dropdown styling 
+        self.option_add('*TCombobox*Listbox.font', ('Segoe UI', 10))
+        self.option_add('*TCombobox*Listbox.background', self.colors['bg_light'])
+        self.option_add('*TCombobox*Listbox.foreground', self.colors['text_light'])
+        self.option_add('*TCombobox*Listbox.selectBackground', self.colors['accent_purple'])
+        self.option_add('*TCombobox*Listbox.selectForeground', self.colors['text_dark'])
     
-def create_header(self):
-    """Create a styled header with decorative elements"""
-    # Header container with border accent 
-    header_container = tk.Frame(self, bg=self.colors['bg_dark'])
-    header_container.pack(fill='x', padx=20, pady=(20, 10))
+    def create_header(self):
+        """Create a styled header with decorative elements"""
+        # Header container with border accent 
+        header_container = tk.Frame(self, bg=self.colors['bg_dark'])
+        header_container.pack(fill='x', padx=20, pady=(20, 10))
     
-    # Top decorative line 
-    top_border = tk.Frame(header_container, bg=self.colors['accent_purple'], height=3)
-    top_border.pack(fill='x')
+        # Top decorative line 
+        top_border = tk.Frame(header_container, bg=self.colors['accent_purple'], height=3)
+        top_border.pack(fill='x')
     
-    # Main header frame 
-    header_frame = tk.Frame(header_container, bg=self.colors['bg_medium'], height=100)
-    header_frame.pack(fill='x', pady=3)
-    header_frame.pack_propagrate(False)
+        # Main header frame 
+        header_frame = tk.Frame(header_container, bg=self.colors['bg_medium'], height=100)
+        header_frame.pack(fill='x', pady=3)
+        header_frame.pack_propagrate(False)
     
-    # Left decorative accent 
-    left_accent = tk.Frame(header_frame, bg=self.colors['accent_pink'], width=5)
-    left_accent.pack(side='left', fill='y')
+        # Left decorative accent 
+        left_accent = tk.Frame(header_frame, bg=self.colors['accent_pink'], width=5)
+        left_accent.pack(side='left', fill='y')
     
-    # Content frame 
-    content_frame = tk.Frame(header_frame, bg=self.colors['bg_medium'])
-    content_frame.pack(side='left', fill='both', expand=True, padx=20)
+        # Content frame 
+        content_frame = tk.Frame(header_frame, bg=self.colors['bg_medium'])
+        content_frame.pack(side='left', fill='both', expand=True, padx=20)
     
-    # Title with gradient effect 
-    title_frame = tk.Frame(content_frame, bg=self.colors['bg_medium'])
-    title_frame.pack(pady=(15, 5))
+        # Title with gradient effect 
+        title_frame = tk.Frame(content_frame, bg=self.colors['bg_medium'])
+        title_frame.pack(pady=(15, 5))
     
-    title_font = tk.font.Font(family='Segoe UI', size=22, weight='bold')
-    title = tk.Label(title_frame, 
-                     text="✨ Titan Campus Algorithmic Assistant ✨",
-                     font=title_font,
-                     bg=self.colors['bg_medium'],
-                     fg=self.colors['accent_purple'])
-    title.pack()
+        title_font = tk.font.Font(family='Segoe UI', size=22, weight='bold')
+        title = tk.Label(title_frame, 
+                    text="✨ Titan Campus Algorithmic Assistant ✨",
+                    font=title_font,
+                    bg=self.colors['bg_medium'],
+                    fg=self.colors['accent_purple'])
+        title.pack()
     
-    # Decorative subtitle divider 
-    divider_frame = tk.Frame(content_frame, bg=self.colors['bg_medium'])
-    divider_frame.pack(pady=3)
+        # Decorative subtitle divider 
+        divider_frame = tk.Frame(content_frame, bg=self.colors['bg_medium'])
+        divider_frame.pack(pady=3)
     
-    tk.Frame(divider_frame, bg=self.colors['accent_pink'], width=40, height=2).pack(side='left', padx=3)
-    tk.Frame(divider_frame, bg=self.colors['accent_purple'], width=40, height=2).pack(side='left', padx=3)
-    tk.Frame(divider_frame, bg=self.colors['accent_blue'], width=40, height=2).pack(side='left', padx=3)
-    tk.Frame(divider_frame, bg=self.colors['accent_mint'], width=40, height=2).pack(side='left', padx=3)
+        tk.Frame(divider_frame, bg=self.colors['accent_pink'], width=40, height=2).pack(side='left', padx=3)
+        tk.Frame(divider_frame, bg=self.colors['accent_purple'], width=40, height=2).pack(side='left', padx=3)
+        tk.Frame(divider_frame, bg=self.colors['accent_blue'], width=40, height=2).pack(side='left', padx=3)
+        tk.Frame(divider_frame, bg=self.colors['accent_mint'], width=40, height=2).pack(side='left', padx=3)
     
-    # Subtitle with icons 
-    subtitle = tk.Label(content_frame, 
-                        text=" Graph Algorithms • Dynamic Programming • String Matching • Complexity Analysis", 
-                        font=('Segoe UI', 9), 
-                        bg=self.colors['bg_medium'],
-                        fg=self.colors['text_medium'])
-    subtitle.pack()
+        # Subtitle with icons 
+        subtitle = tk.Label(content_frame, 
+                    text=" Graph Algorithms • Dynamic Programming • String Matching • Complexity Analysis", 
+                    font=('Segoe UI', 9), 
+                    bg=self.colors['bg_medium'],
+                    fg=self.colors['text_medium'])
+        subtitle.pack()
     
-    # Right decorative accent 
-    right_accent = tk.Frame(header_frame, bg=self.colors['accent_mint'], width=5)
-    right_accent.pack(side='right', fill='y')
+        # Right decorative accent 
+        right_accent = tk.Frame(header_frame, bg=self.colors['accent_mint'], width=5)
+        right_accent.pack(side='right', fill='y')
     
-    # Bottom decorative line (gradient effect)
-    bottom_frame = tk.Frame(header_container, bg=self.colors['bg_dark'], height=3)
-    bottom_frame.pack(fill='x')
+        # Bottom decorative line (gradient effect)
+        bottom_frame = tk.Frame(header_container, bg=self.colors['bg_dark'], height=3)
+        bottom_frame.pack(fill='x')
     
-    gradient_colors = [self.colors['accent_mint'], self.colors['accent_blue'],
-                       self.colors['accent_purple'], self.colors['accent_pink']]
-    for color in gradient_colors:
-        tk.Frame(bottom_frame, bg=color, height=3).pack(side='left', fill='both', expand=True)
+        gradient_colors = [self.colors['accent_mint'], self.colors['accent_blue'],
+                    self.colors['accent_purple'], self.colors['accent_pink']]
+        for color in gradient_colors:
+            tk.Frame(bottom_frame, bg=color, height=3).pack(side='left', fill='both', expand=True)
         
-def create_footer(self):
-    """Create a cute footer with more info"""
-    footer_frame = tk.Frame(self, bg=self.colors['bg_dark'], height=30)
-    footer_frame.pack(fill='x', padx=20, pady=(0, 15))
-    footer_frame.pack_propagate(False)
+    def create_footer(self):
+        """Create a cute footer with more info"""
+        footer_frame = tk.Frame(self, bg=self.colors['bg_dark'], height=30)
+        footer_frame.pack(fill='x', padx=20, pady=(0, 15))
+        footer_frame.pack_propagate(False)
     
-    # Decorative top line 
-    top_line = tk.Frame(footer_frame, bg=self.colors['border'], height=1)
-    top_line.pack(fill='x', pady=(0, 8))
+        # Decorative top line 
+        top_line = tk.Frame(footer_frame, bg=self.colors['border'], height=1)
+        top_line.pack(fill='x', pady=(0, 8))
     
-    # Decorative top line 
-    top_line = tk.Frame(footer_frame, bg=self.colors['border'], height=1)
-    top_line.pack(fill='x', pady=(0, 8))
+        # Decorative top line 
+        top_line = tk.Frame(footer_frame, bg=self.colors['border'], height=1)
+        top_line.pack(fill='x', pady=(0, 8))
     
-    # Footer content 
-    footer_text = tk.Label(footer_frame, 
-        text="💫 Made with algorithms & aesthetic vibes ✨ CPSC 335 Final Project 🎓 ",
-        font=('Segoe UI', 8),
-        bg=self.colors['bg_dark'],
-        fg=self.colors['text_medium'])
-    footer_text.pack()
+        # Footer content 
+        footer_text = tk.Label(footer_frame, 
+            text="💫 Made with algorithms & aesthetic vibes ✨ CPSC 335 Final Project 🎓 ",
+            font=('Segoe UI', 8),
+            bg=self.colors['bg_dark'],
+            fg=self.colors['text_medium'])
+        footer_text.pack()
     
     
 class CampusNavigator(ttk.Frame):
@@ -467,7 +467,7 @@ class CampusNavigator(ttk.Frame):
     
         sparkles = ['✨', '💫', '⭐']
         for sparkle in sparkles:
-            tk.Label(sparkle_frame:
+            tk.Label(sparkle_frame,
                 text=sparkle,
                 font=('Segoe UI', 10), 
                 bg=self.colors['bg_dark'],
@@ -583,7 +583,7 @@ Ready to navigate? Let's go! 💫
         self.results_text.insert(tk.END, f"⏱️  Execution Time:{elapsed:.2f}ms\n")
         self.results_text.insert(tk.END, f"{'━'*59}\n")
     
-    def bts(self, start, goal):
+    def bfs(self, start, goal):
        """BFS algorithm with styled output"""
        queue = deque([(start, [start])])
        visited = {start}
@@ -651,137 +651,137 @@ Ready to navigate? Let's go! 💫
         current_path.pop()
         return False
     
-    defs_recursive(start, goal, [])
-    result += output[0]
+        dfs_recursive(start, goal, [])
+        result += output[0]
     
-    if found[0]:
-        result += f"\n✅ PATH FOUND!\n\n"
-        result += "🛤️ Route:\n"
-        for i, location in enumerate(path, 1):
-            if i < len(path):
-                result += f"   {i}. {location} 📍 \n"
-                result += f"       ↓\n"
-            else:
-                result += f"   {i}. {location} 🎯\n"
+        if found[0]:
+            result += f"\n✅ PATH FOUND!\n\n"
+            result += "🛤️ Route:\n"
+            for i, location in enumerate(path, 1):
+               if i < len(path):
+                   result += f"   {i}. {location} 📍 \n"
+                   result += f"       ↓\n"
+               else:
+                   result += f"   {i}. {location} 🎯\n"
                 
-        total_dist = sum(self.graoh[path[i]][path[i+1]] for i in range(len(path)-1))
-        result += f"\n  Total Distance: {total_dist} units\n"
-        result += f" Nodes Visited: {len(visited)}\n"
-    else:
-        result += " No path between locations.\n"
+            total_dist = sum(self.graph[path[i]][path[i+1]] for i in range(len(path)-1))
+            result += f"\n  Total Distance: {total_dist} units\n"
+            result += f" Nodes Visited: {len(visited)}\n"
+        else:
+            result += " No path between locations.\n"
         
-        return result 
+            return result 
 
-def dijkstra(self, start, goal):
-    """Dijkstra's algorithm with styled output"""
-    result = " DIJKSTRA'S SHORTEST PATH ALGORITHM\n"
-    result += "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+    def dijkstra(self, start, goal):
+        """Dijkstra's algorithm with styled output"""
+        result = " DIJKSTRA'S SHORTEST PATH ALGORITHM\n"
+        result += "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
     
-    distances = {node: float('inf') for node in self.graph}
-    distances[start] = 0
-    previous = {node: None for node in self.graph}
-    pq = [(0, start)]
-    visited = set()
+        distances = {node: float('inf') for node in self.graph}
+        distances[start] = 0
+        previous = {node: None for node in self.graph}
+        pq = [(0, start)]
+        visited = set()
     
-    result += "🔍 Processing Nodes (by distance):\n"
-    step = 1
+        result += "🔍 Processing Nodes (by distance):\n"
+        step = 1
     
-    while pq:
-        current_dist, current = heapq.heappop(pq)
+        while pq:
+            current_dist, current = heapq.heappop(pq)
         
-        if current in visited:
-            continue 
+            if current in visited:
+                continue 
         
-        visited.add(current)
-        result += f"   Step{step}: {current} (distance: {current_dist})\n"
-        step += 1
+            visited.add(current)
+            result += f"   Step{step}: {current} (distance: {current_dist})\n"
+            step += 1
         
-        if current == goal:
-            break 
+            if current == goal:
+                break 
         
-        for neighbor, weight in self.graph[current].itmes():
-            distance = current_dist + weight
+            for neighbor, weight in self.graph[current].itmes():
+                distance = current_dist + weight
             
-            if distance < distances[neighbor]:
-                distances[neighbor] = distance 
-                previous[neighbor] = current 
-                heapq.heappush(pq, (distance, neighbor))
+                if distance < distances[neighbor]:
+                    distances[neighbor] = distance 
+                    previous[neighbor] = current 
+                    heapq.heappush(pq, (distance, neighbor))
             
-    # Reconstruct path 
-    if distances[goal] != float('inf'):
-        path = []
-        current = goal
-        while current is not None:
-            path.append(current)
-            current = previous[current]
-        path.reverse()
+        # Reconstruct path 
+        if distances[goal] != float('inf'):
+           path = []
+           current = goal
+           while current is not None:
+               path.append(current)
+               current = previous[current]
+           path.reverse()
         
-        result += f"\n✅ OPTIMAL PATH FOUND!\n\n"
-        result += "    Shortest Route:\n"
-        for i, location in enumerate(path, 1):
-            if i < len(path):
-                dist = self.graph[path[i-1]][path[i]]
-                result += f"    {i}. {location}  📍\n"
-                result += f"        ↓ ({dist} units)\n"
-            else: 
-                result += f"    {i}. {location}  🎯\n"
+           result += f"\n✅ OPTIMAL PATH FOUND!\n\n"
+           result += "    Shortest Route:\n"
+           for i, location in enumerate(path, 1):
+                if i < len(path):
+                    dist = self.graph[path[i-1]][path[i]]
+                    result += f"    {i}. {location}  📍\n"
+                    result += f"        ↓ ({dist} units)\n"
+                else: 
+                    result += f"    {i}. {location}  🎯\n"
                 
-        result += f"\n📏  Optimal Distance: {distances[goal]} units\n"
-        result += f"🔢  Nodes Processed: {len(visited)}\n"
-    else:
-        result += "❌  No path exists between locations.\n"
+           result += f"\n📏  Optimal Distance: {distances[goal]} units\n"
+           result += f"🔢  Nodes Processed: {len(visited)}\n"
+        else:
+           result += "❌  No path exists between locations.\n"
         
-    return result
+        return result
 
-def prim_mst(self, start):
-    """Prim's MST algorithm with styled output"""
-    result = "🌉 PRIM'S MINIMUM SPANNING TREE\n"
-    result += "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
-    result += "Building MST to connect all campus locations efficiently!\n\n"
-    result += "🔍 Edge Selection Process:\n"
+    def prim_mst(self, start):
+       """Prim's MST algorithm with styled output"""
+       result = "🌉 PRIM'S MINIMUM SPANNING TREE\n"
+       result += "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+       result += "Building MST to connect all campus locations efficiently!\n\n"
+       result += "🔍 Edge Selection Process:\n"
+
+       visited = {start}
+       edges = []
+       pq = []
     
-    visited = {start}
-    edges = []
-    pq = []
+       for neighbor, weight in self.graph[start].items():
+           heapq.heappush(pq, (weight, start, neighbor))
+        
+       total_weight = 0
+       step = 1
     
-    for neighbor, weight in self.graph[start].items():
-        heapq.heappush(pq, (weight, start, neighbor))
+       while pq and len(visited) < len(self.graph):
+           weight, u, v = heapq.heapop(pq)
         
-    total_weight = 0
-    step = 1
-    
-    while pq and len(visited) < len(self.graph):
-        weight, u, v = heapq.heapop(pq)
+           if v in visited:
+               continue
         
-        if v in visited:
-            continue
+           visited.add(v)
+           edges.append((u, v, weight))
+           total_weight += weight
         
-        visited.add(v)
-        edges.append((u, v, weight))
-        total_weight += weight
+           result += f"    Step {step}: Add edges {u} ↔ {v} (weight: {weight}) ✨\n"
+           step += 1
         
-        result += f"    Step {step}: Add edges {u} ↔ {v} (weight: {weight}) ✨\n"
-        step += 1
-        
-        for neighbor, w in self.graph[v].items():
-            if neighbor not in visited:
-                heapq.heappush(pq, (w, v, neighbor))
+           for neighbor, w in self.graph[v].items():
+               if neighbor not in visited:
+                   heapq.heappush(pq, (w, v, neighbor))
                 
-    result += f"\n✅  MINIMUM SPANNING TREE COMPLETE!\n\n"
-    result += "🌉  All Edges in MST:\n"
-    for u, v, weight in edges:
-        result += f"   • {u} ↔ {v} ({weight} units)\n"
+       result += f"\n✅  MINIMUM SPANNING TREE COMPLETE!\n\n"
+       result += "🌉  All Edges in MST:\n"
+       for u, v, weight in edges:
+           result += f"   • {u} ↔ {v} ({weight} units)\n"
         
-    result += f"\n📏  Total MST Weight: {total_weight} units\n"
-    result += f"🔢  Edges in Tree: {len(edges)}\n"
-    result += f"🌳  Nodes Connected: {len(visited)}\n"
+       result += f"\n📏  Total MST Weight: {total_weight} units\n"
+       result += f"🔢  Edges in Tree: {len(edges)}\n"
+       result += f"🌳  Nodes Connected: {len(visited)}\n"
     
-    return result 
+       return result 
 
-def reset_display(self):
-    """Reset the display to intial state"""
-    self.results_text.delete(1.0, tk.END)
-    welcome_msg = """
+    def reset_display(self):
+       """Reset the display to intial state"""
+       self.results_text.delete(1.0, tk.END)
+       welcome_msg = """
 ╔═════════════════════════════════════════════════════╗
 ║       ✨   Welcome to Campus Navigator! ✨           ║
 ╚═════════════════════════════════════════════════════╝   
@@ -1031,7 +1031,7 @@ Ready to ptimize your study time? Add tasks to begin! 💫
         try:
             start = int(self.start_time.get())
             end = int(self.end_time.get())
-            priority = int(slef.priority.get())
+            priority = int(self.priority.get())
             
             if not name:
                 messagebox.shwowarning("⚠️  Invalid Input", "Please enter a task name! 📝")
@@ -1118,7 +1118,7 @@ Ready to ptimize your study time? Add tasks to begin! 💫
             
             result += " 📋  Tasks Sorted by End Time:\n"
             for i, task in enumerate(sorted_tasks, 1):
-                result += f"   {i}. {task['name']} ({tasks['start']} → {task['end']})  ⭐{task['priority']}\n"
+                result += f"   {i}. {task['name']} ({task['start']} → {task['end']})  ⭐{task['priority']}\n"
     
             result += "\n🔍 Selection Process:\n"
             
@@ -1530,51 +1530,51 @@ Ready to search? Load your notes to begin!💫
             """
             self.results_text.insert(1.0, welcome_msg)
             
-        def load_file(self):
-            """Load notes from a file"""
-            filename = filedialog.askopenfilename(
-                filetypes=[("Text files", "*, txt"), ("All files", "*.*")],
-                title="Load Notes File"
-            )
-            if filename:
-                try: 
-                    with open(filename, 'r', encoding='utf-8'):
-                    content = f.read()
-                    self.notes_text.delete(1.0, tk.END)
-                    self.notes_text.insert(1.0, content)
-                    messagebox.showinfo("✅ Success", 
+    def load_file(self):
+        """Load notes from a file"""
+        filename = filedialog.askopenfilename(
+            filetypes=[("Text files", "*, txt"), ("All files", "*.*")],
+            title="Load Notes File"
+        )
+        if filename:
+            try: 
+                as f with open(filename, 'r', encoding='utf-8'):
+                content = f.read()
+                self.notes_text.delete(1.0, tk.END)
+                self.notes_text.insert(1.0, content)
+                messagebox.showinfo("✅ Success", 
                                         f"File loaded successfully! ✨\n\n{filename}")
-                except Exception as e:
-                    messagebox.showerror("❌ Error",
-                        f"Could not load file:\n{str(e)}")
+            except Exception as e:
+                messagebox.showerror("❌ Error",
+                    f"Could not load file:\n{str(e)}")
                     
-        def clear_notes(self):
-            """Clear the notes text area"""
-            if self.notes_text.get(1.0, tk.END).strip():
-                if messagebox.askyesno("🗑️ Confirm", 
-                    "Clear all notes? This cannot be undone!"):
-                    self.notes_text.delete(1.0, tk.END)
-                    messagebox.showinfo("✅ Cleared", "Notes cleared! 🧹")
+    def clear_notes(self):
+        """Clear the notes text area"""
+        if self.notes_text.get(1.0, tk.END).strip():
+            if messagebox.askyesno("🗑️ Confirm", 
+                "Clear all notes? This cannot be undone!"):
+                self.notes_text.delete(1.0, tk.END)
+                messagebox.showinfo("✅ Cleared", "Notes cleared! 🧹")
                     
-        def search_pattern(self):
-            """Search for pattern using selected algorithm"""
-            text = self.notes_text.get(1.0, tk.END).strip()
-            pattern = self.pattern_entry.get().strip()
+    def search_pattern(self):
+        """Search for pattern using selected algorithm"""
+        text = self.notes_text.get(1.0, tk.END).strip()
+        pattern = self.pattern_entry.get().strip()
             
-            if not text:
-                messagebox.showwarning("⚠️  No Notes",
-                    "Please load or enter some notes first! 📝")
-                return 
+        if not text:
+            messagebox.showwarning("⚠️  No Notes",
+                "Please load or enter some notes first! 📝")
+            return 
             
-            if not pattern:
-                messagebox.showwarning("⚠️ No Pattern",
-                    "Please enter a pattern to search for! 🔍")
-                return 
+        if not pattern:
+            messagebox.showwarning("⚠️ No Pattern",
+                "Please enter a pattern to search for! 🔍")
+            return 
             
-            algo = self.search_algo.get()
-            self.results_text.delete(1.0, tk.END)
+        algo = self.search_algo.get()
+        self.results_text.delete(1.0, tk.END)
             
-            header = f"""
+        header = f"""
 ╔═════════════════════════════════════════════════════╗
 ║            🔍  PATTERN SEARCH RESULTS 🔍             ║
 ╚═════════════════════════════════════════════════════╝   
@@ -1584,29 +1584,29 @@ Ready to search? Load your notes to begin!💫
  📝 Text Length: {len(text)} characters 
             
 """
-            self.results_text.insert(tk.END, header)
+        self.results_text.insert(tk.END, header)
             
-            start_time = time.time()
+        start_time = time.time()
             
-            if algo == 'naive':
-                result = self.naive_search(text, pattern)
-            elif algo == 'rabin-karp':
-                result = self.rabin_karp(text, pattern)
-            else: # kmp 
-                result = self.kmp_search(text, pattern)
+        if algo == 'naive':
+            result = self.naive_search(text, pattern)
+        elif algo == 'rabin-karp':
+            result = self.rabin_karp(text, pattern)
+        else: # kmp 
+            result = self.kmp_search(text, pattern)
                 
-            elapsed = (time.time() - start_time) * 1000
+        elapsed = (time.time() - start_time) * 1000
             
-            self.results_text.insert(tk.END, result)
-            self.results_text.insert(tk.END, f"\n{'━'*59}\n")
-            self.results_text.insert(tk.END, f"⏱️   Execution Time: {elapsed:.3f}ms\n")
-            self.results_text.insert(tk.END, f"{'━'*59}\n")
+        self.results_text.insert(tk.END, result)
+        self.results_text.insert(tk.END, f"\n{'━'*59}\n")
+        self.results_text.insert(tk.END, f"⏱️   Execution Time: {elapsed:.3f}ms\n")
+        self.results_text.insert(tk.END, f"{'━'*59}\n")
             
         def naive_search(self, text, pattern):
             """Naive string matching algorithm"""
             result = "🔄 NAIVE STRING SEARCH\n"
             result += "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
-            results += "Stratgey: Check every position in text\n\n"
+            result += "Stratgey: Check every position in text\n\n"
             
             matches = []
             n = len(text)
@@ -1643,73 +1643,73 @@ Ready to search? Load your notes to begin!💫
                 
             return result 
         
-        def rabin_karp(self, text, pattern):
-            """Rabin-Karp string matching algorithm"""
-            result = "  RABIN_KARP ALGORITHM\n"
-            result += "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
-            result += "Strategy: Use rolling hash for efficient comparisons\n\n"
+    def rabin_karp(self, text, pattern):
+        """Rabin-Karp string matching algorithm"""
+        result = "  RABIN_KARP ALGORITHM\n"
+        result += "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+        result += "Strategy: Use rolling hash for efficient comparisons\n\n"
             
-            matches = []
-            n = len(text)
-            m = len(pattern)
-            d = 256 # Number of characters 
-            q = 101 # Prime number 
+        matches = []
+        n = len(text)
+        m = len(pattern)
+        d = 256 # Number of characters 
+        q = 101 # Prime number 
             
-            # Calculate hash values
-            h = pow(d, m - 1, q)
-            p = 0 # Pattern hash
-            t = 0 # Text hash
+        # Calculate hash values
+        h = pow(d, m - 1, q)
+        p = 0 # Pattern hash
+        t = 0 # Text hash
             
-            # Calculate intial hash values 
-            for i in range(m):
-                p = (d * p + ord(pattern[i])) % q
-                t = (d * t + ord(text[i])) % q
+           # Calculate intial hash values 
+        for i in range(m):
+            p = (d * p + ord(pattern[i])) % q
+            t = (d * t + ord(text[i])) % q
                 
-            result += f"🔢  Pattern Hash: {p}\n\n"
-            result += "🔍  Searching with Rolling Hash:\n"
+        result += f"🔢  Pattern Hash: {p}\n\n"
+        result += "🔍  Searching with Rolling Hash:\n"
             
-            comparisons = 0
-            hash_matches = 0
+        comparisons = 0
+        hash_matches = 0
             
-            # Slide pattern over text
-            for i in range(n - m + 1):
-                if p == t:
-                    hash_matches += 1
-                    # Verify match character by character 
-                    match = True 
-                    for j in range(m):
-                        comparisons += 1
-                        if text[i + j] != pattern[j]:
-                            match = False
-                            break
+        # Slide pattern over text
+        for i in range(n - m + 1):
+            if p == t:
+                hash_matches += 1
+                # Verify match character by character 
+                match = True 
+                for j in range(m):
+                    comparisons += 1
+                    if text[i + j] != pattern[j]:
+                        match = False
+                        break
                         
-                    if match: 
-                        matches.append(i)
-                        result += f"   ✅ Hash match & verified at position {i}\n"
-                    else:
-                        result += f"   ⚠️  Hash collision at position {i}\n"
+                if match: 
+                    matches.append(i)
+                    result += f"   ✅ Hash match & verified at position {i}\n"
+                else:
+                    result += f"   ⚠️  Hash collision at position {i}\n"
                         
-                # Calculate rolling hash for next window
-                if i < n - m:
-                    t = (d * (t - ord(text[i]) * h) + ord(text[i + m])) % q
-                    if t < 0:
-                        t += q
+            # Calculate rolling hash for next window
+            if i < n - m:
+                t = (d * (t - ord(text[i]) * h) + ord(text[i + m])) % q
+                if t < 0:
+                    t += q
                         
                         
-            result += f"\n📊  SEARCH COMPLETE\n\n"
-            result += f"✨   Matches Found: {len(matches)}\n"
-            result += f"🔢  Hash Matches: {hash_matches}\n"
-            result += f"🔢  Character Comparisons: {comparisons}\n\n"
+        result += f"\n📊  SEARCH COMPLETE\n\n"
+        result += f"✨   Matches Found: {len(matches)}\n"
+        result += f"🔢  Hash Matches: {hash_matches}\n"
+        result += f"🔢  Character Comparisons: {comparisons}\n\n"
             
-            if matches:
-                result += "📍 Match Positions:\n"
-                for pos in matches:
-                    context_start = max(0, pos - 20)
-                    context_end = min(len(text), pos + len(pattern) + 20)
-            else:
-                result += "❌  No matches found in the text.\n"
+        if matches:
+            result += "📍 Match Positions:\n"
+            for pos in matches:
+                context_start = max(0, pos - 20)
+                context_end = min(len(text), pos + len(pattern) + 20)
+        else:
+            result += "❌  No matches found in the text.\n"
                 
-            return result 
+        return result 
         
     def kmp_search(self, text, pattern):
         """KMP string matching algorithm."""
