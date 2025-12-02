@@ -382,6 +382,16 @@ class CampusNavigator(ttk.Frame):
             anchor='w')
         start_label.grid(row=0, column=0, sticky='w', padx=(0, 10), pady=8)
         
+        self.start_var = tk.StringVar(value=self.locations[0])
+        self.start_menu = ttk.Combobox(controls_frame,
+            textvariable=self.start_var,
+            values=self.locations,
+            state='readonly',
+            width=30,
+            font=('Segoe UI', 10),
+            style='Custom.TCombobox')
+        self.start_menu.grid(row=0, column=1, sticky='ew', pady=8)
+        
         # End location 
         end_label = tk.Label(controls_frame, 
             text=" 🎯 Destination:",
