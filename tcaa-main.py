@@ -302,9 +302,8 @@ class TCAA(tk.Tk):
             fg=self.colors['text_medium'])
         footer_text.pack()
     
-    
 class CampusNavigator(ttk.Frame):
-    """Module 1: Graph Algorithms"""
+    """Campus Navigator module with graph algorithms and styled interface"""
     
     def __init__(self, parent, colors):
         """Initialize Campus Navigator"""
@@ -326,23 +325,21 @@ class CampusNavigator(ttk.Frame):
         
         self.locations = list(self.graph.keys())
         self.setup_ui()
-        
-        self.setup_ui()
     
     def setup_ui(self):
         """ Styled UI components with enhanced visuals"""
         # Main container with padding 
         main_container = tk.Frame(self, bg=self.colors['bg_dark'])
         main_container.pack(fill='both', expand=True, padx=25, pady=25)
+
         
-        
-        # Title
+        # Decorative title with icon 
         title_frame = tk.Frame(main_container, bg=self.colors['bg_dark'])
         title_frame.pack(fill='x', pady=(0, 20))
         
         
         title = tk.Label(title_frame, 
-            text=" Campus Navigation System",
+            text="🗺️  Campus Navigation System",
             font=('Segoe UI', 15, 'bold'),
             bg=self.colors['bg_dark'],
             fg=self.colors['accent_purple'])
@@ -394,7 +391,7 @@ class CampusNavigator(ttk.Frame):
         
         # End location 
         end_label = tk.Label(controls_frame, 
-            text=" 🎯 Destination:",
+            text="🎯 Destination:",
             font=('Segoe UI', 10, 'bold'),
             bg=self.colors['card_bg'], 
             fg=self.colors['accent_mint'],
@@ -415,22 +412,22 @@ class CampusNavigator(ttk.Frame):
     
         # Algorithm selection with buttons 
         algo_frame = ttk.LabelFrame(main_container, 
-           text=" Choose Your Algorithm",
+           text="⚡ Choose Your Algorithm",
            style='Custom.TLabelframe',
         padding=15)
         algo_frame.pack(fill='x', pady=(0, 15))
     
-        self.algo_var = tk.StringVar(value="BFS")
+        self.algo_var = tk.StringVar(value="bfs")
     
         # Create radio button frame with decorative elements 
         radio_container = tk.Frame(algo_frame, bg=self.colors['card_bg'])
         radio_container.pack(fill='x')
     
         algorithms = [
-           (' 🔵 BFS - Breadth-First Search', 'bfs', self.colors['accent_blue']),
-           (' 🌳 DFS - Depth-First Search', 'dfs', self.colors['accent_mint']),
-           (' ⚡ Dijkstra - Shortest Weighted Path', 'dijkstra', self.colors['accent_purple']),
-           (' 🌉 Prim\'s MST - Minimum Spanning Tree', 'prim', self.colors['accent_pink'])   
+           ('🔵 BFS - Breadth-First Search', 'bfs', self.colors['accent_blue']),
+           ('🌳 DFS - Depth-First Search', 'dfs', self.colors['accent_mint']),
+           ('⚡ Dijkstra - Shortest Weighted Path', 'dijkstra', self.colors['accent_purple']),
+           ('🌉 Prim\'s MST - Minimum Spanning Tree', 'prim', self.colors['accent_pink'])   
         ]
     
     
@@ -449,24 +446,32 @@ class CampusNavigator(ttk.Frame):
                value=value,
                style='Custom.TRadiobutton').pack(side='left')
         
+        # Action buttons with glow effects
         button_frame = tk.Frame(main_container, bg=self.colors['bg_dark'])
         button_frame.pack(fill='x', pady=(0, 15))
-        # Location selection 
     
         # Main action button with glow 
         main_btn_glow = tk.Frame(button_frame, bg=self.colors['glow_pink'], padx=2, pady=2)
         main_btn_glow.pack(side='left', padx=5)
+        
+        main_btn_shadow = tk.Frame(main_btn_glow, bg=self.colors['highlight'], padx=0, pady=0)
+        main_btn_shadow.pack()
     
-        ttk.Button(main_btn_glow,
+        ttk.Button(main_btn_shadow,
            text="🚀 Find Path!",
-           command=self.reset_display,
+           command=self.find_path,
            style='Secondary.TButton').pack()
     
         # Secondary buttons 
-        ttk.Button(main_btn_glow,
-           text= " Reset",
+        ttk.Button(button_frame,
+           text= "🔄 Reset",
            command=self.reset_display,
            style='Accent.TButton').pack()
+        
+        ttk.Button(button_frame, 
+            text="💾 Save Results",
+            command=self.save_results,
+            style='Secondary.TButton').pack(side='left', padx=5)
     
         # Decorative sparkles 
         sparkle_frame = tk.Frame(button_frame, bg=self.colors['bg_dark'])
@@ -490,13 +495,17 @@ class CampusNavigator(ttk.Frame):
              tk.Frame(results_gradient, bg=color, height=3).pack(side='left', fill='both', expand=True)
     
         results_outer = tk.Frame(main_container, bg=self.colors['accent_light'], padx=2, pady=2)
-        results_outer.pack(fill='both', expand=True)
+        results_outer.pack(fill='both', expand=True, pady=(2, 0))
         
         results_inner = tk.Frame(main_container, bg=self.colors['accent_light'], padx=2, pady=2)
         results_inner.pack(fill='both', expand=True)
+        
+        # Results header with decorative elements 
+        results_header = tk.Frame(results_outer, bg=self.colors['card_bg'], padx=2, pady=2)
+        results_header.pack(fill='x', padx=15, pady=(15, 10))
     
-        results_label = tk.Label(results_inner, 
-            text= " Results & Path Visualization", 
+        results_label = tk.Label(results_header, 
+            text= "📋 Results & Path Visualization", 
             font=('Segoe UI', 11, 'bold'), 
             bg=self.colors['card_bg'], 
             fg=self.colors['accent_purple'])
@@ -509,24 +518,24 @@ class CampusNavigator(ttk.Frame):
         dots_colors = [self.colors['accent_pink'], self.colors['accent_purple'], self.colors['accent_mint']]
         for color in dots_colors:
             tk.Label(dots_frame, 
-                    text="●", 
-                    font=('Segoe UI', 12),
-                    bg=self.colors['card_bg'],
-                    fg=color).pack(side='left', padx=3)
+                text="●", 
+                font=('Segoe UI', 12),
+                bg=self.colors['card_bg'],
+                fg=color).pack(side='left', padx=3)
         
-            self.results_text = scrolledtext.ScrolledText(results_inner,
-                wrap=tk.WORD, 
-                font=('Consolas', 10),
-                bg=self.colors['bg_light'],
-                fg=self.colors['text_light'],
-                relief='flat', 
-                padx=20, 
-                pady=20,
-                insertbackground=self.colors['accent_purple'])
-            self.results_text.pack(fill='both', expand=True, padx=15, pady=(0, 15))
+        self.results_text = scrolledtext.ScrolledText(results_inner,
+            wrap=tk.WORD, 
+            font=('Consolas', 10),
+            bg=self.colors['bg_light'],
+            fg=self.colors['text_light'],
+            relief='flat', 
+            padx=20, 
+            pady=20,
+            insertbackground=self.colors['accent_purple'])
+        self.results_text.pack(fill='both', expand=True, padx=15, pady=(0, 15))
         
-            # Add welcome message 
-            welcome_msg = """
+        # Add welcome message 
+        welcome_msg = """
 ╔═════════════════════════════════════════════════════╗
 ║          ✨ Welcome to Campus Navigator! ✨          ║
 ╚═════════════════════════════════════════════════════╝
@@ -554,10 +563,10 @@ Ready to navigate? Let's go! 💫
         
         if start == end:
             messagebox.showwarning("⚠️ Same Location",
-                        "You're already at your destination!🎯")
+                "You're already at your destination!🎯")
             return 
         
-            self.results_text.delete(1.0, tk.END)
+        self.results_text.delete(1.0, tk.END)
         
         # Header with cute formatting 
         header = f"""
@@ -597,7 +606,7 @@ Ready to navigate? Let's go! 💫
     
        result = "🔵 BREADTH-FIRST SEARCH (BFS)\n"
        result += "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
-       result += "🔍  Exploration Order:\n"
+       result += "🔍 Exploration Order:\n"
     
        step = 1
        while queue:
@@ -616,8 +625,8 @@ Ready to navigate? Let's go! 💫
                        result += f"    {i}. {location} 🎯\n"
                     
                total_dist = sum(self.graph[path[i]][path[i+1]] for i in range(len(path-1)))
-               result += f"\n  Total Distance: {total_dist} units\n"
-               result += f"  Nodes Visited: {len(visited)}\n"
+               result += f"\n📏 Total Distance: {total_dist} units\n"
+               result += f"🔢 Nodes Visited: {len(visited)}\n"
                return result 
         
            for neighbor in sorted(self.graph[current].keys()):
@@ -625,7 +634,7 @@ Ready to navigate? Let's go! 💫
                    visited.add(neighbor)
                    queue.append((neighbor, path + [neighbor]))
                 
-       return " ❌ No path found between locations.\n"
+       return "❌ No path found between locations.\n"
 
     def dfs(self, start, goal):
        """DFS algorithm with styled output"""
@@ -651,33 +660,33 @@ Ready to navigate? Let's go! 💫
                return True 
     
            for neighbor in sorted(self.graph[node].keys()):
-                if neighbor not in visited:
-                    if dfs_recursive(neighbor, target, current_path):
-                        return True 
+               if neighbor not in visited:
+                   if dfs_recursive(neighbor, target, current_path):
+                       return True 
             
-                current_path.pop()
-                return False
+           current_path.pop()
+           return False
     
-           dfs_recursive(start, goal, [])
-           result += output[0]
+       dfs_recursive(start, goal, [])
+       result += output[0]
     
-           if found[0]:
-               result += f"\n✅ PATH FOUND!\n\n"
-               result += "🛤️ Route:\n"
-               for i, location in enumerate(path, 1):
-                  if i < len(path):
-                      result += f"   {i}. {location} 📍 \n"
-                      result += f"       ↓\n"
-                  else:
-                      result += f"   {i}. {location} 🎯\n"
+       if found[0]:
+           result += f"\n✅ PATH FOUND!\n\n"
+           result += "🛤️ Route:\n"
+           for i, location in enumerate(path, 1):
+               if i < len(path):
+                  result += f"   {i}. {location} 📍 \n"
+                  result += f"       ↓\n"
+               else:
+                  result += f"   {i}. {location} 🎯\n"
                 
-               total_dist = sum(self.graph[path[i]][path[i+1]] for i in range(len(path)-1))
-               result += f"\n  Total Distance: {total_dist} units\n"
-               result += f" Nodes Visited: {len(visited)}\n"
-           else:
-               result += " No path between locations.\n"
+           total_dist = sum(self.graph[path[i]][path[i+1]] for i in range(len(path)-1))
+           result += f"\n  Total Distance: {total_dist} units\n"
+           result += f" Nodes Visited: {len(visited)}\n"
+       else:
+           result += " No path between locations.\n"
         
-               return result 
+           return result 
 
     def dijkstra(self, start, goal):
         """Dijkstra's algorithm with styled output"""
@@ -724,19 +733,19 @@ Ready to navigate? Let's go! 💫
            path.reverse()
         
            result += f"\n✅ OPTIMAL PATH FOUND!\n\n"
-           result += "    Shortest Route:\n"
+           result += "🛤️  Shortest Route:\n"
            for i, location in enumerate(path, 1):
                 if i < len(path):
                     dist = self.graph[path[i-1]][path[i]]
-                    result += f"    {i}. {location}  📍\n"
+                    result += f"    {i}. {location} 📍\n"
                     result += f"        ↓ ({dist} units)\n"
                 else: 
-                    result += f"    {i}. {location}  🎯\n"
+                    result += f"    {i}. {location} 🎯\n"
                 
-           result += f"\n📏  Optimal Distance: {distances[goal]} units\n"
-           result += f"🔢  Nodes Processed: {len(visited)}\n"
+           result += f"\n📏 Optimal Distance: {distances[goal]} units\n"
+           result += f"🔢 Nodes Processed: {len(visited)}\n"
         else:
-           result += "❌  No path exists between locations.\n"
+           result += "❌ No path exists between locations.\n"
         
         return result
 
@@ -774,14 +783,14 @@ Ready to navigate? Let's go! 💫
                if neighbor not in visited:
                    heapq.heappush(pq, (w, v, neighbor))
                 
-       result += f"\n✅  MINIMUM SPANNING TREE COMPLETE!\n\n"
-       result += "🌉  All Edges in MST:\n"
+       result += f"\n✅ MINIMUM SPANNING TREE COMPLETE!\n\n"
+       result += "🌉 All Edges in MST:\n"
        for u, v, weight in edges:
            result += f"   • {u} ↔ {v} ({weight} units)\n"
         
-       result += f"\n📏  Total MST Weight: {total_weight} units\n"
-       result += f"🔢  Edges in Tree: {len(edges)}\n"
-       result += f"🌳  Nodes Connected: {len(visited)}\n"
+       result += f"\n📏 Total MST Weight: {total_weight} units\n"
+       result += f"🔢 Edges in Tree: {len(edges)}\n"
+       result += f"🌳 Nodes Connected: {len(visited)}\n"
     
        return result 
 
@@ -805,7 +814,9 @@ Available: Algorithms:
  🌉 Prim     - Creates minimum spanning tree
     
 Ready to navigate? Let's go! 
-        """
+       """
+       self.results_text.insert(1.0, welcome_msg)
+        
         
     def save_results(self):
         """Save current results to a file"""
@@ -823,10 +834,10 @@ Ready to navigate? Let's go!
                     with open(filename, 'w', encoding='utf-8') as f:
                         f.write(content)
                     messagebox.showinfo("💾 Success",
-                                        f"Results saved successfully! ✨\n\n{filename}")
+                        f"Results saved successfully! ✨\n\n{filename}")
                 except Exception as e:
                     messagebox.showerror("❌ Error",
-                                         f"Could not save file:\n{str(e)}")
+                        f"Could not save file:\n{str(e)}")
                     
 class StudyPlanner(ttk.Frame):
     """Study Planner module with greedy and DP scheduling"""
