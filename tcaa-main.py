@@ -58,6 +58,9 @@ class TCAA(tk.Tk):
         # Apply custom styling 
         self.setup_styles()
         
+        # Create decorative header 
+        self.create_header()
+        
         # Create notebook for tabs 
         self.notebook = ttk.Notebook(self, style='Custom.TNotebook')
         self.notebook.pack(fill='both', expand=True, padx=20, pady=(0, 20))
@@ -143,7 +146,7 @@ class TCAA(tk.Tk):
                 borderwidth=2, 
                 bordercolor=self.colors['accent_purple'],
                 focuscolor='none',
-                padding=[18, 18],
+                padding=[18, 10],
                 font=('Segoe UI', 9, 'bold'))
     
         style.map('Secondary.TButton',
@@ -157,7 +160,7 @@ class TCAA(tk.Tk):
                 foreground=self.colors['text_dark'],
                 borderwidth=0,
                 focuscolor='none',
-                padding=[20, 20],
+                padding=[20, 10],
                 font=('Segoe UI', 10, 'bold'))
     
         style.map('Special.TButton',
@@ -202,7 +205,7 @@ class TCAA(tk.Tk):
                 borderwidth=2, 
                 relief='flat')
     
-        style.map('custom.TCombobox', 
+        style.map('Custom.TCombobox', 
                 fieldbackground=[('readonly', self.colors['bg_light'])], 
                 foreground=[('readonly', self.colors['text_light'])], 
                 selectbackground=[('readonly', self.colors['accent_purple'])],
@@ -460,18 +463,18 @@ class CampusNavigator(ttk.Frame):
         ttk.Button(main_btn_shadow,
            text="🚀 Find Path!",
            command=self.find_path,
-           style='Secondary.TButton').pack()
+           style='Accent.TButton').pack()
     
         # Secondary buttons 
         ttk.Button(button_frame,
            text= "🔄 Reset",
            command=self.reset_display,
-           style='Accent.TButton').pack()
+           style='Accent.TButton').pack(side='left', padx=5)
         
         ttk.Button(button_frame, 
             text="💾 Save Results",
             command=self.save_results,
-            style='Secondary.TButton').pack(side='left', padx=5)
+            style='Accent.TButton').pack(side='left', padx=5)
     
         # Decorative sparkles 
         sparkle_frame = tk.Frame(button_frame, bg=self.colors['bg_dark'])
@@ -497,11 +500,11 @@ class CampusNavigator(ttk.Frame):
         results_outer = tk.Frame(main_container, bg=self.colors['accent_light'], padx=2, pady=2)
         results_outer.pack(fill='both', expand=True, pady=(2, 0))
         
-        results_inner = tk.Frame(main_container, bg=self.colors['accent_light'], padx=2, pady=2)
+        results_inner = tk.Frame(results_outer, bg=self.colors['accent_light'], padx=2, pady=2)
         results_inner.pack(fill='both', expand=True)
         
         # Results header with decorative elements 
-        results_header = tk.Frame(results_outer, bg=self.colors['card_bg'], padx=2, pady=2)
+        results_header = tk.Frame(results_inner, bg=self.colors['card_bg'], padx=2, pady=2)
         results_header.pack(fill='x', padx=15, pady=(15, 10))
     
         results_label = tk.Label(results_header, 
@@ -512,7 +515,7 @@ class CampusNavigator(ttk.Frame):
         results_label.pack(side='left')
     
         # Decorative dots 
-        dots_frame = tk.Frame(results_label, bg=self.colors['card_bg'])
+        dots_frame = tk.Frame(results_header, bg=self.colors['card_bg'])
         dots_frame.pack(side='right')
     
         dots_colors = [self.colors['accent_pink'], self.colors['accent_purple'], self.colors['accent_mint']]
@@ -600,204 +603,204 @@ Ready to navigate? Let's go! 💫
         self.results_text.insert(tk.END, f"{'━'*59}\n")
     
     def bfs(self, start, goal):
-       """BFS algorithm with styled output"""
-       queue = deque([(start, [start])])
-       visited = {start}
-    
-       result = "🔵 BREADTH-FIRST SEARCH (BFS)\n"
-       result += "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
-       result += "🔍 Exploration Order:\n"
-    
-       step = 1
-       while queue:
-           current, path = queue.popleft()
-           result += f"    Step {step}: {current}\n"
-           step += 1
+        """BFS algorithm with styled output."""
+        queue = deque([(start, [start])])
+        visited = {start}
         
-           if current == goal:
-               result += f"\n✅ PATH FOUND!\n\n"
-               result += "🛤️  Route:\n"
-               for i, location in enumerate(path, 1):
-                   if i < len(path):
-                       result += f"    {i}. {location}📍\n"
-                       result += f"        ↓\n"
-                   else:
-                       result += f"    {i}. {location} 🎯\n"
-                    
-               total_dist = sum(self.graph[path[i]][path[i+1]] for i in range(len(path-1)))
-               result += f"\n📏 Total Distance: {total_dist} units\n"
-               result += f"🔢 Nodes Visited: {len(visited)}\n"
-               return result 
-        
-           for neighbor in sorted(self.graph[current].keys()):
-               if neighbor not in visited:
-                   visited.add(neighbor)
-                   queue.append((neighbor, path + [neighbor]))
-                
-       return "❌ No path found between locations.\n"
-
-    def dfs(self, start, goal):
-       """DFS algorithm with styled output"""
-       result = "🌳 DEPTH_FIRST SEARCH (DFS)\n"
-       result+= "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
-       result += "🔍 Exploration Order (Deep Dive):\n"
-    
-       visited = set()
-       path = []
-       found = [False]
-       step = [1]
-       output = [""]
-    
-       def dfs_recursive(node, target, current_path):
-           visited.add(node)
-           current_path.append(node)
-           output[0] += f"   Step {step[0]}: {node}, (depth: {len(current_path)})\n"
-           step[0] += 1
-    
-           if node == target:
-               found[0] = True
-               path.extend(current_path)
-               return True 
-    
-           for neighbor in sorted(self.graph[node].keys()):
-               if neighbor not in visited:
-                   if dfs_recursive(neighbor, target, current_path):
-                       return True 
-            
-           current_path.pop()
-           return False
-    
-       dfs_recursive(start, goal, [])
-       result += output[0]
-    
-       if found[0]:
-           result += f"\n✅ PATH FOUND!\n\n"
-           result += "🛤️ Route:\n"
-           for i, location in enumerate(path, 1):
-               if i < len(path):
-                  result += f"   {i}. {location} 📍 \n"
-                  result += f"       ↓\n"
-               else:
-                  result += f"   {i}. {location} 🎯\n"
-                
-           total_dist = sum(self.graph[path[i]][path[i+1]] for i in range(len(path)-1))
-           result += f"\n  Total Distance: {total_dist} units\n"
-           result += f" Nodes Visited: {len(visited)}\n"
-       else:
-           result += " No path between locations.\n"
-        
-           return result 
-
-    def dijkstra(self, start, goal):
-        """Dijkstra's algorithm with styled output"""
-        result = " DIJKSTRA'S SHORTEST PATH ALGORITHM\n"
+        result = "🔵 BREADTH-FIRST SEARCH (BFS)\n"
         result += "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+        result += "🔍 Exploration Order:\n"
+        
+        step = 1
+        while queue:
+            current, path = queue.popleft()
+            result += f"   Step {step}: {current}\n"
+            step += 1
+            
+            if current == goal:
+                result += f"\n✅ PATH FOUND!\n\n"
+                result += "🛤️  Route:\n"
+                for i, location in enumerate(path, 1):
+                    if i < len(path):
+                        result += f"   {i}. {location} 📍\n"
+                        result += f"      ↓\n"
+                    else:
+                        result += f"   {i}. {location} 🎯\n"
+                
+                total_dist = sum(self.graph[path[i]][path[i+1]] for i in range(len(path)-1))
+                result += f"\n📏 Total Distance: {total_dist} units\n"
+                result += f"🔢 Nodes Visited: {len(visited)}\n"
+                return result
+            
+            for neighbor in sorted(self.graph[current].keys()):
+                if neighbor not in visited:
+                    visited.add(neighbor)
+                    queue.append((neighbor, path + [neighbor]))
+        
+        return "❌ No path found between locations.\n"
     
+    def dfs(self, start, goal):
+        """DFS algorithm with styled output."""
+        result = "🌳 DEPTH-FIRST SEARCH (DFS)\n"
+        result += "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+        result += "🔍 Exploration Order (Deep Dive):\n"
+        
+        visited = set()
+        path = []
+        found = [False]
+        step = [1]
+        output = [""]
+        
+        def dfs_recursive(node, target, current_path):
+            visited.add(node)
+            current_path.append(node)
+            output[0] += f"   Step {step[0]}: {node} (depth: {len(current_path)})\n"
+            step[0] += 1
+            
+            if node == target:
+                found[0] = True
+                path.extend(current_path)
+                return True
+            
+            for neighbor in sorted(self.graph[node].keys()):
+                if neighbor not in visited:
+                    if dfs_recursive(neighbor, target, current_path):
+                        return True
+            
+            current_path.pop()
+            return False
+        
+        dfs_recursive(start, goal, [])
+        result += output[0]
+        
+        if found[0]:
+            result += f"\n✅ PATH FOUND!\n\n"
+            result += "🛤️  Route:\n"
+            for i, location in enumerate(path, 1):
+                if i < len(path):
+                    result += f"   {i}. {location} 📍\n"
+                    result += f"      ↓\n"
+                else:
+                    result += f"   {i}. {location} 🎯\n"
+            
+            total_dist = sum(self.graph[path[i]][path[i+1]] for i in range(len(path)-1))
+            result += f"\n📏 Total Distance: {total_dist} units\n"
+            result += f"🔢 Nodes Visited: {len(visited)}\n"
+        else:
+            result += "❌ No path found between locations.\n"
+        
+        return result
+    
+    def dijkstra(self, start, goal):
+        """Dijkstra's algorithm with styled output."""
+        result = "⚡ DIJKSTRA'S SHORTEST PATH ALGORITHM\n"
+        result += "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+        
         distances = {node: float('inf') for node in self.graph}
         distances[start] = 0
         previous = {node: None for node in self.graph}
         pq = [(0, start)]
         visited = set()
-    
+        
         result += "🔍 Processing Nodes (by distance):\n"
         step = 1
-    
+        
         while pq:
             current_dist, current = heapq.heappop(pq)
-        
+            
             if current in visited:
-                continue 
-        
+                continue
+            
             visited.add(current)
-            result += f"   Step{step}: {current} (distance: {current_dist})\n"
+            result += f"   Step {step}: {current} (distance: {current_dist})\n"
             step += 1
-        
+            
             if current == goal:
-                break 
-        
-            for neighbor, weight in self.graph[current].itmes():
+                break
+            
+            for neighbor, weight in self.graph[current].items():
                 distance = current_dist + weight
-            
+                
                 if distance < distances[neighbor]:
-                    distances[neighbor] = distance 
-                    previous[neighbor] = current 
+                    distances[neighbor] = distance
+                    previous[neighbor] = current
                     heapq.heappush(pq, (distance, neighbor))
-            
-        # Reconstruct path 
-        if distances[goal] != float('inf'):
-           path = []
-           current = goal
-           while current is not None:
-               path.append(current)
-               current = previous[current]
-           path.reverse()
         
-           result += f"\n✅ OPTIMAL PATH FOUND!\n\n"
-           result += "🛤️  Shortest Route:\n"
-           for i, location in enumerate(path, 1):
+        # Reconstruct path
+        if distances[goal] != float('inf'):
+            path = []
+            current = goal
+            while current is not None:
+                path.append(current)
+                current = previous[current]
+            path.reverse()
+            
+            result += f"\n✅ OPTIMAL PATH FOUND!\n\n"
+            result += "🛤️  Shortest Route:\n"
+            for i, location in enumerate(path, 1):
                 if i < len(path):
                     dist = self.graph[path[i-1]][path[i]]
-                    result += f"    {i}. {location} 📍\n"
-                    result += f"        ↓ ({dist} units)\n"
-                else: 
-                    result += f"    {i}. {location} 🎯\n"
-                
-           result += f"\n📏 Optimal Distance: {distances[goal]} units\n"
-           result += f"🔢 Nodes Processed: {len(visited)}\n"
+                    result += f"   {i}. {location} 📍\n"
+                    result += f"      ↓ ({dist} units)\n"
+                else:
+                    result += f"   {i}. {location} 🎯\n"
+            
+            result += f"\n📏 Optimal Distance: {distances[goal]} units\n"
+            result += f"🔢 Nodes Processed: {len(visited)}\n"
         else:
-           result += "❌ No path exists between locations.\n"
+            result += "❌ No path exists between locations.\n"
         
         return result
-
+    
     def prim_mst(self, start):
-       """Prim's MST algorithm with styled output"""
-       result = "🌉 PRIM'S MINIMUM SPANNING TREE\n"
-       result += "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
-       result += "Building MST to connect all campus locations efficiently!\n\n"
-       result += "🔍 Edge Selection Process:\n"
-
-       visited = {start}
-       edges = []
-       pq = []
+        """Prim's MST algorithm with styled output."""
+        result = "🌉 PRIM'S MINIMUM SPANNING TREE\n"
+        result += "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+        result += "Building MST to connect all campus locations efficiently!\n\n"
+        result += "🔍 Edge Selection Process:\n"
+        
+        visited = {start}
+        edges = []
+        pq = []
+        
+        for neighbor, weight in self.graph[start].items():
+            heapq.heappush(pq, (weight, start, neighbor))
+        
+        total_weight = 0
+        step = 1
+        
+        while pq and len(visited) < len(self.graph):
+            weight, u, v = heapq.heappop(pq)
+            
+            if v in visited:
+                continue
+            
+            visited.add(v)
+            edges.append((u, v, weight))
+            total_weight += weight
+            
+            result += f"   Step {step}: Add edge {u} ↔ {v} (weight: {weight}) ✨\n"
+            step += 1
+            
+            for neighbor, w in self.graph[v].items():
+                if neighbor not in visited:
+                    heapq.heappush(pq, (w, v, neighbor))
+        
+        result += f"\n✅ MINIMUM SPANNING TREE COMPLETE!\n\n"
+        result += "🌉 All Edges in MST:\n"
+        for u, v, weight in edges:
+            result += f"   • {u} ↔ {v} ({weight} units)\n"
+        
+        result += f"\n📏 Total MST Weight: {total_weight} units\n"
+        result += f"🔢 Edges in Tree: {len(edges)}\n"
+        result += f"🌳 Nodes Connected: {len(visited)}\n"
+        
+        return result
     
-       for neighbor, weight in self.graph[start].items():
-           heapq.heappush(pq, (weight, start, neighbor))
-        
-       total_weight = 0
-       step = 1
-    
-       while pq and len(visited) < len(self.graph):
-           weight, u, v = heapq.heapop(pq)
-        
-           if v in visited:
-               continue
-        
-           visited.add(v)
-           edges.append((u, v, weight))
-           total_weight += weight
-        
-           result += f"    Step {step}: Add edges {u} ↔ {v} (weight: {weight}) ✨\n"
-           step += 1
-        
-           for neighbor, w in self.graph[v].items():
-               if neighbor not in visited:
-                   heapq.heappush(pq, (w, v, neighbor))
-                
-       result += f"\n✅ MINIMUM SPANNING TREE COMPLETE!\n\n"
-       result += "🌉 All Edges in MST:\n"
-       for u, v, weight in edges:
-           result += f"   • {u} ↔ {v} ({weight} units)\n"
-        
-       result += f"\n📏 Total MST Weight: {total_weight} units\n"
-       result += f"🔢 Edges in Tree: {len(edges)}\n"
-       result += f"🌳 Nodes Connected: {len(visited)}\n"
-    
-       return result 
-
     def reset_display(self):
-       """Reset the display to intial state"""
-       self.results_text.delete(1.0, tk.END)
-       welcome_msg = """
+        """Reset the display to initial state."""
+        self.results_text.delete(1.0, tk.END)
+        welcome_msg = """
 ╔═════════════════════════════════════════════════════╗
 ║       ✨   Welcome to Campus Navigator! ✨           ║
 ╚═════════════════════════════════════════════════════╝   
@@ -814,8 +817,8 @@ Available: Algorithms:
  🌉 Prim     - Creates minimum spanning tree
     
 Ready to navigate? Let's go! 
-       """
-       self.results_text.insert(1.0, welcome_msg)
+        """
+        self.results_text.insert(1.0, welcome_msg)
         
         
     def save_results(self):
@@ -930,6 +933,8 @@ class StudyPlanner(ttk.Frame):
             font=('Segoe UI', 10), 
             width=10, 
             bg=self.colors['bg_light'],
+            fg=self.colors['text_light'],
+            insertbackground=self.colors['accent_purple'],
             relief='flat')
         self.end_time.pack(side='left', ipady=5)
         
@@ -1000,7 +1005,7 @@ class StudyPlanner(ttk.Frame):
         results_outer = tk.Frame(main_container, bg=self.colors['accent_light'], padx=2, pady=2)
         results_outer.pack(fill='both', expand=True)
         
-        results_inner = tk.Frame(main_container, bg=self.colors['accent_light'], padx=2, pady=2)
+        results_inner = tk.Frame(results_outer, bg=self.colors['accent_light'], padx=2, pady=2)
         results_inner.pack(fill='both', expand=True)
         
         
@@ -1052,13 +1057,14 @@ Ready to ptimize your study time? Add tasks to begin! 💫
             priority = int(self.priority.get())
             
             if not name:
-                messagebox.shwowarning("⚠️  Invalid Input", "Please enter a task name! 📝")
+                messagebox.showwarning("⚠️  Invalid Input", "Please enter a task name! 📝")
                 return
             
             if start >= end:
                 messagebox.showwarning("⚠️  Invalid Time",
                     "Start time must be before end time! ⏰")
                 return
+            
             
             self.tasks.append({
                 'name': name, 
@@ -1125,35 +1131,35 @@ Ready to ptimize your study time? Add tasks to begin! 💫
         self.schedule_text.insert(tk.END, f"⏱️   Execution Time: {elapsed:.2f}ms\n")
         self.schedule_text.insert(tk.END, f"{'━'*59}\n")
         
-        def greedy_schedule(self, start):
-            """Greedy interval scheduling algorithm"""
-            result = "⚡ GREEDY INTERVAL SCHEDULING\n"
-            result += "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
-            result += "Strategy: Sort by end time, pick non-overlapping tasks!\n\n"
+    def greedy_schedule(self, start):
+        """Greedy interval scheduling algorithm"""
+        result = "⚡ GREEDY INTERVAL SCHEDULING\n"
+        result += "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+        result += "Strategy: Sort by end time, pick non-overlapping tasks!\n\n"
             
-            # Sort by end time 
-            sorted_tasks = sorted(self.tasks, key=lambda x: x['end'])
+        # Sort by end time 
+        sorted_tasks = sorted(self.tasks, key=lambda x: x['end'])
             
-            result += " 📋  Tasks Sorted by End Time:\n"
-            for i, task in enumerate(sorted_tasks, 1):
-                result += f"   {i}. {task['name']} ({task['start']} → {task['end']})  ⭐{task['priority']}\n"
+        result += " 📋  Tasks Sorted by End Time:\n"
+        for i, task in enumerate(sorted_tasks, 1):
+            result += f"   {i}. {task['name']} ({task['start']} → {task['end']})  ⭐{task['priority']}\n"
     
-            result += "\n🔍 Selection Process:\n"
+        result += "\n🔍 Selection Process:\n"
             
-            scheduled = []
-            last_end = -1
-            step = 1
+        scheduled = []
+        last_end = -1
+        step = 1
             
-            for task in sorted_tasks:
-                if task['start'] >= last_end:
-                    scheduled.append(task)
-                    result += f"    Step {step}: ✅ Selected '{task['name']}' "
-                    result += f"({task['start']} → {task['end']})\n"
-                    last_end = task['end']
-                else:
-                    result += f"    Step{step}:  ⏭️  Skipped '{task['name']}' "
-                    result += f"(conflits with previous task)\n"
-                step += 1
+        for task in sorted_tasks:
+            if task['start'] >= last_end:
+                scheduled.append(task)
+                result += f"    Step {step}: ✅ Selected '{task['name']}' "
+                result += f"({task['start']} → {task['end']})\n"
+                last_end = task['end']
+            else:
+                result += f"    Step{step}:  ⏭️  Skipped '{task['name']}' "
+                result += f"(conflits with previous task)\n"
+            step += 1
                 
             result += f"\n✨ OPTIMAL SCHEDULE\n\n"
             result += "📅 Selected Tasks:\n"
@@ -1477,7 +1483,7 @@ class NotesSearchEngine(ttk.Frame):
         algo_frame = tk.Frame(search_frame, bg=self.colors['card_bg'])
         algo_frame.pack(fill='x', pady=(10, 0))
         
-        self.search_algo = tk.StringVar(value='native')
+        self.search_algo = tk.StringVar(value='naive')
         
         algorithms = [
             ('🔄 Naive Search', 'naive', self.colors['accent_blue']),
@@ -1551,7 +1557,7 @@ Ready to search? Load your notes to begin!💫
     def load_file(self):
         """Load notes from a file"""
         filename = filedialog.askopenfilename(
-            filetypes=[("Text files", "*, txt"), ("All files", "*.*")],
+            filetypes=[("Text files", "*.txt"), ("All files", "*.*")],
             title="Load Notes File"
         )
         if filename:
@@ -1620,30 +1626,30 @@ Ready to search? Load your notes to begin!💫
         self.results_text.insert(tk.END, f"⏱️   Execution Time: {elapsed:.3f}ms\n")
         self.results_text.insert(tk.END, f"{'━'*59}\n")
             
-        def naive_search(self, text, pattern):
-            """Naive string matching algorithm"""
-            result = "🔄 NAIVE STRING SEARCH\n"
-            result += "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
-            result += "Stratgey: Check every position in text\n\n"
+    def naive_search(self, text, pattern):
+        """Naive string matching algorithm"""
+        result = "🔄 NAIVE STRING SEARCH\n"
+        result += "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+        result += "Stratgey: Check every position in text\n\n"
             
-            matches = []
-            n = len(text)
-            m = len(pattern)
-            comparisons = 0
+        matches = []
+        n = len(text)
+        m = len(pattern)
+        comparisons = 0
             
-            result += "🔍 Search Progress:\n"
+        result += "🔍 Search Progress:\n"
             
-            for i in range(n - m + 1):
-                j = 0 
-                while j < m and text[i + j] == pattern[j]:
-                    j += 1
-                    comparisons += 1
+        for i in range(n - m + 1):
+            j = 0 
+            while j < m and text[i + j] == pattern[j]:
+                j += 1
+                comparisons += 1
                     
-                if j == m:
-                    matches.append(i)
-                    result += f"    ✅ Match found at position {i}\n"
-                else:
-                    comparisons += 1 # Count the failed comparisons
+            if j == m:
+                matches.append(i)
+                result += f"    ✅ Match found at position {i}\n"
+            else:
+                comparisons += 1 # Count the failed comparisons
                     
             result += f"\n📊 SEARCH COMPLETE\n\n"
             result += f"✨ Matches Found: {len(matches)}\n"
@@ -1787,7 +1793,7 @@ Ready to search? Load your notes to begin!💫
         result += f"\n📊   SEARCH COMPLETE\n\n"
         result += f"✨  Matches Found: {len(matches)}\n"
         result += f"🔢  Total Comparisons: {comparisons}\n"
-        result += f"⚡  Efficiency Gain: {((n * m - comparisons) / (n * m) * 100):.f}%\n\n"
+        result += f"⚡  Efficiency Gain: {((n * m - comparisons) / (n * m) * 100):.1f}%\n\n"
         
         
         if matches:
