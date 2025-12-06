@@ -10,7 +10,7 @@ This application implements four comprehensive modules showcasing algorithmic te
 
 1. Campus Navigator (Graph Algorithms)
 - BFS - Breadth-First Search for shortest unweighted path 
-- DFS + Connectivoty - Depth-First Search with connectivity check
+- DFS + Connectivity - Depth-First Search with connectivity check
 - Dijkstra's Shortest Path - Optimal weighted path using min-heap
 - Prim's MST - Minimum Spanning Tree using min-heap
 
@@ -34,7 +34,7 @@ Programming language: Python3
 
 GUI Framework:
 Tkinter(recommended and used)
-- Part pf Python standard library 
+- Part of Python standard library 
 - Cross-platform compatible 
 - No additional installation required 
 
@@ -160,7 +160,7 @@ Dynamic Programming Scheduler (0/1 Knapsack)
 - Time O(n x W) where W = available time 
 - Space: O(n x W) for DP table
 - Recurrence: dp[i][t] = max(dp[i-1][t], dp[i-1][t-time[i]] + value[i])
-- Optimal For: Maxmimizing value within time constraint 
+- Optimal For: Maximizing value within time constraint 
 
 String Matching (Module 3)
 Naive Search
@@ -178,8 +178,4 @@ KMP (Knuth-Morris-Pratt)
 - Space: O(m) for lps array
 - Method: Preprocess pattern, skip redundant comparisons
 - Best For: Single pattern, linear time guarantee
-
-
-
-
 
