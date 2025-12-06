@@ -4,12 +4,19 @@ CPSC 335: Algorithm Engineering - Final Project
 
 A Python GUI application that demonstrates graph algorithms, dynamic programming, greedy scheduling, string pattern matching and algorithm analysis. 
 
+
+<img width="2298" height="1558" alt="Image 12-6-25 at 9 42 AM" src="https://github.com/user-attachments/assets/5652b947-7a10-4114-aef8-4fd383e60394" />
+<img width="2298" height="1558" alt="Image 12-6-25 at 9 43 AM" src="https://github.com/user-attachments/assets/2ac6f5d5-5668-4959-b579-630c90d17e27" />
+<img width="2298" height="1558" alt="Image 12-6-25 at 9 43 AM (1)" src="https://github.com/user-attachments/assets/842f875d-ccc3-4569-8392-e52130b966a0" />
+<img width="2298" height="1558" alt="Image 12-6-25 at 9 43 AM (2)" src="https://github.com/user-attachments/assets/4334e365-3aa0-4c16-8405-f56302aeebde" />
+
+
 ## Project Overview 
 
 This application implements four comprehensive modules showcasing algorithmic techniques covered in CPSC 335:
 
 1. Campus Navigator (Graph Algorithms)
-- BFS - Breadth-First Search for shortest unweighted path 
+- BFS - Breadth-First Search for the shortest unweighted path 
 - DFS + Connectivity - Depth-First Search with connectivity check
 - Dijkstra's Shortest Path - Optimal weighted path using min-heap
 - Prim's MST - Minimum Spanning Tree using min-heap
