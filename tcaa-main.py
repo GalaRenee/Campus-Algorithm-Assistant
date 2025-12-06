@@ -2030,7 +2030,7 @@ The P vs NP question asks:
     "If we can quickly VERIFY a solution,
      can we also quickly FIND it?"
      
- 💰 Millennium Prize Problem: $1,000,000 reward
+ 💰 Million Dollar Prize Problem: $1,000,000 reward
  🤔 Unsolved for 50+ years
  📊 Most computer scientists believe P ≠ NP
  ✨ One of the most important questions in CS
