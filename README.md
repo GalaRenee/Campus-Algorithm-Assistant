@@ -41,18 +41,18 @@ Programming language: Python3
 
 GUI Framework:
 Tkinter(recommended and used)
-- Part of Python standard library 
+- Part of the Python standard library 
 - Cross-platform compatible 
 - No additional installation required 
 
 # Usage Guide 
 ## Module 1: Campus Navigator 
-Demonstrates: BFS, DFS, Dijkstra's Algroithm, Prim's MST
+Demonstrates: BFS, DFS, Dijkstra's Algorithm, Prim's MST
 
 How to Use:
 1. Select an algorithm (BFS/DFS/Dijkstra/Prim)
-2. Choose start and end locations from dropdowns
-3. Click "Run Algorithm"
+2. Choose start and end locations from the dropdowns
+3. Click "Run Algorithm."
 4. View the path/results and execution time 
 Sample Campus Locations:
 - Library
@@ -66,23 +66,23 @@ Sample Campus Locations:
 What each Algorithm does:
 - BFS: Finds path with fewest hops(unweighted)
 - DFS: Shows traversal order + connectivity status
-- Dijkstra: Finds shortest weighted path 
-- Prim: Constructs minimum spanning tree
+- Dijkstra: Find the shortest weighted path 
+- Prim: Constructs a minimum spanning tree
 
 ## Module 2: Study Planner 
 Demonstrates: Greedy Interval Scheduling, 0/1 Knapsack DP
 
 For Greedy Scheduler:
-1. Select "Greedy Scheduler (Max Tasks)"
+1. Select "Greedy Scheduler (Max Tasks)."
 2. Enter tasks: names, start_time, end_time (one per line)
-3. Click "Run Scheduler"
-4. See maximum non-overlapping tasks selected
+3. Click "Run Scheduler."
+4. See the maximum non-overlapping tasks selected
 
 For DP Scheduler:
 1. Select "DP Optimal Schedler (Max Value)
 2. Click "Load DP Example" or enter: name, time_required, value
 3. Set available time (hours)
-4. Click "Run Scheduler"
+4. Click "Run Scheduler."
 5. See optimal task selection maximizing value 
 
 Key Difference:
@@ -101,7 +101,7 @@ How to Use:
 - Rabin-Karp: Rolling Hash approach 
 - KMP: Optimal linear-time search 
 - Compare All: Run all three and compare performance 
-4. Click "Search"
+4. Click "Search."
 5. View match positions and timing 
 Note: Use "Compare All" to see performance differences!
 
@@ -112,7 +112,7 @@ Time Complexities:
 - Explanation of why each has its complexity 
 - Practical performance guidelines 
 P vs NP:
-- Comprehensive explanation of P and NP clases
+- Comprehensive explanation of P and NP classes
 - NP-Complete and NP-Hard problems 
 - Real-world implications 
 - Connection to TCAA algorithms 
@@ -140,17 +140,20 @@ BFS (Breadth-First Search)
 - Time O(V + E)
 - Space: O(V)
 - Implementation: Queue-based level-order traversal 
-- Use Case: Shortest path in unweighted graphs 
+- Use Case: Shortest path in unweighted graphs
+
 DFS (Depth-First Search)
 - Time: O(V + E)
 - Space: O(V) recursion stack 
 - Implementation: Recursive with visited set
 - Use Case: Connectivity, cycle detection
+
 Dijkstra's Algorithm
 - Time: O((V + E) log V) with binary heap
 - Space: O(V)
 - Implementation: Min-heap priority queue
 - Use Case: Shortest weighted path (non-negative weights)
+
 Prim's MST
 - Time: O((V + E) log V)
 - Space: O(V)
@@ -161,8 +164,8 @@ Greedy & DP (Module 2)
 Greedy Interval Scheduling
 - Time: O(n log n)- sorting dominates 
 - Space: O(1)
-- Strategy: Sort by end time, select earliest finishing 
-- Optimal For: Maximizing number of tasks 
+- Strategy: Sort by end time, select the earliest finishing 
+- Optimal For: Maximizing the number of tasks 
 Dynamic Programming Scheduler (0/1 Knapsack)
 - Time O(n x W) where W = available time 
 - Space: O(n x W) for DP table
