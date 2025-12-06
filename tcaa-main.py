@@ -9,7 +9,19 @@ import heapq
 from collections import deque, defaultdict
 import time
 import os 
-
+import random 
+try:
+    import PyPDF2
+    PDF_SUPPORT = True
+except ImportError:
+    PDF_SUPPORT = False
+    
+try: 
+    from docx import Document 
+    DOCX_SUPPORT = True
+except ImportError:
+    DOCX_SUPPORT = False
+    
 class TCAA(tk.Tk):
     """Main application class with styling. Implementing a purple/blue/pink aesthetic."""
     
@@ -45,7 +57,7 @@ class TCAA(tk.Tk):
         
         # Configure main window 
         self.title("✨ Titan Campus Algorithmic Assistant (TCAA) ✨")
-        self.geometry("1150x800")
+        self.geometry("1150x1000")
         self.configure(bg=self.colors['bg_dark'])
         
         # Configure combox dropdown colors for better contrast
@@ -79,8 +91,7 @@ class TCAA(tk.Tk):
         
         # Add footer with personality
         self.create_footer()
-        
-        
+         
     def setup_styles(self):
         """Configure custom ttk styles for modern, cute appearance"""
         style = ttk.Style()
@@ -335,11 +346,9 @@ class CampusNavigator(ttk.Frame):
         main_container = tk.Frame(self, bg=self.colors['bg_dark'])
         main_container.pack(fill='both', expand=True, padx=25, pady=25)
 
-        
         # Decorative title with icon 
         title_frame = tk.Frame(main_container, bg=self.colors['bg_dark'])
         title_frame.pack(fill='x', pady=(0, 20))
-        
         
         title = tk.Label(title_frame, 
             text="🗺️  Campus Navigation System",
@@ -507,12 +516,12 @@ class CampusNavigator(ttk.Frame):
         results_header = tk.Frame(results_inner, bg=self.colors['card_bg'], padx=2, pady=2)
         results_header.pack(fill='x', padx=15, pady=(15, 10))
     
-        results_label = tk.Label(results_header, 
+        self.results_label = tk.Label(results_header, 
             text= "📋 Results & Path Visualization", 
             font=('Segoe UI', 11, 'bold'), 
             bg=self.colors['card_bg'], 
             fg=self.colors['accent_purple'])
-        results_label.pack(side='left')
+        self.results_label.pack(side='left')
     
         # Decorative dots 
         dots_frame = tk.Frame(results_header, bg=self.colors['card_bg'])
@@ -525,6 +534,7 @@ class CampusNavigator(ttk.Frame):
                 font=('Segoe UI', 12),
                 bg=self.colors['card_bg'],
                 fg=color).pack(side='left', padx=3)
+            
         
         self.results_text = scrolledtext.ScrolledText(results_inner,
             wrap=tk.WORD, 
@@ -535,7 +545,7 @@ class CampusNavigator(ttk.Frame):
             padx=20, 
             pady=20,
             insertbackground=self.colors['accent_purple'])
-        self.results_text.pack(fill='both', expand=True, padx=15, pady=(0, 15))
+        self.results_text.pack(fill='both', expand=True, padx=15, pady=(0, 15)) 
         
         # Add welcome message 
         welcome_msg = """
@@ -601,6 +611,9 @@ Ready to navigate? Let's go! 💫
         self.results_text.insert(tk.END, f"\n{'━'*59}\n")
         self.results_text.insert(tk.END, f"⏱️  Execution Time:{elapsed:.2f}ms\n")
         self.results_text.insert(tk.END, f"{'━'*59}\n")
+        
+        # Update graph visualization if in graph mode 
+        self.update_graph_display(self.current_path)
     
     def bfs(self, start, goal):
         """BFS algorithm with styled output."""
@@ -626,7 +639,8 @@ Ready to navigate? Let's go! 💫
                         result += f"      ↓\n"
                     else:
                         result += f"   {i}. {location} 🎯\n"
-                
+                        
+
                 total_dist = sum(self.graph[path[i]][path[i+1]] for i in range(len(path)-1))
                 result += f"\n📏 Total Distance: {total_dist} units\n"
                 result += f"🔢 Nodes Visited: {len(visited)}\n"
@@ -841,7 +855,6 @@ Ready to navigate? Let's go!
                 except Exception as e:
                     messagebox.showerror("❌ Error",
                         f"Could not save file:\n{str(e)}")
-                    
 class StudyPlanner(ttk.Frame):
     """Study Planner module with greedy and DP scheduling"""
     
@@ -856,15 +869,15 @@ class StudyPlanner(ttk.Frame):
     def setup_ui(self):
         """Create styled UI components"""
         main_container = tk.Frame(self, bg=self.colors['bg_dark'])
-        main_container.pack(fill='both', expand=True, padx=25, pady=25)
+        main_container.pack(fill='both', expand=True, padx=15, pady=25)
         
         # Decorative title
         title_frame = tk.Frame(main_container, bg=self.colors['bg_dark'])
-        title_frame.pack(fill='x', pady=(0, 20))
+        title_frame.pack(fill='x', pady=(0, 10))
         
         title = tk.Label(title_frame, 
             text="✨ Study Session Planner",
-            font=('Segoe UI', 15, 'bold'),
+            font=('Segoe UI', 14, 'bold'),
             bg=self.colors['bg_dark'],
             fg=self.colors['accent_purple'])
         title.pack(side='left')
@@ -879,104 +892,103 @@ class StudyPlanner(ttk.Frame):
         
         # Task input frame with decorative border 
         input_outer = tk.Frame(main_container, bg=self.colors['accent_purple'], padx=2, pady=2)
-        input_outer.pack(fill='x', pady=(0, 15))
+        input_outer.pack(fill='x', pady=(0, 8))
         
         input_frame = ttk.LabelFrame(input_outer,
             text="➕ Add Study Task",
             style='Custom.TLabelframe',
-            padding=20)
+            padding=10)
         input_frame.pack(fill='x')
         
-        # Task name
-        name_frame = tk.Frame(input_frame, bg=self.colors['card_bg'])
-        name_frame.pack(fill='x', pady=5)
+        # Putting everything in one line
+        all_inputs = tk.Frame(input_frame, bg=self.colors['card_bg'])
+        all_inputs.pack(fill='x')
         
-        tk.Label(name_frame,
-                 text="📝  Task Name:",
-                 font=('Segoe Ui', 10, 'bold'),
+        # Task name with a smaller label
+        tk.Label(all_inputs,
+                 text="📝 Task:",
+                 font=('Segoe Ui', 9, 'bold'),
                  bg=self.colors['card_bg'],
-                 fg=self.colors['accent_pink']).pack(side='left', padx=(0, 10))
+                 fg=self.colors['accent_pink']).pack(side='left', padx=(0, 5))
         
-        self.task_name = tk.Entry(name_frame,
-            font=('Segoe UI', 10),
+        self.task_name = tk.Entry(all_inputs,
+            font=('Segoe UI', 9),
+            width=15,
             bg=self.colors['bg_light'],
             fg=self.colors['text_light'],
             relief='flat',
             insertbackground=self.colors['accent_purple'])
-        self.task_name.pack(side='left', fill='x', expand=True, ipady=5)
+        self.task_name.pack(side='left', ipady=3, padx=(0, 10))
         
-        # Time inputs 
-        time_frame = tk.Frame(input_frame, bg=self.colors['card_bg'])
-        time_frame.pack(fill='x', pady=5)
-        
-        tk.Label(time_frame,
+        tk.Label(all_inputs,
             text="⏰  Start:",
-            font=('Segoe UI', 10, 'bold'),
+            font=('Segoe UI', 9, 'bold'),
             bg=self.colors['card_bg'],
-            fg=self.colors['accent_mint']).pack(side='left', padx=(0, 10))
+            fg=self.colors['accent_mint']).pack(side='left', padx=(0, 5))
         
-        self.start_time = tk.Entry(time_frame, 
-            font=('Segoe UI', 10),
-            width=10,
+        self.start_time = tk.Entry(all_inputs, 
+            font=('Segoe UI', 9),
+            width=6,
             bg=self.colors['bg_light'],
             fg=self.colors['text_light'],
             relief='flat')
-        self.start_time.pack(side='left', ipady=5)
+        self.start_time.pack(side='left', ipady=3, padx=(0, 10))
         
-        tk.Label(time_frame,
+        # End time
+        tk.Label(all_inputs,
             text="⏰  End:",
-            font=('Segoe UI', 10, 'bold'),
+            font=('Segoe UI', 9, 'bold'),
             bg=self.colors['card_bg'],
-            fg=self.colors['accent_blue']).pack(side='left', padx=(20, 10))
+            fg=self.colors['accent_blue']).pack(side='left', padx=(0, 5))
         
-        self.end_time = tk.Entry(time_frame, 
-            font=('Segoe UI', 10), 
-            width=10, 
+        self.end_time = tk.Entry(all_inputs, 
+            font=('Segoe UI', 9), 
+            width=6, 
             bg=self.colors['bg_light'],
             fg=self.colors['text_light'],
             insertbackground=self.colors['accent_purple'],
             relief='flat')
-        self.end_time.pack(side='left', ipady=5)
+        self.end_time.pack(side='left', ipady=3, padx=(0, 10))
         
-        tk.Label(time_frame, 
+        # Priority
+        tk.Label(all_inputs, 
             text="⭐ Priority:",
-            font=('Segoe UI', 10, 'bold'),
+            font=('Segoe UI', 9, 'bold'),
             bg=self.colors['card_bg'],
-            fg=self.colors['accent_peach']).pack(side='left', padx=(20, 10))
+            fg=self.colors['accent_peach']).pack(side='left', padx=(0, 5))
         
-        self.priority = tk.Entry(time_frame, 
-            font=('Segoe UI', 10),
-            width=10,
+        self.priority = tk.Entry(all_inputs, 
+            font=('Segoe UI', 9),
+            width=6,
             bg=self.colors['bg_light'],
             fg=self.colors['text_light'],
             relief='flat')
-        self.priority.pack(side='left', ipady=5)
+        self.priority.pack(side='left', ipady=3, padx=(0, 15))
         
-        # Buttons 
-        btn_frame = tk.Frame(input_frame, bg=self.colors['card_bg'])
-        btn_frame.pack(fill='x', pady=(10, 0))
-        
-        ttk.Button(btn_frame, 
+        # Buttons on the same line
+        ttk.Button(all_inputs, 
             text="➕ Add Task",
             command=self.add_task,
-            style='Accent.TButton').pack(side='left', padx=5)
+            style='Accent.TButton').pack(side='left', padx=3)
         
-        ttk.Button(btn_frame, 
+        ttk.Button(all_inputs, 
             text="🗑️  Clear All",
             command=self.clear_tasks,
-            style='Secondary.TButton').pack(side='left', padx=5)
+            style='Secondary.TButton').pack(side='left', padx=3)
+        
+        # Compact algorithm selection + buton in ONE frame
+        control_frame = tk.Frame(main_container, bg=self.colors['bg_dark'])
+        control_frame.pack(fill='x', pady=(0, 10))
         
         # Algorithm selection
-        algo_frame = ttk.LabelFrame(main_container,
-            text="⚡ Select Scheduling Algorithm",
-            style='Custom.TLabelframe', 
-            padding=15)
-        algo_frame.pack(fill='x', pady=(0, 15))
+        algo_label = tk.Label(control_frame,
+            text="⚡ Algorithm",
+            font=('Segoe UI', 10, 'bold'),
+            bg=self.colors['bg_dark'],
+            fg=self.colors['accent_purple'])
+        algo_label.pack(side='left', padx=(0, 10))
         
         self.schedule_algo = tk.StringVar(value='greedy')
-        
-        radio_container = tk.Frame(algo_frame, bg=self.colors['card_bg'])
-        radio_container.pack(fill='x')
         
         algorithms = [
             (' Greedy - Maximize Tasks', 'greedy', self.colors['accent_mint']),
@@ -984,22 +996,17 @@ class StudyPlanner(ttk.Frame):
         ]
         
         for text, value, color in algorithms:
-            radio_frame = tk.Frame(radio_container, bg=self.colors['card_bg'])
-            radio_frame.pack(side='left', fill='x', expand=True, padx=10)
-            
-            tk.Frame(radio_frame, bg=color, width=3, height=20).pack(side='left', padx=(0, 5))
-            
-            ttk.Radiobutton(radio_frame, 
+           ttk.Radiobutton(control_frame,
                 text=text,
                 variable=self.schedule_algo,
                 value=value,
-                style='Custom.TRadiobutton').pack(side='left')
-            
+                style='Custom.TRadiobutton').pack(side='left', padx=5)
+
         # Schedule button 
-        ttk.Button(main_container, 
-            text="   Generate Schedule!",
+        ttk.Button(control_frame, 
+            text="🚀  Generate Schedule!",
             command=self.generate_schedule,
-            style='Special.TButton').pack(pady=(0, 15))
+            style='Special.TButton').pack(side='right')
         
         # Results display 
         results_outer = tk.Frame(main_container, bg=self.colors['accent_light'], padx=2, pady=2)
@@ -1018,6 +1025,7 @@ class StudyPlanner(ttk.Frame):
         
         self.schedule_text = scrolledtext.ScrolledText(results_inner, 
             wrap=tk.WORD,
+            height=40,
             font=('Consolas', 10),
             bg=self.colors['bg_light'],
             fg=self.colors['text_light'],
@@ -1043,7 +1051,7 @@ class StudyPlanner(ttk.Frame):
 🎯 DP     - Maximizes total priority value (weighted scheduling)
    
        
-Ready to ptimize your study time? Add tasks to begin! 💫
+Ready to optimize your study time? Add tasks to begin! 💫
         """
         
         self.schedule_text.insert(1.0, welcome_msg)
@@ -1131,7 +1139,7 @@ Ready to ptimize your study time? Add tasks to begin! 💫
         self.schedule_text.insert(tk.END, f"⏱️   Execution Time: {elapsed:.2f}ms\n")
         self.schedule_text.insert(tk.END, f"{'━'*59}\n")
         
-    def greedy_schedule(self, start):
+    def greedy_schedule(self):
         """Greedy interval scheduling algorithm"""
         result = "⚡ GREEDY INTERVAL SCHEDULING\n"
         result += "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
@@ -1158,112 +1166,112 @@ Ready to ptimize your study time? Add tasks to begin! 💫
                 last_end = task['end']
             else:
                 result += f"    Step{step}:  ⏭️  Skipped '{task['name']}' "
-                result += f"(conflits with previous task)\n"
+                result += f"(conflicts with previous task)\n"
             step += 1
                 
-            result += f"\n✨ OPTIMAL SCHEDULE\n\n"
-            result += "📅 Selected Tasks:\n"
-            total_priority = 0
-            total_time = 0 
+        result += f"\n✨ OPTIMAL SCHEDULE\n\n"
+        result += "📅 Selected Tasks:\n"
+        total_priority = 0
+        total_time = 0 
             
-            for i, task in enumerate(scheduled, 1):
-                duration = task['end'] - task['start']
-                total_time += duration
-                total_priority += task['priority']
-                result += f"   {i}. {task['name']}\n"
-                result += f"       ⏰ Time: {task['start']}:80 - {task['end']}: 80 ({duration}h)\n"
-                result += f"       ⭐ Priority: {task['priority']}\n\n"
+        for i, task in enumerate(scheduled, 1):
+            duration = task['end'] - task['start']
+            total_time += duration
+            total_priority += task['priority']
+            result += f"   {i}. {task['name']}\n"
+            result += f"       ⏰ Time: {task['start']}:00 - {task['end']}: 00 ({duration}h)\n"
+            result += f"       ⭐ Priority: {task['priority']}\n\n"
                 
-            result += f"📊  Statistics:\n"
-            result += f"   ✅ Tasks Scheduled: {len(scheduled)}/{len(self.tasks)}\n"
-            result += f"   ⏰ Total Study Time: {total_time} hours\n"
-            result += f"   ⭐ Total Priority: {total_priority}\n"
+        result += f"📊  Statistics:\n"
+        result += f"   ✅ Tasks Scheduled: {len(scheduled)}/{len(self.tasks)}\n"
+        result += f"   ⏰ Total Study Time: {total_time} hours\n"
+        result += f"   ⭐ Total Priority: {total_priority}\n"
             
-            return result 
+        return result 
         
-        def dp_schedule(self):
-            """Dynamic programming weighted scheduling"""
-            result = "🎯 DYNAMIC PROGRAMMING SCHEDULER\n"
-            result += "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
-            result += "Strategy: Maximize total priority using 0/1 Knapsack approach!\n\n"
+    def dp_schedule(self):
+        """Dynamic programming weighted scheduling"""
+        result = "🎯 DYNAMIC PROGRAMMING SCHEDULER\n"
+        result += "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+        result += "Strategy: Maximize total priority using 0/1 Knapsack approach!\n\n"
             
-            # Sort by end time for DP
-            sorted_tasks = sorted(self.tasks, key=lambda x: x['end'])
-            n = len(sorted_tasks)
+        # Sort by end time for DP
+        sorted_tasks = sorted(self.tasks, key=lambda x: x['end'])
+        n = len(sorted_tasks)
             
-            # Find latest non-conflicting task 
-            def find_latest_non_conflict(i):
-                for j in range(i - 1, -1, -1):
-                    if sorted_tasks[j]['end'] <= sorted_tasks[i]['start']:
-                        return j 
-                return -1 
+        # Find latest non-conflicting task 
+        def find_latest_non_conflict(i):
+            for j in range(i - 1, -1, -1):
+                if sorted_tasks[j]['end'] <= sorted_tasks[i]['start']:
+                    return j 
+            return -1 
             
-            # DP table
-            dp = [0] * n
-            dp[0] = sorted_tasks[0]['priority']
+        # DP table
+        dp = [0] * n
+        dp[0] = sorted_tasks[0]['priority']
             
-            result += "📊 DP Table Construction:\n"
+        result += "📊 DP Table Construction:\n"
             
-            for i in range(1, n):
-                # Include current task 
-                include_priority = sorted_tasks[i]['priority']
-                latest = find_latest_non_conflict(i)
-                if latest != -1:
-                    include_priority += dp[latest]
+        for i in range(1, n):
+            # Include current task 
+            include_priority = sorted_tasks[i]['priority']
+            latest = find_latest_non_conflict(i)
+            if latest != -1:
+                include_priority += dp[latest]
                     
-                # Exclude current task 
-                exclude_priority = dp[i -1]
+            # Exclude current task 
+            exclude_priority = dp[i -1]
                 
-                dp[i] = max(include_priority, exclude_priority)
+            dp[i] = max(include_priority, exclude_priority)
                 
-                result += f"    Task {i+1} ({sorted_tasks[i]['name']}): "
-                result += f"Include={include_priority}, Exclude={exclude_priority} → "
-                result += f"Max={dp[i]}\n"
+            result += f"    Task {i+1} ({sorted_tasks[i]['name']}): "
+            result += f"Include={include_priority}, Exclude={exclude_priority} → "
+            result += f"Max={dp[i]}\n"
                 
-            # Backtrack to find solution 
-            scheduled = []
-            i = n - 1
-            while i >= 0:
-                if i == 0:
-                    scheduled.append(sorted_tasks[0])
-                    break
+        # Backtrack to find solution 
+        scheduled = []
+        i = n - 1
+        while i >= 0:
+            if i == 0:
+                scheduled.append(sorted_tasks[0])
+                break
                 
-                latest = find_latest_non_conflict(i)
-                include_priority = sorted_tasks[i]['priority']
-                if latest != -1:
-                    include_priority += dp[latest]
+            latest = find_latest_non_conflict(i)
+            include_priority = sorted_tasks[i]['priority']
+            if latest != -1:
+                include_priority += dp[latest]
                     
-                if include_priority > dp[i - 1]:
-                    scheduled.append(sorted_tasks[i])
-                    i = latest
-                else:
-                    i -= 1
+            if include_priority > dp[i - 1]:
+                scheduled.append(sorted_tasks[i])
+                i = latest
+            else:
+                i -= 1
                     
-            scheduled.reverse()
+        scheduled.reverse()
             
-            result += f"\n✨ OPTIMAL WEIGHTED SCHEDULE\n\n"
-            result += "📅 Selected Tasks (Priority-Optimized):\n"
-            total_priority = 0
-            total_time = 0
+        result += f"\n✨ OPTIMAL WEIGHTED SCHEDULE\n\n"
+        result += "📅 Selected Tasks (Priority-Optimized):\n"
+        total_priority = 0
+        total_time = 0
             
-            for i, task in enumerate(scheduled, 1):
-                duration = task['end'] - task['start']
-                total_time += duration
-                total_priority += task['priority']
-                result += f"   {i}. {task['name']}\n"
-                result += f"       ⏰ Time: {task['start']}:00 - {task['end']}: 00 ({duration}h)\n"
-                result += f"       ⭐ Priority: {task['priority']}\n\n"
+        for i, task in enumerate(scheduled, 1):
+            duration = task['end'] - task['start']
+            total_time += duration
+            total_priority += task['priority']
+            result += f"   {i}. {task['name']}\n"
+            result += f"       ⏰ Time: {task['start']}:00 - {task['end']}: 00 ({duration}h)\n"
+            result += f"       ⭐ Priority: {task['priority']}\n\n"
                 
-            result += f"📊 Statistics:\n"
-            result += f"   ✅ Tasks Scheduled: {len(scheduled)}/{len(self.tasks)}\n"
-            result += f"   ⏰ Total Study Time: {total_time} hours\n"
-            result += f"   ⭐ Maximum Priority Achieved: {total_priority}\n"
-            result += f"   🎯 DP Table Final Value: {dp[n-1]}\n"
+        result += f"📊 Statistics:\n"
+        result += f"   ✅ Tasks Scheduled: {len(scheduled)}/{len(self.tasks)}\n"
+        result += f"   ⏰ Total Study Time: {total_time} hours\n"
+        result += f"   ⭐ Maximum Priority Achieved: {total_priority}\n"
+        result += f"   🎯 DP Table Final Value: {dp[n-1]}\n"
             
-            return result 
+        return result 
         
-        def toggle_graph(self):
-            """Toggle betwen custom and default graph"""
+    def toggle_graph(self):
+        """Toggle betwen custom and default graph"""
         if not self.custom_graph:
             messagebox.showwarning("⚠️  No Custom Graph"),
             "Please build a custom graph first! 🏗️ \n\nAdd nodes and edges using the builder above."
@@ -1398,11 +1406,11 @@ class NotesSearchEngine(ttk.Frame):
     def setup_ui(self):
         """Stylized UI components"""
         main_container = tk.Frame(self, bg=self.colors['bg_dark'])
-        main_container.pack(fill='both', expand=True, padx=25, pady=25)
+        main_container.pack(fill='both', expand=True, padx=15, pady=15)
         
         # Title
         title_frame = tk.Frame(main_container, bg=self.colors['bg_dark'])
-        title_frame.pack(fill='x', pady=(0, 20))
+        title_frame.pack(fill='x', pady=(0, 10))
         
         
         title = tk.Label(title_frame, 
@@ -1421,17 +1429,17 @@ class NotesSearchEngine(ttk.Frame):
         
         # Notes input with decorative border
         notes_outer = tk.Frame(main_container, bg=self.colors['accent_purple'], padx=2, pady=2)
-        notes_outer.pack(fill='both', expand=True, pady=(0, 15))
+        notes_outer.pack(fill='both', expand=True, pady=(0, 5))
         
         notes_frame = ttk.LabelFrame(notes_outer, 
              text="📝  Your Notes",
              style='Custom.TLabelframe',
-             padding=15)
+             padding=8)
         notes_frame.pack(fill='both', expand=True)
         
         # File operations
         file_btn_frame = tk.Frame(notes_frame, bg=self.colors['card_bg'])
-        file_btn_frame.pack(fill='x', pady=(0, 10))
+        file_btn_frame.pack(fill='x', pady=(0, 5))
         
         ttk.Button(file_btn_frame,
             text="📂 Load File",
@@ -1446,21 +1454,21 @@ class NotesSearchEngine(ttk.Frame):
         # Text area
         self.notes_text = scrolledtext.ScrolledText(notes_frame,
             wrap=tk.WORD,
-            font=('Segoe UI', 10),
+            font=('Segoe UI', 9),
             bg=self.colors['bg_light'],
             fg=self.colors['text_light'],
             relief='flat',
-            padx=15,
-            pady=15,
-            height=8)
-        self.notes_text.pack(fill='both', expand=True)
+            padx=10,
+            pady=5,
+            height=2)
+        self.notes_text.pack(fill='both')
         
         # Search controls
         search_frame = ttk.LabelFrame(main_container, 
             text="🔍 Search Pattern", 
             style='Custom.TLabelframe',
-            padding=15)
-        search_frame.pack(fill='x', pady=(0, 15))
+            padding=8)
+        search_frame.pack(fill='x', pady=(0, 5))
         
         pattern_frame = tk.Frame(search_frame, bg=self.colors['card_bg'])
         pattern_frame.pack(fill='x', pady=5)
@@ -1484,6 +1492,7 @@ class NotesSearchEngine(ttk.Frame):
         algo_frame.pack(fill='x', pady=(10, 0))
         
         self.search_algo = tk.StringVar(value='naive')
+        self.case_sensitive = tk.BooleanVar(value=False) # Case-insensitive
         
         algorithms = [
             ('🔄 Naive Search', 'naive', self.colors['accent_blue']),
@@ -1502,38 +1511,51 @@ class NotesSearchEngine(ttk.Frame):
                 variable=self.search_algo,
                 value=value,
                 style='Custom.TRadiobutton').pack(side='left')
+        
+        # Case sensitivity option 
+        case_frame = tk.Frame(search_frame, bg=self.colors['card_bg'])
+        case_frame.pack(fill='x', pady=(10, 0))
+        
+        ttk.Checkbutton(case_frame, 
+            text='  Case Sensitive',
+            variable=self.case_sensitive,
+            style='Custom.TRadiobutton').pack(side='left') 
+        
+        # Search button 
+        ttk.Button(main_container,
+            text="🔍 Search Now!",
+            command=self.search_pattern,
+            style='Accent.TButton').pack(pady=(0, 10))
             
-            # Search button 
-            ttk.Button(main_container,
-                text="🔍 Search Now!",
-                command=self.search_pattern,
-                style='Accent.TButton').pack(pady=(0, 15))
+        # Results 
+        results_outer = tk.Frame(main_container, bg=self.colors['accent_light'], padx=2, pady=2)
+        results_outer.pack(fill='both', expand=True)
             
-            # Results 
-            results_outer = tk.Frame(main_container, bg=self.colors['accent_light'], padx=2, pady=2)
-            results_outer.pack(fill='both', expand=True)
+        results_inner = tk.Frame(results_outer, bg=self.colors['card_bg'], padx=2, pady=2)
+        results_inner.pack(fill='both', expand=True)
             
-            results_inner = tk.Frame(results_outer, bg=self.colors['card_bg'], padx=2, pady=2)
-            results_inner.pack(fill='both', expand=True)
+        results_label = tk.Label(results_inner, 
+            text="📊 Search Results",
+            font=('Segoe UI', 11, 'bold'),
+            bg=self.colors['card_bg'],
+            fg=self.colors['accent_purple'])
+        results_label.pack(anchor='w', padx=15, pady=(15, 10))
             
-            results_label = tk.Label(results_inner, 
-                text="📊 Search Results",
-                font=('Segoe UI', 11, 'bold'),
-                bg=self.colors['card_bg'],
-                fg=self.colors['accent_purple'])
-            results_label.pack(anchor='w', padx=15, pady=(15, 10))
+        self.results_text = scrolledtext.ScrolledText(results_inner,
+            wrap=tk.WORD, 
+            height=40,
+            width=85,
+            font=('Consolas', 10),
+            bg='#1E2D3E',
+            fg='#E8F0FF',
+            relief='flat',
+            padx=12,
+            pady=12,
+            state='normal',
+            insertbackground='#B8A9FF')
+        self.results_text.pack(fill='both', expand=True, padx=15, pady=(0, 15))
             
-            self.results_text = scrolledtext.ScrolledText(results_inner,
-                wrap=tk.WORD, 
-                font=('Consolas', 10),
-                bg=self.colors['bg_light'],
-                fg=self.colors['text_light'],
-                relief='flat',
-                padx=20,
-                pady=20)
-            self.results_text.pack(fill='both', expand=True, padx=15, pady=(0, 15))
-            
-            welcome_msg = """
+        welcome_msg = """
 ╔═════════════════════════════════════════════════════╗
 ║           🔍 Welcome to Notes Search! 🔍             ║
 ╚═════════════════════════════════════════════════════╝               
@@ -1551,27 +1573,56 @@ class NotesSearchEngine(ttk.Frame):
  ⚡ KMP           - Efficient with preprocessing 
        
 Ready to search? Load your notes to begin!💫            
-            """
-            self.results_text.insert(1.0, welcome_msg)
+        """
+        self.results_text.insert(1.0, welcome_msg)
             
     def load_file(self):
-        """Load notes from a file"""
-        filename = filedialog.askopenfilename(
-            filetypes=[("Text files", "*.txt"), ("All files", "*.*")],
+        """Load notes from a file (supports .txt and .pdf)"""
+        filetypes=[("Text files", "*.txt")]
+        if PDF_SUPPORT:
+            filetypes.insert(0, ("PDF files", "*.pdf"))
+        filetypes.append(("All files", "*.*"))
+            
+        filename= filedialog.askopenfilename(
+            filetypes=filetypes,
             title="Load Notes File"
         )
+            
         if filename:
             try: 
-                with open(filename, 'r', encoding='utf-8') as f:
-                   content = f.read()
-                   self.notes_text.delete(1.0, tk.END)
-                   self.notes_text.insert(1.0, content)
-                   messagebox.showinfo("✅ Success", 
-                                        f"File loaded successfully! ✨\n\n{filename}")
+                # Check if it's a PDF file
+                if filename.lower().endswith('.pdf'):
+                    if not PDF_SUPPORT:
+                        messagebox.showerror("❌  Error",
+                            "PDF support not available!\n\n")
+                        return
+                    
+                    # Extract text from PDF
+                    content = ""
+                    with open(filename, 'rb') as f:
+                        pdf_reader = PyPDF2.PdfReader(f)
+                        for page_num in range(len(pdf_reader.pages)):
+                            page = pdf_reader.pages[page_num]
+                            content += page.extract_text() + "\n\n"
+                    
+                    if not content.strip():
+                        messagebox.showwarning("⚠️ Warning",
+                           "PDF appears to be empty or contains only images.\nNo text extracted.")
+                        return
+                else:
+                    # Read as text file 
+                    with open(filename, 'r', encoding='utf-8') as f:
+                        content = f.read()
+                
+                # Display the content 
+                self.notes_text.delete(1.0, tk.END)
+                self.notes_text.insert(1.0, content)
+                messagebox.showinfo("✅ Success",
+                    f"File loaded successfully! ✨\n\n{os.path.basename(filename)}\nCharacters: {len(content)}")
             except Exception as e:
                 messagebox.showerror("❌ Error",
                     f"Could not load file:\n{str(e)}")
-                    
+                               
     def clear_notes(self):
         """Clear the notes text area"""
         if self.notes_text.get(1.0, tk.END).strip():
@@ -1596,6 +1647,15 @@ Ready to search? Load your notes to begin!💫
             return 
             
         algo = self.search_algo.get()
+        case_sensitive = self.case_sensitive.get()
+        
+        # Convert to lowercase if case-insensitive 
+        if not case_sensitive:
+            text = text.lower()
+            pattern = pattern.lower()
+            
+        # Ensure widget is in normal state and clear it 
+        self.results_text.config(state='normal')    
         self.results_text.delete(1.0, tk.END)
             
         header = f"""
@@ -1603,7 +1663,7 @@ Ready to search? Load your notes to begin!💫
 ║            🔍  PATTERN SEARCH RESULTS 🔍             ║
 ╚═════════════════════════════════════════════════════╝   
 
- 🎯 Pattern: "{pattern} "
+ 🎯 Pattern: "{pattern}"
  ⚡ Algorithm: {algo.upper().replace('_', '-')}
  📝 Text Length: {len(text)} characters 
             
@@ -1625,6 +1685,10 @@ Ready to search? Load your notes to begin!💫
         self.results_text.insert(tk.END, f"\n{'━'*59}\n")
         self.results_text.insert(tk.END, f"⏱️   Execution Time: {elapsed:.3f}ms\n")
         self.results_text.insert(tk.END, f"{'━'*59}\n")
+        
+        # Force widget to update and display 
+        self.results_text.update_idletasks()
+        self.results_text.see('1.0')
             
     def naive_search(self, text, pattern):
         """Naive string matching algorithm"""
@@ -1651,21 +1715,21 @@ Ready to search? Load your notes to begin!💫
             else:
                 comparisons += 1 # Count the failed comparisons
                     
-            result += f"\n📊 SEARCH COMPLETE\n\n"
-            result += f"✨ Matches Found: {len(matches)}\n"
-            result += f"🔢 Total Comparisons: {comparisons}\n\n"
+        result += f"\n📊 SEARCH COMPLETE\n\n"
+        result += f"✨ Matches Found: {len(matches)}\n"
+        result += f"🔢 Total Comparisons: {comparisons}\n\n"
             
-            if matches:
-                result += "📍 Match Positions:\n"
-                for pos in matches:
-                    context_start = max(0, pos - 20)
-                    context_end = min(len(text), pos + len(pattern) + 20)
-                    context = text[context_start:context_end]
-                    result += f"   Position {pos}: ...{context}...\n"
-            else:
-                result += "❌ No matches found in the text.\n"
+        if matches:
+            result += "📍 Match Positions:\n"
+            for pos in matches:
+                context_start = max(0, pos - 20)
+                context_end = min(len(text), pos + len(pattern) + 20)
+                context = text[context_start:context_end]
+                result += f"   Position {pos}: ...{context}...\n"
+        else:
+            result += "❌ No matches found in the text.\n"
                 
-            return result 
+        return result 
         
     def rabin_karp(self, text, pattern):
         """Rabin-Karp string matching algorithm"""
@@ -1684,7 +1748,7 @@ Ready to search? Load your notes to begin!💫
         p = 0 # Pattern hash
         t = 0 # Text hash
             
-           # Calculate intial hash values 
+        # Calculate intial hash values 
         for i in range(m):
             p = (d * p + ord(pattern[i])) % q
             t = (d * t + ord(text[i])) % q
@@ -1730,6 +1794,8 @@ Ready to search? Load your notes to begin!💫
             for pos in matches:
                 context_start = max(0, pos - 20)
                 context_end = min(len(text), pos + len(pattern) + 20)
+                context = text[context_start:context_end] 
+                result += f"   Position {pos}: ...{context}...\n"
         else:
             result += "❌  No matches found in the text.\n"
                 
@@ -2096,5 +2162,4 @@ def main():
     
 if __name__ == "__main__":
     main()
-    
     

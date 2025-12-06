@@ -2,7 +2,7 @@
 
 CPSC 335: Algorithm Engineering - Final Project
 
-A Python GUI application that demonstrates graph algroithms, dynamic programming, greedy scheduling, string pattern matching and algorithm analysis. 
+A Python GUI application that demonstrates graph algorithms, dynamic programming, greedy scheduling, string pattern matching and algorithm analysis. 
 
 ## Project Overview 
 
@@ -12,7 +12,7 @@ This application implements four comprehensive modules showcasing algorithmic te
 - BFS - Breadth-First Search for shortest unweighted path 
 - DFS + Connectivoty - Depth-First Search with connectivity check
 - Dijkstra's Shortest Path - Optimal weighted path using min-heap
-- Prim's MST - Minimim Spanning Tree using min-heap
+- Prim's MST - Minimum Spanning Tree using min-heap
 
 2. Planner (Greedy & Dynamic Programming)
 - Greedy Scheduler - Interval scheduling for maximum tasks 
@@ -20,7 +20,7 @@ This application implements four comprehensive modules showcasing algorithmic te
 
 3. Notes Search Engine (string Matching)
 - Naive Search - Brute-force pattern matching O(nxm)
-- Rabin-Kapr - Hash-based search O(n+m) average
+- Rabin-Karp - Hash-based search O(n+m) average
 - KMP - Knuth-Morris-Pratt O(n+m) guarenteed
 - Compare All - Side-by-side performance analysis
 
@@ -40,7 +40,7 @@ Tkinter(recommended and used)
 
 # Usage Guide 
 ## Module 1: Campus Navigator 
-Demonstrates: BFS, DFS, Dijkstra's Algroithm, PRim's MST
+Demonstrates: BFS, DFS, Dijkstra's Algroithm, Prim's MST
 
 How to Use:
 1. Select an algorithm (BFS/DFS/Dijkstra/Prim)
@@ -83,8 +83,8 @@ Key Difference:
 - DP: Maximizes total VALUE within time constraints (knapsack)
 
 ## Module 3: Notes Search Engine
-Demonstrates: Naive, Rabin-KArp, KMP string matching 
-How to USe:
+Demonstrates: Naive, Rabin-Karp, KMP string matching 
+How to Use:
 1. Click "Upload TXT/PDF/DOCX" and select a file
 - For PDF/DOCX: USES sample text 
 - For TXT: Reads actual file content 
@@ -174,9 +174,9 @@ Rabin-Karp
 - Method: Rolling hash with prime modulus
 - Best for: Multiple pattern search 
 KMP (Knuth-Morris-Pratt)
-- Time: O(n + m) guarenteed
+- Time: O(n + m) guaranteed
 - Space: O(m) for lps array
-- Method: Preprocess pattern, skip redundant comparisosns
+- Method: Preprocess pattern, skip redundant comparisons
 - Best For: Single pattern, linear time guarantee
 
 
